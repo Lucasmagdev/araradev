@@ -1452,4 +1452,278 @@ git merge feature/login         # traz as mudanças pro main</code></pre>
       </ol>
     `,
   },
+
+  // ===== FASE 11 — Assíncrono: Promises e async/await =====
+  {
+    id: 'async-1',
+    unit: 'Fase 11 — Assíncrono',
+    title: 'Síncrono vs assíncrono',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Código <strong>síncrono</strong> roda linha por linha, esperando cada uma terminar antes da próxima. Código <strong>assíncrono</strong> dispara uma tarefa que demora (buscar dados na rede, ler arquivo) e <strong>continua</strong> sem travar o programa — o resultado chega depois.</p>
+      <pre><code>console.log("1");
+setTimeout(() =&gt; console.log("2"), 1000); // só roda depois de 1s
+console.log("3");
+// imprime: 1, 3, 2</code></pre>
+      <p>Por que importa: se o JavaScript travasse a tela esperando cada requisição de rede, o app congelaria. Assíncrono deixa a interface responsiva enquanto espera.</p>
+    `,
+    quiz: [
+      { q: 'No exemplo, qual a ordem que aparece no console?', options: ['1, 2, 3', '1, 3, 2', '3, 2, 1', '2, 1, 3'], answer: 1 },
+      { q: 'Operações assíncronas são úteis principalmente pra:', options: ['deixar o código mais curto', 'não travar o programa enquanto espera tarefas demoradas (rede, arquivo)', 'rodar mais rápido a CPU'], answer: 1 },
+      { q: 'Código síncrono se caracteriza por:', options: ['rodar tudo de uma vez sem ordem', 'rodar linha por linha, esperando cada uma terminar', 'nunca terminar'], answer: 1 },
+    ],
+  },
+  {
+    id: 'async-2',
+    unit: 'Fase 11 — Assíncrono',
+    title: 'Promises',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Uma <strong>Promise</strong> é um objeto que representa um valor que vai chegar <em>no futuro</em>. Ela tem 3 estados: <strong>pendente</strong>, <strong>resolvida</strong> (deu certo) ou <strong>rejeitada</strong> (deu erro).</p>
+      <pre><code>buscarUsuario(42)
+  .then(usuario =&gt; console.log(usuario.nome)) // sucesso
+  .catch(erro =&gt; console.log("falhou:", erro)) // erro
+  .finally(() =&gt; console.log("acabou")); // sempre roda</code></pre>
+      <p><code>.then()</code> recebe o valor quando a Promise resolve. <code>.catch()</code> captura erro se ela rejeitar. Você pode encadear vários <code>.then()</code>.</p>
+    `,
+    quiz: [
+      { q: 'Quais são os 3 estados de uma Promise?', options: ['início, meio, fim', 'pendente, resolvida, rejeitada', 'aberta, fechada, perdida'], answer: 1 },
+      { q: 'O que <code>.catch()</code> faz numa Promise?', options: ['roda quando a Promise resolve com sucesso', 'captura o erro quando a Promise é rejeitada', 'cancela a Promise'], answer: 1 },
+      { q: '<code>.then(valor =&gt; ...)</code> recebe:', options: ['o erro da Promise', 'o valor quando a Promise resolve com sucesso', 'nada, é só decoração'], answer: 1 },
+    ],
+  },
+  {
+    id: 'async-3',
+    unit: 'Fase 11 — Assíncrono',
+    title: 'async / await',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p><strong>async/await</strong> é uma forma mais legível de trabalhar com Promises — parece código síncrono, mas é assíncrono por baixo.</p>
+      <pre><code>async function mostrarUsuario(id) {
+  try {
+    const usuario = await buscarUsuario(id); // espera a Promise resolver
+    console.log(usuario.nome);
+  } catch (erro) {
+    console.log("falhou:", erro);
+  }
+}</code></pre>
+      <ul>
+        <li><code>async</code> antes da função: ela passa a retornar uma Promise e pode usar <code>await</code> dentro.</li>
+        <li><code>await</code> pausa a função até a Promise resolver, e devolve o valor.</li>
+        <li><code>try/catch</code> trata o erro (faz o papel do <code>.catch()</code>).</li>
+      </ul>
+    `,
+    quiz: [
+      { q: 'O que <code>await</code> faz?', options: ['cancela a Promise', 'pausa a função até a Promise resolver e devolve o valor', 'transforma código assíncrono em síncrono de verdade'], answer: 1 },
+      { q: 'Pra usar <code>await</code> dentro de uma função, ela precisa ser:', options: ['marcada como async', 'uma arrow function', 'declarada com var'], answer: 0 },
+      { q: 'Com async/await, o erro é tratado normalmente com:', options: ['.catch() obrigatório', 'try/catch', 'um if no final'], answer: 1 },
+    ],
+  },
+  {
+    id: 'async-4',
+    unit: 'Fase 11 — Assíncrono',
+    title: 'fetch e tratamento de erro',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p><code>fetch</code> é a função do navegador pra fazer requisições HTTP. Ela retorna uma Promise.</p>
+      <pre><code>async function carregarPosts() {
+  const res = await fetch("https://api.exemplo.com/posts");
+  if (!res.ok) throw new Error("HTTP " + res.status); // 4xx/5xx
+  const dados = await res.json(); // converte o corpo em objeto
+  return dados;
+}</code></pre>
+      <p>Detalhe importante: <code>fetch</code> <strong>não</strong> rejeita a Promise em erro HTTP (404, 500). Ela só rejeita se a rede falhar. Por isso você checa <code>res.ok</code> manualmente.</p>
+    `,
+    quiz: [
+      { q: '<code>fetch</code> retorna:', options: ['o JSON pronto', 'uma Promise', 'o status code direto'], answer: 1 },
+      { q: 'Por que checar <code>res.ok</code> mesmo usando try/catch?', options: ['porque fetch não rejeita sozinho em erro HTTP (404/500), só em falha de rede', 'porque res.ok é obrigatório na sintaxe', 'não precisa, é redundante'], answer: 0 },
+      { q: '<code>await res.json()</code> serve pra:', options: ['enviar dados pro servidor', 'converter o corpo da resposta em objeto JavaScript', 'fechar a conexão'], answer: 1 },
+    ],
+  },
+  {
+    id: 'async-5',
+    unit: 'Fase 11 — Assíncrono',
+    title: 'Consolidar resultados',
+    type: 'code',
+    xp: 25,
+    content: `
+      <p>Quando você dispara várias chamadas, costuma receber uma lista de resultados, cada um marcando se deu certo. Ex: <code>[{ok: true, valor: 10}, {ok: false, valor: 5}]</code>.</p>
+      <p>Escreva <code>somarSucessos(resultados)</code> que retorna a soma do campo <code>valor</code> <strong>apenas</strong> dos itens com <code>ok === true</code>.</p>
+    `,
+    starter: 'function somarSucessos(resultados) {\n  // some valor só onde ok for true\n}',
+    funcName: 'somarSucessos',
+    tests: [
+      { args: [[{ ok: true, valor: 10 }, { ok: false, valor: 5 }, { ok: true, valor: 3 }]], expected: 13 },
+      { args: [[]], expected: 0 },
+      { args: [[{ ok: false, valor: 9 }]], expected: 0 },
+      { args: [[{ ok: true, valor: 7 }]], expected: 7 },
+    ],
+  },
+  {
+    id: 'async-6',
+    unit: 'Fase 11 — Assíncrono',
+    title: 'Fazer um fetch real',
+    type: 'checklist',
+    xp: 10,
+    content: `
+      <p>Num projeto seu (ou num arquivo de teste), escreva uma função <code>async</code> que:</p>
+      <ol>
+        <li>Faz <code>fetch</code> numa API pública (ex: <code>https://viacep.com.br/ws/30140071/json/</code>)</li>
+        <li>Checa <code>res.ok</code> e lança erro se falhar</li>
+        <li>Converte com <code>res.json()</code> e dá <code>console.log</code> no resultado</li>
+        <li>Envolve tudo em <code>try/catch</code></li>
+      </ol>
+      <p>Rode e veja o objeto no console. Depois force um erro (URL inválida) pra ver o <code>catch</code> disparar.</p>
+    `,
+  },
+
+  // ===== FASE 12 — React e componentes =====
+  {
+    id: 'react-1',
+    unit: 'Fase 12 — React e componentes',
+    title: 'Componentes e JSX',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>No React, a tela é montada com <strong>componentes</strong>: funções que retornam <strong>JSX</strong> (parece HTML dentro do JavaScript).</p>
+      <pre><code>function Saudacao() {
+  return &lt;h1&gt;Olá, AraraDev!&lt;/h1&gt;;
+}</code></pre>
+      <p>Um componente é reutilizável e pode ser usado dentro de outro, como se fosse uma tag:</p>
+      <pre><code>function App() {
+  return (
+    &lt;div&gt;
+      &lt;Saudacao /&gt;
+      &lt;Saudacao /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+      <p>Regra: o nome do componente começa com <strong>letra maiúscula</strong> — é assim que o React distingue componente de tag HTML comum.</p>
+    `,
+    quiz: [
+      { q: 'Um componente React é basicamente:', options: ['um arquivo CSS', 'uma função que retorna JSX', 'uma tabela do banco'], answer: 1 },
+      { q: 'JSX é:', options: ['um banco de dados', 'sintaxe parecida com HTML escrita dentro do JavaScript', 'um framework separado do React'], answer: 1 },
+      { q: 'Por que o nome do componente começa com letra maiúscula?', options: ['é só estética', 'pro React distinguir componente de tag HTML comum', 'senão dá erro de sintaxe no navegador'], answer: 1 },
+    ],
+  },
+  {
+    id: 'react-2',
+    unit: 'Fase 12 — React e componentes',
+    title: 'Props',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p><strong>Props</strong> são os parâmetros de um componente — dados que vêm "de fora" pra deixá-lo configurável.</p>
+      <pre><code>function Saudacao(props) {
+  return &lt;h1&gt;Olá, {props.nome}!&lt;/h1&gt;;
+}
+
+// uso:
+&lt;Saudacao nome="Lucas" /&gt;
+&lt;Saudacao nome="Ana" /&gt;</code></pre>
+      <p>Dentro do JSX, <code>{ }</code> insere valores JavaScript. Props são <strong>somente leitura</strong>: o componente não deve alterar suas próprias props.</p>
+    `,
+    quiz: [
+      { q: 'Props servem pra:', options: ['guardar estilos CSS', 'passar dados de fora pra dentro de um componente, deixando-o configurável', 'conectar no banco de dados'], answer: 1 },
+      { q: 'No JSX, pra inserir um valor JavaScript (ex: uma variável) você usa:', options: ['colchetes [ ]', 'chaves { }', 'parênteses ( )'], answer: 1 },
+      { q: 'Um componente pode alterar as próprias props?', options: ['sim, à vontade', 'não — props são somente leitura', 'só se for async'], answer: 1 },
+    ],
+  },
+  {
+    id: 'react-3',
+    unit: 'Fase 12 — React e componentes',
+    title: 'Estado (useState)',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p><strong>Estado</strong> é um dado que pertence ao componente e pode mudar com o tempo (ex: um contador). Quando o estado muda, o React <strong>re-renderiza</strong> o componente automaticamente.</p>
+      <pre><code>import { useState } from "react";
+
+function Contador() {
+  const [contagem, setContagem] = useState(0);
+  return (
+    &lt;button onClick={() =&gt; setContagem(contagem + 1)}&gt;
+      Cliquei {contagem} vezes
+    &lt;/button&gt;
+  );
+}</code></pre>
+      <p><code>useState(0)</code> devolve um par: o valor atual e uma função pra atualizá-lo. Nunca altere o estado direto (<code>contagem = 5</code> não funciona) — sempre use a função <code>setContagem</code>.</p>
+    `,
+    quiz: [
+      { q: 'Quando o estado de um componente muda, o React:', options: ['ignora', 're-renderiza o componente automaticamente', 'recarrega a página inteira'], answer: 1 },
+      { q: '<code>const [x, setX] = useState(0)</code> — o que é <code>setX</code>?', options: ['o valor atual do estado', 'a função que atualiza o estado e dispara o re-render', 'um valor fixo'], answer: 1 },
+      { q: 'Pra mudar o estado corretamente você deve:', options: ['atribuir direto: contagem = 5', 'usar a função setadora: setContagem(5)', 'recarregar a página'], answer: 1 },
+    ],
+  },
+  {
+    id: 'react-4',
+    unit: 'Fase 12 — React e componentes',
+    title: 'Renderizar listas',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Pra exibir uma lista de itens no React, você usa <code>.map()</code> transformando cada dado em JSX.</p>
+      <pre><code>function ListaTarefas({ tarefas }) {
+  return (
+    &lt;ul&gt;
+      {tarefas.map(t =&gt; (
+        &lt;li key={t.id}&gt;{t.titulo}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+      <p>Cada item precisa de uma prop <strong><code>key</code> única</strong> (geralmente o <code>id</code>). A key ajuda o React a saber qual item mudou, foi adicionado ou removido — sem ela, listas grandes re-renderizam errado e ficam lentas.</p>
+    `,
+    quiz: [
+      { q: 'Pra renderizar uma lista de dados em JSX, normalmente se usa:', options: ['um for solto dentro do return', '.map() transformando cada item em JSX', '.push() dentro do JSX'], answer: 1 },
+      { q: 'Pra que serve a prop <code>key</code> numa lista?', options: ['estilizar o item', 'ajudar o React a identificar qual item mudou/foi adicionado/removido', 'definir a ordem alfabética'], answer: 1 },
+      { q: 'Uma boa <code>key</code> costuma ser:', options: ['o índice sempre, em qualquer caso', 'um id único de cada item', 'o próprio texto traduzido'], answer: 1 },
+    ],
+  },
+  {
+    id: 'react-5',
+    unit: 'Fase 12 — React e componentes',
+    title: 'Lógica de um componente',
+    type: 'code',
+    xp: 25,
+    content: `
+      <p>Componentes muitas vezes calculam coisas com funções puras antes de renderizar. Ex: montar a <code>className</code> de um botão conforme o estado.</p>
+      <p>Escreva <code>classeBotao(ativo, desabilitado)</code> que retorna uma string:</p>
+      <ul>
+        <li>começa sempre com <code>"btn"</code></li>
+        <li>se <code>ativo</code> for true, adiciona <code>" ativo"</code></li>
+        <li>se <code>desabilitado</code> for true, adiciona <code>" off"</code></li>
+      </ul>
+      <p>Ex: <code>classeBotao(true, false)</code> → <code>"btn ativo"</code>.</p>
+    `,
+    starter: 'function classeBotao(ativo, desabilitado) {\n  // monte e retorne a className\n}',
+    funcName: 'classeBotao',
+    tests: [
+      { args: [false, false], expected: 'btn' },
+      { args: [true, false], expected: 'btn ativo' },
+      { args: [false, true], expected: 'btn off' },
+      { args: [true, true], expected: 'btn ativo off' },
+    ],
+  },
+  {
+    id: 'react-6',
+    unit: 'Fase 12 — React e componentes',
+    title: 'Mapear um componente real',
+    type: 'checklist',
+    xp: 10,
+    content: `
+      <p>Abra um projeto React seu (ou o próprio AraraDev). Escolha 1 componente e, sem IA, identifique no código:</p>
+      <ol>
+        <li>Quais <strong>props</strong> ele recebe?</li>
+        <li>Ele tem <strong>estado</strong> (<code>useState</code>)? O que esse estado representa?</li>
+        <li>Onde ele decide <strong>o que renderizar</strong> (condicionais, <code>.map()</code>)?</li>
+        <li>Quem é o "pai" que usa esse componente e passa as props?</li>
+      </ol>
+      <p>Escreva as respostas em 4 frases. Isso treina ler código de componente em vez de só gerar com IA.</p>
+    `,
+  },
 ];

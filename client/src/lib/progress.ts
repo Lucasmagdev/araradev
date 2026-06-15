@@ -12,13 +12,17 @@ export const BADGES: Badge[] = [
   { id: 'first-lesson',   icon: '🌱', name: 'Primeira lição',   check: (p) => Object.keys(p.completed).length >= 1 },
   { id: 'ten-lessons',    icon: '📚', name: '10 lições',         check: (p) => Object.keys(p.completed).length >= 10 },
   { id: 'thirty-lessons', icon: '🎯', name: '30 lições',         check: (p) => Object.keys(p.completed).length >= 30 },
+  { id: 'fifty-lessons',  icon: '🏆', name: '50 lições',         check: (p) => Object.keys(p.completed).length >= 50 },
   { id: 'all-lessons',    icon: '🦜', name: 'AraraDev Master',   check: (p) => Object.keys(p.completed).length >= LESSONS.length },
   { id: 'streak-3',       icon: '🔥', name: 'Streak 3 dias',     check: (p) => p.streak.count >= 3 },
   { id: 'streak-7',       icon: '⚡', name: 'Streak 7 dias',     check: (p) => p.streak.count >= 7 },
   { id: 'xp-50',          icon: '⭐', name: '50 XP',             check: (p) => p.xp >= 50 },
   { id: 'xp-200',         icon: '💎', name: '200 XP',            check: (p) => p.xp >= 200 },
   { id: 'xp-500',         icon: '🚀', name: '500 XP',            check: (p) => p.xp >= 500 },
+  { id: 'xp-1000',        icon: '🏅', name: '1000 XP',           check: (p) => p.xp >= 1000 },
   { id: 'coder',          icon: '💻', name: 'Programador',       check: (p) => LESSONS.filter(l => l.type === 'code' && p.completed[l.id]).length >= 5 },
+  { id: 'async-dev',      icon: '⏳', name: 'Async Dev',         check: (p) => LESSONS.filter(l => l.id.startsWith('async-') && p.completed[l.id]).length >= 6 },
+  { id: 'react-dev',      icon: '⚛️', name: 'React Dev',          check: (p) => LESSONS.filter(l => l.id.startsWith('react-') && p.completed[l.id]).length >= 6 },
 ];
 
 export interface Level {

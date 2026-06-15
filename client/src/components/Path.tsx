@@ -31,10 +31,12 @@ const FASE_DECOS: Deco[][] = [
   [{ t: 'API', l: '-12%', top: '8%' }, { t: '.env', r: '-10%', top: '26%' }, { t: 'MVC', l: '-8%', top: '48%' }, { t: 'middleware', r: '-8%', top: '66%' }, { t: 'auth()', l: '-10%', top: '82%' }],
   [{ t: 'GET /', l: '-12%', top: '10%' }, { t: 'POST', r: '-10%', top: '28%' }, { t: 'JSON', l: '-8%', top: '50%' }, { t: '200 OK', r: '-8%', top: '68%' }, { t: 'fetch()', l: '-10%', top: '84%' }],
   [{ t: 'commit', l: '-12%', top: '8%' }, { t: 'push', r: '-10%', top: '26%' }, { t: 'branch', l: '-8%', top: '48%' }, { t: 'rebase', r: '-8%', top: '66%' }, { t: 'merge', l: '-10%', top: '82%' }],
+  [{ t: 'await', l: '-12%', top: '10%' }, { t: '.then()', r: '-10%', top: '28%' }, { t: 'Promise', big: true, l: '-8%', top: '50%' }, { t: 'fetch()', r: '-8%', top: '68%' }, { t: 'async', l: '-10%', top: '84%' }],
+  [{ t: '<JSX>', big: true, l: '-12%', top: '10%' }, { t: 'props', r: '-10%', top: '28%' }, { t: 'useState', l: '-8%', top: '50%' }, { t: '.map()', r: '-8%', top: '68%' }, { t: 'key', l: '-10%', top: '84%' }],
 ];
 
-const FASE_COLORS = ['#ff4b4b', '#1cb0f6', '#a560e8', '#ff9600', '#2ec4b6', '#ce82ff', '#58cc02', '#4c6ef5', '#ff6b6b', '#ffd43b'];
-const FASE_ICONS = ['{ }', '[ ]', 'fn()', 'O(n)', 'SQL', 'bug', 'test()', 'arch', 'REST', 'git'];
+const FASE_COLORS = ['#ff4b4b', '#1cb0f6', '#a560e8', '#ff9600', '#2ec4b6', '#ce82ff', '#58cc02', '#4c6ef5', '#ff6b6b', '#ffd43b', '#f783ac', '#20c997'];
+const FASE_ICONS = ['{ }', '[ ]', 'fn()', 'O(n)', 'SQL', 'bug', 'test()', 'arch', 'REST', 'git', 'async', 'JSX'];
 
 function faseIndex(unit: string): number {
   const m = unit.match(/Fase (\d+)/);
@@ -141,10 +143,26 @@ export default function Path({ onOpenLesson }: { onOpenLesson: (index: number) =
                   </div>
                 );
               })}
+
+              {stats.done === stats.total && (
+                <div className="fase-trophy" title={`${shortTitle} — fase completa`}>
+                  <span className="fase-trophy-icon">🏆</span>
+                  <span className="fase-trophy-label">Fase {fi + 1} completa</span>
+                </div>
+              )}
             </div>
           </div>
         );
       })}
+
+      {nextIndex !== -1 && (
+        <button
+          className="continue-fab"
+          onClick={() => onOpenLesson(nextIndex)}
+        >
+          Continuar trilha →
+        </button>
+      )}
     </main>
   );
 }
