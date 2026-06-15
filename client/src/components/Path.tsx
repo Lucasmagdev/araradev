@@ -135,10 +135,7 @@ export default function Path({ onOpenLesson }: { onOpenLesson: (index: number) =
                     </button>
                     <span className="lesson-label">{lesson.title}</span>
                     {isCurrent && (
-                      <>
-                        <div className="start-badge">{done ? 'em andamento' : 'começar'}</div>
-                        <div className="mascot"><img src="/araradev.jpeg" alt="AraraDev" className="mascot-img" /></div>
-                      </>
+                      <div className="start-badge">{done ? 'em andamento' : 'começar'}</div>
                     )}
                   </div>
                 );

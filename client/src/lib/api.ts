@@ -1,5 +1,5 @@
 import { Capacitor } from '@capacitor/core';
-import type { Progress, User } from '../types';
+import type { Progress, RankingEntry, User } from '../types';
 
 export const API_BASE = Capacitor.isNativePlatform()
   ? 'http://80.241.218.217:3008'
@@ -73,4 +73,24 @@ export function saveProgressRemote(progress: Progress) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(progress),
   }).catch(() => {});
+}
+
+export function recordLessonCompletion(lessonId: string, xp: number) {
+  return req<{ ok: boolean }>('/api/lesson-completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ lessonId, xp }),
+  }).catch(() => {});
+}
+
+export function recordDailyChallenge(date: string, correct: number, total: number, xp: number) {
+  return req<{ ok: boolean }>('/api/daily-challenges', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date, correct, total, xp }),
+  }).catch(() => {});
+}
+
+export function getRanking(period: 'global' | 'weekly' | 'monthly') {
+  return req<RankingEntry[]>(`/api/ranking?period=${period}`);
 }

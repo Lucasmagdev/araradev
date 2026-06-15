@@ -9,13 +9,13 @@ import BottomNav, { type NavKey } from '../components/BottomNav';
 import Path from '../components/Path';
 import LessonScreen from '../components/LessonScreen';
 import LessonModal from '../components/LessonModal';
-import { ProfileModal, AchievementsModal, SettingsModal, PhaseCompleteModal } from '../components/Modals';
+import { ProfileModal, AchievementsModal, SettingsModal, PhaseCompleteModal, DailyChallengeModal, RankingModal } from '../components/Modals';
 import Toasts, { type Toast } from '../components/Toasts';
 import { launchConfetti } from '../lib/effects';
 
 export default function Trilha() {
   const navigate = useNavigate();
-  const { markComplete } = useProgress();
+  const { progress, markComplete } = useProgress();
 
   const [authChecked, setAuthChecked] = useState(false);
   const [nav, setNav] = useState<NavKey>('trilha');
@@ -40,6 +40,15 @@ export default function Trilha() {
     if (res.phaseComplete) setPendingPhase(res.phaseComplete);
   }, [markComplete, addToast]);
 
+  const openLesson = useCallback((index: number) => {
+    const lesson = LESSONS[index];
+    if (!progress.completed[lesson.id] && progress.credits.current <= 0) {
+      addToast('Sem créditos agora. Eles recarregam automaticamente a cada <strong>48h</strong>.');
+      return;
+    }
+    setOpenIndex(index);
+  }, [addToast, progress.completed, progress.credits]);
+
   const closeLesson = useCallback(() => {
     setOpenIndex(null);
     if (pendingPhase) {
@@ -63,7 +72,7 @@ export default function Trilha() {
     <>
       <div id="app-shell">
         <Header />
-        <Path onOpenLesson={setOpenIndex} />
+        <Path onOpenLesson={openLesson} />
         <BottomNav active={nav} onNav={onNav} />
       </div>
 
@@ -74,6 +83,8 @@ export default function Trilha() {
         <LessonModal lesson={lesson} onComplete={handleComplete} onClose={closeLesson} />
       )}
 
+      {nav === 'diario' && <DailyChallengeModal onClose={() => setNav('trilha')} onToast={addToast} />}
+      {nav === 'ranking' && <RankingModal onClose={() => setNav('trilha')} />}
       {nav === 'perfil' && <ProfileModal onClose={() => setNav('trilha')} />}
       {nav === 'conquistas' && <AchievementsModal onClose={() => setNav('trilha')} />}
       {nav === 'config' && <SettingsModal onClose={() => setNav('trilha')} />}

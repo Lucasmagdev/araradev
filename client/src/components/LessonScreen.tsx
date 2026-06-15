@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
-  const { progress } = useProgress();
+  const { progress, consumeCredit, recordCorrectAnswer } = useProgress();
   const quiz = lesson.quiz || [];
   const [qi, setQi] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -26,9 +26,13 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
 
   function verify() {
     if (selected === null || answered) return;
-    setAnswered(true);
     const ok = selected === q.answer;
-    if (ok) setCorrectCount(c => c + 1);
+    if (!ok && !alreadyDone && !consumeCredit()) return;
+    setAnswered(true);
+    if (ok) {
+      setCorrectCount(c => c + 1);
+      if (!alreadyDone) recordCorrectAnswer();
+    }
     playSound(ok ? 'correct' : 'wrong');
   }
 
@@ -63,12 +67,12 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
       <div className="ls-header">
         <button className="ls-close" onClick={onClose} aria-label="Fechar lição"><IconClose /></button>
         <div className="ls-progress-wrap"><div className="ls-progress-fill" style={{ width: progressPct + '%' }} /></div>
+        <div className={'ls-credits' + (progress.credits.current === 0 ? ' empty' : '')}>♥ {progress.credits.current}</div>
       </div>
 
       <div className="ls-body">
         {finished ? (
           <div className="ls-complete">
-            <Mascote estado={mascoteEstado} fala={mascoteFala} size={140} />
             <div className="ls-complete-icon">🏆</div>
             <h2 className="ls-complete-title">Lição concluída!</h2>
             <p className="ls-complete-sub">{lesson.title}</p>
@@ -108,7 +112,13 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
 
       {!finished && !answered && (
         <div className="ls-footer">
-          <button className={'ls-verify-btn' + (selected !== null ? ' ready' : '')} disabled={selected === null} onClick={verify}>VERIFICAR</button>
+          <button
+            className={'ls-verify-btn' + (selected !== null && (alreadyDone || progress.credits.current > 0) ? ' ready' : '')}
+            disabled={selected === null || (!alreadyDone && progress.credits.current <= 0)}
+            onClick={verify}
+          >
+            {!alreadyDone && progress.credits.current <= 0 ? 'SEM CRÉDITOS' : 'VERIFICAR'}
+          </button>
         </div>
       )}
 

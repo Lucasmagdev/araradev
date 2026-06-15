@@ -31,6 +31,30 @@ export interface Streak {
   lastDate: string | null;
 }
 
+export interface Credits {
+  current: number;
+  max: number;
+  nextRechargeAt: number | null;
+}
+
+export interface XpEvent {
+  amount: number;
+  source: string;
+  at: number;
+}
+
+export interface ProgressStats {
+  correctAnswers: number;
+  codeExercisesPassed: number;
+}
+
+export interface DailyChallengeProgress {
+  date: string | null;
+  completed: boolean;
+  correct: number;
+  total: number;
+}
+
 export interface Progress {
   completed: Record<string, boolean>;
   code: Record<string, string>;
@@ -39,6 +63,10 @@ export interface Progress {
   badges: string[];
   nome: string;
   avatar: string;
+  credits: Credits;
+  xpEvents: XpEvent[];
+  stats: ProgressStats;
+  dailyChallenge: DailyChallengeProgress;
 }
 
 export interface User {
@@ -46,4 +74,14 @@ export interface User {
   email: string;
   name: string;
   avatar: string;
+}
+
+export interface RankingEntry {
+  id: string;
+  name: string;
+  avatar: string;
+  xp: number;
+  lessons: number;
+  streak: number;
+  rank: number;
 }

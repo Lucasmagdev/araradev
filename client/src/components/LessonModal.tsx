@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function LessonModal({ lesson, onComplete, onClose }: Props) {
-  const { progress, saveCode } = useProgress();
+  const { progress, consumeCredit, saveCode } = useProgress();
   const done = !!progress.completed[lesson.id];
 
   return (
@@ -19,15 +19,16 @@ export default function LessonModal({ lesson, onComplete, onClose }: Props) {
         <button className="close" aria-label="Fechar" onClick={onClose}>×</button>
         <h2 dangerouslySetInnerHTML={{ __html: lesson.title }} />
         {lesson.type === 'code'
-          ? <CodeBody lesson={lesson} done={done} onComplete={onComplete} saveCode={saveCode} initial={progress.code[lesson.id]} />
+          ? <CodeBody lesson={lesson} done={done} credits={progress.credits.current} consumeCredit={consumeCredit} onComplete={onComplete} saveCode={saveCode} initial={progress.code[lesson.id]} />
           : <ChecklistBody lesson={lesson} done={done} onComplete={onComplete} />}
       </div>
     </div>
   );
 }
 
-function CodeBody({ lesson, done, onComplete, saveCode, initial }: {
+function CodeBody({ lesson, done, credits, consumeCredit, onComplete, saveCode, initial }: {
   lesson: Lesson; done: boolean; onComplete: (l: Lesson) => void;
+  credits: number; consumeCredit: () => boolean;
   saveCode: (id: string, code: string) => void; initial?: string;
 }) {
   const [code, setCode] = useState(initial ?? lesson.starter ?? '');
@@ -36,22 +37,34 @@ function CodeBody({ lesson, done, onComplete, saveCode, initial }: {
   const [msg, setMsg] = useState(done ? 'Lição já concluída ✓ (pode continuar testando)' : '');
 
   function run() {
+    if (!done && credits <= 0) {
+      setMsg('Sem créditos agora. Volte quando recarregar.');
+      return;
+    }
     saveCode(lesson.id, code);
     const out = runCodeTests(lesson.funcName || '', code, lesson.tests || []);
-    if (out.error) { setError(out.error); setResults(null); setMsg(''); return; }
+    if (out.error) {
+      if (!done) consumeCredit();
+      setError(out.error);
+      setResults(null);
+      setMsg('Erro no código. Perdeu 1 crédito.');
+      return;
+    }
     setError(null);
     setResults(out.results);
     if (out.results.every(r => r.pass)) {
       setMsg('🎉 Todos os testes passaram!');
       if (!done) onComplete(lesson);
     } else {
-      setMsg('Quase lá — ajusta o código e roda de novo.');
+      if (!done) consumeCredit();
+      setMsg('Quase lá — perdeu 1 crédito. Ajusta o código e roda de novo.');
     }
   }
 
   return (
     <>
       <div className="lesson-content" dangerouslySetInnerHTML={{ __html: lesson.content }} />
+      {!done && <div className={'modal-credits' + (credits === 0 ? ' empty' : '')}>♥ {credits} créditos restantes</div>}
       <textarea id="code-input" rows={8} value={code} onChange={(e) => setCode(e.target.value)} spellCheck={false} />
       <div className="actions">
         <button onClick={run}>Rodar testes</button>

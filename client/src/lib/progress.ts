@@ -1,6 +1,9 @@
 import type { Progress } from '../types';
 import { LESSONS } from '../data/lessons';
 
+export const MAX_CREDITS = 5;
+export const CREDIT_RECHARGE_MS = 48 * 60 * 60 * 1000;
+
 export interface Badge {
   id: string;
   icon: string;
@@ -16,6 +19,9 @@ export const BADGES: Badge[] = [
   { id: 'all-lessons',    icon: '🦜', name: 'AraraDev Master',   check: (p) => Object.keys(p.completed).length >= LESSONS.length },
   { id: 'streak-3',       icon: '🔥', name: 'Streak 3 dias',     check: (p) => p.streak.count >= 3 },
   { id: 'streak-7',       icon: '⚡', name: 'Streak 7 dias',     check: (p) => p.streak.count >= 7 },
+  { id: 'correct-25',      icon: '✅', name: '25 acertos',          check: (p) => p.stats.correctAnswers >= 25 },
+  { id: 'correct-100',     icon: '🎯', name: '100 acertos',         check: (p) => p.stats.correctAnswers >= 100 },
+  { id: 'daily-first',     icon: '📅', name: 'Primeiro diário',     check: (p) => !!p.dailyChallenge.completed },
   { id: 'xp-50',          icon: '⭐', name: '50 XP',             check: (p) => p.xp >= 50 },
   { id: 'xp-200',         icon: '💎', name: '200 XP',            check: (p) => p.xp >= 200 },
   { id: 'xp-500',         icon: '🚀', name: '500 XP',            check: (p) => p.xp >= 500 },
@@ -23,6 +29,8 @@ export const BADGES: Badge[] = [
   { id: 'coder',          icon: '💻', name: 'Programador',       check: (p) => LESSONS.filter(l => l.type === 'code' && p.completed[l.id]).length >= 5 },
   { id: 'async-dev',      icon: '⏳', name: 'Async Dev',         check: (p) => LESSONS.filter(l => l.id.startsWith('async-') && p.completed[l.id]).length >= 6 },
   { id: 'react-dev',      icon: '⚛️', name: 'React Dev',          check: (p) => LESSONS.filter(l => l.id.startsWith('react-') && p.completed[l.id]).length >= 6 },
+  { id: 'phase-1',         icon: '🏁', name: 'Fase 1 completa',     check: (p) => isUnitComplete(p, 'Fase 1') },
+  { id: 'phase-4',         icon: '🧠', name: 'Algoritmos',          check: (p) => isUnitComplete(p, 'Fase 4') },
 ];
 
 export interface Level {
@@ -45,12 +53,83 @@ export function getLevel(xp: number): Level {
 }
 
 export function emptyProgress(): Progress {
-  return { completed: {}, code: {}, xp: 0, streak: { count: 0, lastDate: null }, badges: [], nome: '', avatar: '🦜' };
+  return {
+    completed: {},
+    code: {},
+    xp: 0,
+    streak: { count: 0, lastDate: null },
+    badges: [],
+    nome: '',
+    avatar: '🦜',
+    credits: { current: MAX_CREDITS, max: MAX_CREDITS, nextRechargeAt: null },
+    xpEvents: [],
+    stats: { correctAnswers: 0, codeExercisesPassed: 0 },
+    dailyChallenge: { date: null, completed: false, correct: 0, total: 0 },
+  };
+}
+
+export function rechargeCredits(progress: Progress, now = Date.now()): Progress {
+  if (!progress.credits.nextRechargeAt || now < progress.credits.nextRechargeAt) return progress;
+  return {
+    ...progress,
+    credits: {
+      ...progress.credits,
+      current: progress.credits.max,
+      nextRechargeAt: null,
+    },
+  };
+}
+
+export function normalizeProgress(progress: Partial<Progress> | null | undefined): Progress {
+  const base = emptyProgress();
+  const merged = { ...base, ...(progress || {}) };
+  const credits = { ...base.credits, ...(progress?.credits || {}) };
+  const stats = { ...base.stats, ...(progress?.stats || {}) };
+  const dailyChallenge = { ...base.dailyChallenge, ...(progress?.dailyChallenge || {}) };
+  merged.credits = {
+    current: Math.max(0, Math.min(credits.current, credits.max || MAX_CREDITS)),
+    max: credits.max || MAX_CREDITS,
+    nextRechargeAt: credits.nextRechargeAt || null,
+  };
+  merged.stats = stats;
+  merged.dailyChallenge = dailyChallenge;
+  merged.xpEvents = Array.isArray(progress?.xpEvents) ? progress.xpEvents : [];
+  return rechargeCredits(merged);
+}
+
+export function consumeCredit(progress: Progress, now = Date.now()): Progress | null {
+  const recharged = rechargeCredits(progress, now);
+  if (recharged.credits.current <= 0) return null;
+  const current = recharged.credits.current - 1;
+  return {
+    ...recharged,
+    credits: {
+      ...recharged.credits,
+      current,
+      nextRechargeAt: current < recharged.credits.max
+        ? recharged.credits.nextRechargeAt || now + CREDIT_RECHARGE_MS
+        : null,
+    },
+  };
+}
+
+export function formatCreditTimer(nextRechargeAt: number | null, now = Date.now()): string {
+  if (!nextRechargeAt) return '';
+  const remaining = Math.max(0, nextRechargeAt - now);
+  const hours = Math.floor(remaining / 3600000);
+  const minutes = Math.ceil((remaining % 3600000) / 60000);
+  if (hours <= 0) return `${minutes}min`;
+  return `${hours}h ${minutes.toString().padStart(2, '0')}min`;
 }
 
 export function isUnlocked(progress: Progress, index: number): boolean {
   if (index === 0) return true;
   return !!progress.completed[LESSONS[index - 1].id];
+}
+
+export function isUnitComplete(progress: Progress, unitPrefix: string): boolean {
+  const lessons = LESSONS.filter(l => l.unit.startsWith(unitPrefix));
+  return lessons.length > 0 && lessons.every(l => progress.completed[l.id]);
 }
 
 /** Mutates streak in place, returns same object. */

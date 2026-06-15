@@ -93,9 +93,6 @@ export default function Landing() {
             <a href="#fases" className="lp-btn-ghost lp-btn-lg">Ver trilha ↓</a>
           </div>
         </div>
-        <div className="lp-hero-visual">
-          <img src="/logoararadev.jpeg" className="lp-hero-mascot" alt="AraraDev mascote" />
-        </div>
       </section>
 
       <section className="lp-features">
