@@ -3,6 +3,7 @@ import type { Lesson } from '../types';
 import { useProgress } from '../context/ProgressContext';
 import { playSound, launchConfetti } from '../lib/effects';
 import { IconClose } from './icons';
+import Mascote, { type MascoteEstado } from './Mascote';
 
 interface Props {
   lesson: Lesson;
@@ -46,6 +47,17 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
 
   const progressPct = finished ? 100 : Math.round((qi / total) * 100);
 
+  let mascoteEstado: MascoteEstado = 'idle';
+  let mascoteFala: string | undefined;
+  if (finished) {
+    mascoteEstado = 'comemora';
+    mascoteFala = 'Mandou bem!';
+  } else if (answered) {
+    const ok = selected === q.answer;
+    mascoteEstado = ok ? 'acerta' : 'erra';
+    mascoteFala = ok ? 'Arrasou!' : 'Quase!';
+  }
+
   return (
     <div id="lesson-screen">
       <div className="ls-header">
@@ -56,6 +68,7 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
       <div className="ls-body">
         {finished ? (
           <div className="ls-complete">
+            <Mascote estado={mascoteEstado} fala={mascoteFala} size={140} />
             <div className="ls-complete-icon">🏆</div>
             <h2 className="ls-complete-title">Lição concluída!</h2>
             <p className="ls-complete-sub">{lesson.title}</p>
@@ -70,6 +83,9 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
           </div>
         ) : (
           <div className="ls-question-wrap">
+            <div className="ls-mascote-slot">
+              <Mascote estado={mascoteEstado} fala={answered ? mascoteFala : undefined} size={84} />
+            </div>
             <div className="ls-type-label">Escolha a resposta correta</div>
             <div className="ls-question" dangerouslySetInnerHTML={{ __html: q.q }} />
             <div className="ls-options">

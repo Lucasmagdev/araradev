@@ -12,6 +12,12 @@ function waveOffsets(w: number): number[] {
   return WAVE_OFFSETS_BASE.map(o => Math.round(o * scale));
 }
 
+// Tela estreita: offsets negativos saem do viewport e somem. Inverte pra dentro.
+function decoPos(v: string | undefined, narrow: boolean): string | undefined {
+  if (!v || !narrow) return v;
+  return v.startsWith('-') ? v.slice(1) : v;
+}
+
 interface Deco { t: string; big?: boolean; l?: string; r?: string; top: string; }
 
 const FASE_DECOS: Deco[][] = [
@@ -105,7 +111,7 @@ export default function Path({ onOpenLesson }: { onOpenLesson: (index: number) =
             <div className="fase-track">
               {decos.map((d, di) => (
                 <div key={di} className={'deco-item ' + (d.big ? 'big' : 'small')}
-                  style={{ position: 'absolute', top: d.top, left: d.l, right: d.r }}>{d.t}</div>
+                  style={{ position: 'absolute', top: d.top, left: decoPos(d.l, width < 480), right: decoPos(d.r, width < 480) }}>{d.t}</div>
               ))}
 
               {g.lessons.map(({ lesson, index }, gi) => {

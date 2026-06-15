@@ -33,6 +33,8 @@ body {
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  position: relative;
+  background: linear-gradient(180deg, #0d1a2e 0%, #091420 40%, #060e18 70%, #04090f 100%);
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -505,6 +507,8 @@ body {
   margin: 0 auto;
   padding: 16px 16px 32px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 /* Fase banner (replaces unit-title) */
@@ -752,6 +756,92 @@ body {
 @keyframes bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
+}
+
+/* ===== Mascote (nível 1: CSS na PNG) ===== */
+.mascote {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.mascote-img,
+.mascote-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform-origin: 50% 90%;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4));
+}
+.mascote-fala {
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  border-radius: 14px;
+  margin-bottom: 8px;
+  max-width: 220px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+.mascote-fala::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: #fff;
+  border-bottom: 0;
+}
+
+/* idle: flutua suave */
+.mascote-idle .mascote-img { animation: mascote-flutua 3s ease-in-out infinite; }
+@keyframes mascote-flutua {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(-1.5deg); }
+}
+
+/* acerta: pulinho */
+.mascote-acerta .mascote-img { animation: mascote-pula 0.55s ease; }
+@keyframes mascote-pula {
+  0% { transform: translateY(0) scale(1); }
+  35% { transform: translateY(-22px) scale(1.08, 0.95); }
+  60% { transform: translateY(0) scale(0.96, 1.06); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* erra: treme */
+.mascote-erra .mascote-img { animation: mascote-treme 0.5s ease; }
+@keyframes mascote-treme {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20% { transform: translateX(-6px) rotate(-4deg); }
+  40% { transform: translateX(6px) rotate(4deg); }
+  60% { transform: translateX(-4px) rotate(-2deg); }
+  80% { transform: translateX(4px) rotate(2deg); }
+}
+
+/* comemora: festa */
+.mascote-comemora .mascote-img { animation: mascote-festa 0.7s ease infinite; }
+@keyframes mascote-festa {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-18px) rotate(-6deg) scale(1.05); }
+  50% { transform: translateY(0) rotate(0deg) scale(1); }
+  75% { transform: translateY(-18px) rotate(6deg) scale(1.05); }
+}
+
+.ls-mascote-slot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascote-img { animation: none !important; }
 }
 
 /* Modal */
@@ -1512,6 +1602,9 @@ body {
 
   .deco-item.big { font-size: 1.1rem; }
   .deco-item.small { font-size: 0.6rem; }
+  /* narrow screens: pull edge decorations inside so #path doesn't clip them */
+  .deco-item[style*="left"] { left: 3% !important; }
+  .deco-item[style*="right"] { right: 3% !important; }
 
   .modal { padding: 18px 14px; border-radius: 14px; }
   #modal-overlay { padding: 10px 10px 76px; }

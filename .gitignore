@@ -14,6 +14,11 @@ android/capacitor-cordova-android-plugins/
 api/.env
 *.env
 
+# video fonte bruta (mantemos só os .webm processados)
+*.mp4
+android/_emu_*.png
+*_emu_*.png
+
 # os / editor
 .DS_Store
 *.log
