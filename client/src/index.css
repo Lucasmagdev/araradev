@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* App (trilha) styles — :root vars are global here.
+   Landing styles are scoped under .lp-page so they don't leak. */
+@import "./styles/app.css";
+@import "./styles/landing.css";
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  background: #04090f;
+}

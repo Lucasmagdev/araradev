@@ -1,0 +1,19 @@
+# deps
+node_modules/
+client/node_modules/
+
+# builds
+client/dist/
+android/build/
+android/app/build/
+android/.gradle/
+android/capacitor-cordova-android-plugins/
+
+# secrets
+.env
+api/.env
+*.env
+
+# os / editor
+.DS_Store
+*.log

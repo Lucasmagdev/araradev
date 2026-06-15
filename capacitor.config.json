@@ -1,0 +1,9 @@
+{
+  "appId": "com.araradev.app",
+  "appName": "AraraDev",
+  "webDir": "client/dist",
+  "server": {
+    "cleartext": true,
+    "androidScheme": "http"
+  }
+}
