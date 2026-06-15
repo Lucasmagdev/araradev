@@ -13,6 +13,10 @@ android/capacitor-cordova-android-plugins/
 .env
 api/.env
 *.env
+# android release signing (NUNCA commitar keystore nem senhas)
+android/keystore.properties
+*.jks
+*.keystore
 
 # video fonte bruta (mantemos só os .webm processados)
 *.mp4
