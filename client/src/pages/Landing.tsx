@@ -85,15 +85,7 @@ export default function Landing() {
         <div className="lp-bg-aurora a1" />
         <div className="lp-bg-aurora a2" />
         <div className="lp-bg-aurora a3" />
-        <div className="lp-bg-grid" />
-        <div className="lp-bg-shapes">
-          <span className="lp-shape ring s1" />
-          <span className="lp-shape cube s2" />
-          <span className="lp-shape ring s3" />
-          <span className="lp-shape dot s4" />
-          <span className="lp-shape cube s5" />
-          <span className="lp-shape dot s6" />
-        </div>
+        <div className="lp-bg-aurora a4" />
       </div>
 
       <header className="lp-header">
