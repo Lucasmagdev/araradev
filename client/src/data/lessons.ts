@@ -328,6 +328,104 @@ if (idade &gt;= 18 &amp;&amp; temCarteira) {
     ],
   },
 
+  {
+    id: 'x1-1',
+    unit: 'Fase 1 — Lógica de programação',
+    title: 'Média de uma lista',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Pra calcular a <strong>média</strong>: some todos os números e divida pela quantidade.</p>
+      <pre><code>soma / quantidade</code></pre>
+      <p>Escreva <code>media(lista)</code> que retorna a média dos números. Se a lista estiver vazia, retorne 0.</p>
+    `,
+    starter: 'function media(lista) {\n  // seu código aqui\n}',
+    funcName: 'media',
+    tests: [
+      { args: [[2, 4, 6]], expected: 4 },
+      { args: [[10]], expected: 10 },
+      { args: [[]], expected: 0 },
+      { args: [[1, 2]], expected: 1.5 },
+    ],
+  },
+  {
+    id: 'x1-2',
+    unit: 'Fase 1 — Lógica de programação',
+    title: 'Contar ocorrências',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Percorra a lista e use um <strong>acumulador</strong> pra contar quantas vezes um valor aparece.</p>
+      <p>Escreva <code>contar(lista, alvo)</code> que retorna quantas vezes <code>alvo</code> aparece em <code>lista</code>.</p>
+    `,
+    starter: 'function contar(lista, alvo) {\n  // seu código aqui\n}',
+    funcName: 'contar',
+    tests: [
+      { args: [[1, 2, 2, 3, 2], 2], expected: 3 },
+      { args: [['a', 'b', 'a'], 'a'], expected: 2 },
+      { args: [[1, 2, 3], 9], expected: 0 },
+    ],
+  },
+  {
+    id: 'x1-3',
+    unit: 'Fase 1 — Lógica de programação',
+    title: 'Operador módulo (%)',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>O operador <strong>%</strong> (módulo) devolve o <strong>resto</strong> da divisão.</p>
+      <pre><code>7 % 2 // 1  (7 dividido por 2 sobra 1)
+10 % 5 // 0  (divisão exata)
+8 % 3  // 2</code></pre>
+      <p>Uso clássico: <code>n % 2 === 0</code> testa se <code>n</code> é <strong>par</strong> (resto zero).</p>
+    `,
+    quiz: [
+      { q: 'Quanto vale <code>9 % 4</code>?', options: ['1', '2', '2.25', '0'], answer: 0 },
+      { q: 'Como testar se <code>n</code> é par?', options: ['n / 2 === 0', 'n % 2 === 0', 'n % 2 === 1', 'n * 2 === 0'], answer: 1 },
+      { q: 'Quanto vale <code>6 % 3</code>?', options: ['2', '1', '0', '3'], answer: 2 },
+    ],
+  },
+  {
+    id: 'x1-4',
+    unit: 'Fase 1 — Lógica de programação',
+    title: 'Maior número da lista',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Guarde um "maior até agora" e atualize sempre que achar um número maior.</p>
+      <pre><code>let maior = lista[0];
+for (...) { if (atual &gt; maior) maior = atual; }</code></pre>
+      <p>Escreva <code>maiorDaLista(lista)</code> que retorna o maior número. Pode assumir que a lista tem ao menos 1 item.</p>
+    `,
+    starter: 'function maiorDaLista(lista) {\n  // seu código aqui\n}',
+    funcName: 'maiorDaLista',
+    tests: [
+      { args: [[1, 9, 3, 7]], expected: 9 },
+      { args: [[-5, -2, -10]], expected: -2 },
+      { args: [[42]], expected: 42 },
+    ],
+  },
+  {
+    id: 'x1-5',
+    unit: 'Fase 1 — Lógica de programação',
+    title: 'Está no intervalo?',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Combine duas condições com <strong>&amp;&amp;</strong> (e). Um número está no intervalo se for maior-ou-igual ao mínimo <strong>e</strong> menor-ou-igual ao máximo.</p>
+      <p>Escreva <code>noIntervalo(n, min, max)</code> que retorna <code>true</code> se <code>n</code> está entre <code>min</code> e <code>max</code> (incluindo as pontas).</p>
+    `,
+    starter: 'function noIntervalo(n, min, max) {\n  // seu código aqui\n}',
+    funcName: 'noIntervalo',
+    tests: [
+      { args: [5, 1, 10], expected: true },
+      { args: [1, 1, 10], expected: true },
+      { args: [10, 1, 10], expected: true },
+      { args: [0, 1, 10], expected: false },
+      { args: [11, 1, 10], expected: false },
+    ],
+  },
+
   // ===== FASE 2 — Estruturas de dados =====
   {
     id: 'm2-1',
@@ -526,6 +624,106 @@ clientes[1].idade; // 17</code></pre>
     ],
   },
 
+  {
+    id: 'x2-1',
+    unit: 'Fase 2 — Estruturas de dados',
+    title: 'Remover duplicados',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Um <strong>Set</strong> guarda só valores únicos. Dá pra transformar array em Set e voltar pra array:</p>
+      <pre><code>[...new Set(lista)]</code></pre>
+      <p>Escreva <code>semDuplicados(lista)</code> que retorna a lista sem valores repetidos, na ordem original.</p>
+    `,
+    starter: 'function semDuplicados(lista) {\n  // seu código aqui\n}',
+    funcName: 'semDuplicados',
+    tests: [
+      { args: [[1, 2, 2, 3, 1]], expected: [1, 2, 3] },
+      { args: [['a', 'a', 'b']], expected: ['a', 'b'] },
+      { args: [[]], expected: [] },
+    ],
+  },
+  {
+    id: 'x2-2',
+    unit: 'Fase 2 — Estruturas de dados',
+    title: 'Somar valores de um objeto',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p><code>Object.values(obj)</code> devolve um array com os valores do objeto. Daí é só somar.</p>
+      <pre><code>Object.values({a: 1, b: 2}) // [1, 2]</code></pre>
+      <p>Escreva <code>somaValores(obj)</code> que retorna a soma de todos os valores (números) do objeto.</p>
+    `,
+    starter: 'function somaValores(obj) {\n  // seu código aqui\n}',
+    funcName: 'somaValores',
+    tests: [
+      { args: [{ a: 1, b: 2, c: 3 }], expected: 6 },
+      { args: [{ x: 10 }], expected: 10 },
+      { args: [{}], expected: 0 },
+    ],
+  },
+  {
+    id: 'x2-3',
+    unit: 'Fase 2 — Estruturas de dados',
+    title: 'Quando usar Map vs Objeto',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Os dois guardam pares <strong>chave → valor</strong>, mas:</p>
+      <ul>
+        <li><strong>Objeto</strong>: chaves são texto. Bom pra "registro" com campos conhecidos (<code>user.nome</code>).</li>
+        <li><strong>Map</strong>: chave pode ser qualquer tipo, mantém ordem de inserção, tem <code>.size</code> e é melhor pra adicionar/remover muito.</li>
+      </ul>
+      <pre><code>const m = new Map();
+m.set('a', 1);
+m.get('a'); // 1
+m.size;     // 1</code></pre>
+    `,
+    quiz: [
+      { q: 'Qual estrutura tem <code>.size</code> pra contar itens?', options: ['Objeto', 'Map', 'os dois', 'nenhum'], answer: 1 },
+      { q: 'Pra um "registro" com campos fixos (nome, idade), o mais natural é:', options: ['Map', 'Objeto', 'Set', 'Array'], answer: 1 },
+      { q: 'Como pegar um valor de um Map <code>m</code> na chave "a"?', options: ['m["a"]', 'm.a', 'm.get("a")', 'm.value("a")'], answer: 2 },
+    ],
+  },
+  {
+    id: 'x2-4',
+    unit: 'Fase 2 — Estruturas de dados',
+    title: 'Interseção de duas listas',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>A <strong>interseção</strong> são os itens que aparecem nas duas listas. <code>lista.includes(x)</code> testa se <code>x</code> está numa lista.</p>
+      <p>Escreva <code>intersecao(a, b)</code> que retorna os valores presentes em <strong>ambas</strong>, sem repetir.</p>
+    `,
+    starter: 'function intersecao(a, b) {\n  // seu código aqui\n}',
+    funcName: 'intersecao',
+    tests: [
+      { args: [[1, 2, 3], [2, 3, 4]], expected: [2, 3] },
+      { args: [[1, 2], [3, 4]], expected: [] },
+      { args: [[1, 1, 2], [1, 2]], expected: [1, 2] },
+    ],
+  },
+  {
+    id: 'x2-5',
+    unit: 'Fase 2 — Estruturas de dados',
+    title: 'Agrupar por primeira letra',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Dá pra usar um <strong>objeto como agrupador</strong>: a chave é a categoria, o valor é um array.</p>
+      <pre><code>if (!grupos[chave]) grupos[chave] = [];
+grupos[chave].push(item);</code></pre>
+      <p>Escreva <code>agrupar(palavras)</code> que retorna um objeto agrupando as palavras pela <strong>primeira letra</strong>.</p>
+    `,
+    starter: 'function agrupar(palavras) {\n  // seu código aqui\n}',
+    funcName: 'agrupar',
+    tests: [
+      { args: [['ana', 'bia', 'alex']], expected: { a: ['ana', 'alex'], b: ['bia'] } },
+      { args: [[]], expected: {} },
+      { args: [['casa']], expected: { c: ['casa'] } },
+    ],
+  },
+
   // ===== FASE 3 — Recursão =====
   {
     id: 'rec-1',
@@ -622,6 +820,107 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
       { q: 'Recursão sem caso base corre o risco de:', options: ['ficar mais rápida', 'stack overflow (estouro de pilha)', 'virar um loop automaticamente'], answer: 1 },
       { q: 'Recursão costuma ser mais natural pra:', options: ['problemas divididos em partes menores (árvores, listas aninhadas)', 'somar 2 números', 'imprimir texto fixo'], answer: 0 },
       { q: 'É verdade que tudo feito com recursão pode ser feito com loop?', options: ['sim', 'não, são coisas completamente diferentes'], answer: 0 },
+    ],
+  },
+
+  {
+    id: 'x3-1',
+    unit: 'Fase 3 — Recursão',
+    title: 'Caso base e caso recursivo',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Toda recursão precisa de duas partes:</p>
+      <ul>
+        <li><strong>Caso base</strong>: quando parar (sem ele, loop infinito → erro de pilha).</li>
+        <li><strong>Caso recursivo</strong>: a função chama a si mesma com um problema <em>menor</em>.</li>
+      </ul>
+      <pre><code>function contagem(n) {
+  if (n === 0) return;      // caso base
+  console.log(n);
+  contagem(n - 1);          // caso recursivo (menor)
+}</code></pre>
+    `,
+    quiz: [
+      { q: 'O que evita a recursão rodar pra sempre?', options: ['o caso recursivo', 'o caso base', 'o return', 'o loop'], answer: 1 },
+      { q: 'No caso recursivo, o problema deve ficar:', options: ['maior', 'igual', 'menor', 'aleatório'], answer: 2 },
+      { q: 'Recursão sem caso base causa:', options: ['resultado errado', 'estouro de pilha', 'nada', 'loop for'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x3-2',
+    unit: 'Fase 3 — Recursão',
+    title: 'Soma recursiva',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Soma de <code>[1,2,3]</code> = <code>1 + soma([2,3])</code>. O caso base é a lista vazia (soma 0).</p>
+      <p>Use <code>lista.slice(1)</code> pra pegar a lista sem o primeiro item. Escreva <code>somaRec(lista)</code> <strong>com recursão</strong>.</p>
+    `,
+    starter: 'function somaRec(lista) {\n  // seu código aqui\n}',
+    funcName: 'somaRec',
+    tests: [
+      { args: [[1, 2, 3]], expected: 6 },
+      { args: [[]], expected: 0 },
+      { args: [[5]], expected: 5 },
+      { args: [[10, -5]], expected: 5 },
+    ],
+  },
+  {
+    id: 'x3-3',
+    unit: 'Fase 3 — Recursão',
+    title: 'Potência recursiva',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p><code>base^exp</code> = <code>base × base^(exp-1)</code>. Caso base: qualquer número elevado a 0 é 1.</p>
+      <p>Escreva <code>potencia(base, exp)</code> usando recursão (<code>exp</code> é inteiro &ge; 0).</p>
+    `,
+    starter: 'function potencia(base, exp) {\n  // seu código aqui\n}',
+    funcName: 'potencia',
+    tests: [
+      { args: [2, 3], expected: 8 },
+      { args: [5, 0], expected: 1 },
+      { args: [3, 2], expected: 9 },
+      { args: [2, 10], expected: 1024 },
+    ],
+  },
+  {
+    id: 'x3-4',
+    unit: 'Fase 3 — Recursão',
+    title: 'Contar dígitos',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Cada divisão inteira por 10 "remove" um dígito: <code>Math.floor(n / 10)</code>. Caso base: número menor que 10 tem 1 dígito.</p>
+      <p>Escreva <code>contaDigitos(n)</code> que conta os dígitos de um inteiro positivo, com recursão.</p>
+    `,
+    starter: 'function contaDigitos(n) {\n  // seu código aqui\n}',
+    funcName: 'contaDigitos',
+    tests: [
+      { args: [5], expected: 1 },
+      { args: [42], expected: 2 },
+      { args: [1000], expected: 4 },
+      { args: [9], expected: 1 },
+    ],
+  },
+  {
+    id: 'x3-5',
+    unit: 'Fase 3 — Recursão',
+    title: 'Inverter string recursivo',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Inverter <code>"abc"</code> = inverter <code>"bc"</code> + <code>"a"</code> no fim. Caso base: string vazia.</p>
+      <p>Use <code>s[0]</code> (primeiro) e <code>s.slice(1)</code> (resto). Escreva <code>inverteRec(s)</code> com recursão.</p>
+    `,
+    starter: 'function inverteRec(s) {\n  // seu código aqui\n}',
+    funcName: 'inverteRec',
+    tests: [
+      { args: ['abc'], expected: 'cba' },
+      { args: [''], expected: '' },
+      { args: ['a'], expected: 'a' },
+      { args: ['arara'], expected: 'arara' },
     ],
   },
 
@@ -722,6 +1021,105 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
       { q: 'Em código de produção, o normal é:', options: ['sempre reimplementar sua própria ordenação', 'usar o sort() nativo da linguagem', 'evitar ordenar listas'], answer: 1 },
       { q: 'Por que <code>[10,2,1].sort()</code> pode dar resultado inesperado em alguns casos?', options: ['sort() às vezes compara como texto, não como número, sem um comparador', 'sort() está com bug', 'listas não podem ser ordenadas'], answer: 0 },
       { q: 'Entender o algoritmo por trás do sort serve principalmente pra:', options: ['nunca usar sort()', 'debugar, entender performance e entrevistas', 'decorar código'], answer: 1 },
+    ],
+  },
+
+  {
+    id: 'x4-1',
+    unit: 'Fase 4 — Algoritmos clássicos',
+    title: 'Busca binária',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Em lista <strong>ordenada</strong>, a busca binária corta o problema pela metade a cada passo (muito mais rápida que olhar item por item).</p>
+      <p>Olhe o meio: se for o alvo, achou; se o alvo for menor, busque na metade esquerda; senão na direita.</p>
+      <p>Escreva <code>buscaBinaria(lista, alvo)</code> que retorna o <strong>índice</strong> do alvo, ou <code>-1</code> se não existir.</p>
+    `,
+    starter: 'function buscaBinaria(lista, alvo) {\n  // seu código aqui\n}',
+    funcName: 'buscaBinaria',
+    tests: [
+      { args: [[1, 3, 5, 7, 9], 7], expected: 3 },
+      { args: [[1, 3, 5, 7, 9], 1], expected: 0 },
+      { args: [[1, 3, 5, 7, 9], 4], expected: -1 },
+      { args: [[], 5], expected: -1 },
+    ],
+  },
+  {
+    id: 'x4-2',
+    unit: 'Fase 4 — Algoritmos clássicos',
+    title: 'Bubble sort',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>O <strong>bubble sort</strong> compara pares vizinhos e troca quando estão fora de ordem, repetindo até ninguém trocar mais.</p>
+      <p>Escreva <code>bubbleSort(lista)</code> que retorna uma nova lista ordenada do menor pro maior. (Não use <code>.sort()</code> — faça na mão.)</p>
+    `,
+    starter: 'function bubbleSort(lista) {\n  // seu código aqui\n}',
+    funcName: 'bubbleSort',
+    tests: [
+      { args: [[3, 1, 2]], expected: [1, 2, 3] },
+      { args: [[5, 4, 3, 2, 1]], expected: [1, 2, 3, 4, 5] },
+      { args: [[]], expected: [] },
+      { args: [[1]], expected: [1] },
+    ],
+  },
+  {
+    id: 'x4-3',
+    unit: 'Fase 4 — Algoritmos clássicos',
+    title: 'Entendendo Big O',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p><strong>Big O</strong> descreve como o trabalho cresce conforme a entrada cresce.</p>
+      <ul>
+        <li><strong>O(1)</strong>: constante — acessar <code>lista[0]</code>.</li>
+        <li><strong>O(n)</strong>: linear — um loop simples na lista.</li>
+        <li><strong>O(n²)</strong>: loop dentro de loop (ex: bubble sort).</li>
+        <li><strong>O(log n)</strong>: corta pela metade — busca binária.</li>
+      </ul>
+      <p>Pra 1000 itens, O(n) faz ~1000 passos; O(n²) faz ~1.000.000.</p>
+    `,
+    quiz: [
+      { q: 'Busca binária é qual complexidade?', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], answer: 2 },
+      { q: 'Dois loops aninhados na mesma lista costumam ser:', options: ['O(1)', 'O(n)', 'O(n²)', 'O(log n)'], answer: 2 },
+      { q: 'Acessar <code>lista[5]</code> direto é:', options: ['O(1)', 'O(n)', 'O(n²)', 'O(log n)'], answer: 0 },
+    ],
+  },
+  {
+    id: 'x4-4',
+    unit: 'Fase 4 — Algoritmos clássicos',
+    title: 'Dois números que somam o alvo',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Problema clássico de entrevista. Veja se existem dois números na lista que somados dão o alvo.</p>
+      <p>Escreva <code>somaPar(lista, alvo)</code> que retorna <code>true</code> se algum par soma <code>alvo</code>, senão <code>false</code>. (Não use o mesmo elemento duas vezes.)</p>
+    `,
+    starter: 'function somaPar(lista, alvo) {\n  // seu código aqui\n}',
+    funcName: 'somaPar',
+    tests: [
+      { args: [[1, 2, 3], 5], expected: true },
+      { args: [[1, 2, 3], 7], expected: false },
+      { args: [[4, 4], 8], expected: true },
+      { args: [[4], 8], expected: false },
+    ],
+  },
+  {
+    id: 'x4-5',
+    unit: 'Fase 4 — Algoritmos clássicos',
+    title: 'Mínimo e máximo numa passada',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Dá pra achar o menor e o maior em um <strong>único</strong> loop (O(n)), guardando os dois ao mesmo tempo.</p>
+      <p>Escreva <code>minMax(lista)</code> que retorna um array <code>[min, max]</code>. Pode assumir lista não-vazia.</p>
+    `,
+    starter: 'function minMax(lista) {\n  // seu código aqui\n}',
+    funcName: 'minMax',
+    tests: [
+      { args: [[3, 1, 4, 1, 5]], expected: [1, 5] },
+      { args: [[7]], expected: [7, 7] },
+      { args: [[-2, -9, -1]], expected: [-9, -1] },
     ],
   },
 
@@ -918,6 +1316,105 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
     `,
   },
 
+  {
+    id: 'x6-1',
+    unit: 'Fase 6 — Debug e leitura de código IA',
+    title: 'Ler a mensagem de erro',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>A mensagem de erro quase sempre diz <strong>o quê</strong> e <strong>onde</strong>. Leia de cima pra baixo:</p>
+      <pre><code>TypeError: Cannot read properties of
+undefined (reading 'nome')
+    at perfil (app.js:42)</code></pre>
+      <ul>
+        <li><strong>Tipo</strong>: <code>TypeError</code></li>
+        <li><strong>Causa</strong>: algo é <code>undefined</code> e você tentou ler <code>.nome</code></li>
+        <li><strong>Local</strong>: <code>app.js</code> linha 42</li>
+      </ul>
+      <p>Antes de pedir pra IA, leia: metade dos bugs se resolve só entendendo a mensagem.</p>
+    `,
+    quiz: [
+      { q: 'No erro acima, qual o provável problema?', options: ['nome está errado', 'o objeto é undefined', 'falta ponto e vírgula', 'app.js não existe'], answer: 1 },
+      { q: 'Onde o erro aconteceu?', options: ['linha 1', 'app.js linha 42', 'na IA', 'no navegador'], answer: 1 },
+      { q: 'Melhor primeiro passo ao ver um erro:', options: ['pedir pra IA reescrever tudo', 'ler a mensagem com atenção', 'apagar o arquivo', 'ignorar'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x6-2',
+    unit: 'Fase 6 — Debug e leitura de código IA',
+    title: 'Conserte o off-by-one',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>O código abaixo deveria somar de 1 até n, mas tem um <strong>bug clássico</strong> (off-by-one): ele para cedo demais.</p>
+      <pre><code>for (let i = 1; i &lt; n; i++)</code></pre>
+      <p>Conserte <code>somaAteN(n)</code> pra somar de 1 até n <strong>inclusive</strong>.</p>
+    `,
+    starter: 'function somaAteN(n) {\n  let total = 0;\n  for (let i = 1; i < n; i++) {\n    total += i;\n  }\n  return total;\n}',
+    funcName: 'somaAteN',
+    tests: [
+      { args: [5], expected: 15 },
+      { args: [1], expected: 1 },
+      { args: [10], expected: 55 },
+    ],
+  },
+  {
+    id: 'x6-3',
+    unit: 'Fase 6 — Debug e leitura de código IA',
+    title: '== vs === (a pegadinha)',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p><code>==</code> converte tipos antes de comparar (gera bugs silenciosos). <code>===</code> compara valor <strong>e</strong> tipo.</p>
+      <pre><code>0 == ''      // true  (!!)
+0 === ''     // false
+'5' == 5     // true  (!!)
+'5' === 5    // false</code></pre>
+      <p>Regra: use <strong>sempre <code>===</code></strong>. Muito bug "que a IA escreveu e funcionou às vezes" é <code>==</code>.</p>
+    `,
+    quiz: [
+      { q: 'Quanto dá <code>"5" === 5</code>?', options: ['true', 'false', 'erro', 'undefined'], answer: 1 },
+      { q: 'Qual comparação devo usar por padrão?', options: ['==', '===', 'os dois', 'tanto faz'], answer: 1 },
+      { q: '<code>0 == ""</code> retorna:', options: ['false', 'true', 'erro', 'NaN'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x6-4',
+    unit: 'Fase 6 — Debug e leitura de código IA',
+    title: 'Conserte o acesso a undefined',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>A função pega o primeiro nome de uma lista de usuários, mas quebra quando a lista está <strong>vazia</strong> (<code>Cannot read properties of undefined</code>).</p>
+      <p>Conserte <code>primeiroNome(users)</code> pra retornar o nome do primeiro usuário, ou <code>'ninguém'</code> se a lista estiver vazia.</p>
+    `,
+    starter: "function primeiroNome(users) {\n  return users[0].nome;\n}",
+    funcName: 'primeiroNome',
+    tests: [
+      { args: [[{ nome: 'Lucas' }, { nome: 'Ana' }]], expected: 'Lucas' },
+      { args: [[]], expected: 'ninguém' },
+      { args: [[{ nome: 'Bia' }]], expected: 'Bia' },
+    ],
+  },
+  {
+    id: 'x6-5',
+    unit: 'Fase 6 — Debug e leitura de código IA',
+    title: 'Revisar código gerado por IA',
+    type: 'checklist',
+    xp: 10,
+    content: `
+      <p>Pegue um trecho que a IA gerou pra você (Codexy ou Gontijo). Sem pedir pra IA explicar, responda por escrito:</p>
+      <ol>
+        <li>O que cada função <strong>recebe</strong> e o que <strong>retorna</strong>?</li>
+        <li>Tem algum caso não tratado (lista vazia, <code>null</code>, erro de rede)?</li>
+        <li>Tem <code>==</code> onde deveria ser <code>===</code>?</li>
+        <li>Você conseguiria reescrever 1 função do zero, sem a IA?</li>
+      </ol>
+      <p>Marque como concluído quando responder as 4. Isso treina <strong>ler</strong>, não só gerar.</p>
+    `,
+  },
+
   // ===== FASE 7 — Testes automatizados =====
   {
     id: 'm5-1',
@@ -1003,6 +1500,109 @@ test("dobro de 4 é 8", () => {
       { args: [[5]], expected: 5 },
       { args: [[1, 2, 3, 4]], expected: 2.5 },
     ],
+  },
+
+  {
+    id: 'x7-1',
+    unit: 'Fase 7 — Testes automatizados',
+    title: 'Arrange, Act, Assert',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Um bom teste tem 3 partes (padrão <strong>AAA</strong>):</p>
+      <ul>
+        <li><strong>Arrange</strong>: prepara os dados de entrada.</li>
+        <li><strong>Act</strong>: chama a função que está sendo testada.</li>
+        <li><strong>Assert</strong>: verifica se o resultado é o esperado.</li>
+      </ul>
+      <pre><code>const lista = [1, 2, 3];        // arrange
+const r = soma(lista);          // act
+expect(r).toBe(6);              // assert</code></pre>
+    `,
+    quiz: [
+      { q: 'Em qual etapa você chama a função testada?', options: ['Arrange', 'Act', 'Assert', 'nenhuma'], answer: 1 },
+      { q: 'Verificar o resultado esperado é o:', options: ['Arrange', 'Act', 'Assert', 'Setup'], answer: 2 },
+      { q: 'Preparar os dados de entrada é o:', options: ['Arrange', 'Act', 'Assert', 'Run'], answer: 0 },
+    ],
+  },
+  {
+    id: 'x7-2',
+    unit: 'Fase 7 — Testes automatizados',
+    title: 'Casos de borda',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>O "caminho feliz" quase sempre passa. Bugs moram nos <strong>casos de borda</strong>:</p>
+      <ul>
+        <li>Lista <strong>vazia</strong> <code>[]</code></li>
+        <li><strong>Um</strong> único item</li>
+        <li>Valores <strong>negativos</strong> ou <strong>zero</strong></li>
+        <li><code>null</code> / <code>undefined</code></li>
+        <li>Valores <strong>repetidos</strong></li>
+      </ul>
+      <p>Pra cada função, pergunte: "o que acontece se a entrada for vazia ou estranha?"</p>
+    `,
+    quiz: [
+      { q: 'Qual destes é um caso de borda clássico?', options: ['lista com 3 itens normais', 'lista vazia', 'lista com nomes', 'lista ordenada'], answer: 1 },
+      { q: 'Por que testar casos de borda?', options: ['é onde bugs se escondem', 'pra demorar mais', 'não precisa', 'só por enfeite'], answer: 0 },
+      { q: 'Um valor de borda comum em números é:', options: ['100', 'zero', '7', '42'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x7-3',
+    unit: 'Fase 7 — Testes automatizados',
+    title: 'Implemente pra passar nos testes',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>Vire a mesa: os testes já existem (veja abaixo), você escreve a função pra <strong>passar em todos</strong> — incluindo os casos de borda.</p>
+      <p>Escreva <code>ehPalindromo(s)</code> que retorna <code>true</code> se a string é igual lida de trás pra frente. String vazia conta como palíndromo.</p>
+    `,
+    starter: 'function ehPalindromo(s) {\n  // seu código aqui\n}',
+    funcName: 'ehPalindromo',
+    tests: [
+      { args: ['arara'], expected: true },
+      { args: ['casa'], expected: false },
+      { args: [''], expected: true },
+      { args: ['a'], expected: true },
+      { args: ['abba'], expected: true },
+    ],
+  },
+  {
+    id: 'x7-4',
+    unit: 'Fase 7 — Testes automatizados',
+    title: 'Conserte a validação de email',
+    type: 'code',
+    xp: 20,
+    content: `
+      <p>A função deveria aceitar email com <code>@</code> e um ponto depois. Mas ela passa em <code>"a@b"</code> (sem ponto) — falha num caso de borda.</p>
+      <p>Conserte <code>emailValido(s)</code>: precisa ter algo antes do <code>@</code>, algo entre <code>@</code> e <code>.</code>, e algo depois do <code>.</code></p>
+    `,
+    starter: "function emailValido(s) {\n  return s.includes('@');\n}",
+    funcName: 'emailValido',
+    tests: [
+      { args: ['lucas@email.com'], expected: true },
+      { args: ['a@b'], expected: false },
+      { args: ['semarroba.com'], expected: false },
+      { args: ['x@y.z'], expected: true },
+      { args: [''], expected: false },
+    ],
+  },
+  {
+    id: 'x7-5',
+    unit: 'Fase 7 — Testes automatizados',
+    title: 'Escrever testes de uma função sua',
+    type: 'checklist',
+    xp: 10,
+    content: `
+      <p>Pegue uma função de um projeto seu (Codexy/Gontijo). Sem IA, escreva no papel ou em comentário:</p>
+      <ol>
+        <li>1 teste do <strong>caminho feliz</strong> (entrada normal).</li>
+        <li>1 teste de <strong>caso de borda</strong> (vazio, zero, null...).</li>
+        <li>1 teste de entrada <strong>inválida</strong> (o que deveria acontecer?).</li>
+      </ol>
+      <p>Para cada um: entrada → saída esperada. Marque concluído quando tiver os 3.</p>
+    `,
   },
 
   // ===== FASE 8 — Arquitetura e segurança =====
@@ -1119,6 +1719,107 @@ const apiKey = process.env.API_KEY;</code></pre>
     content: `
       <p>Revise 1 projeto seu: tem alguma senha, token ou chave de API escrita direto no código (não em <code>.env</code>)? O <code>.env</code> está no <code>.gitignore</code> (não vai pro repositório)?</p>
       <p>Se encontrar algo exposto, mova pra variável de ambiente e, se já foi commitado, troque a chave/senha (ela deve ser considerada vazada).</p>
+    `,
+  },
+
+  {
+    id: 'x8-1',
+    unit: 'Fase 8 — Arquitetura e segurança',
+    title: 'Separação de responsabilidades',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Cada parte do código deve ter <strong>um trabalho só</strong>. Misturar tudo numa função vira bola de neve impossível de manter.</p>
+      <p>Padrão comum em backend:</p>
+      <ul>
+        <li><strong>Rota/Controller</strong>: recebe a requisição, responde.</li>
+        <li><strong>Serviço</strong>: regra de negócio.</li>
+        <li><strong>Repositório/DAO</strong>: fala com o banco.</li>
+      </ul>
+      <p>Sinal de alerta: uma função que valida, consulta o banco, formata HTML e manda email — tudo junto.</p>
+    `,
+    quiz: [
+      { q: 'Quem deveria falar diretamente com o banco?', options: ['o controller da rota', 'a camada de repositório', 'o componente de UI', 'qualquer um'], answer: 1 },
+      { q: 'Uma função que faz 5 coisas diferentes indica:', options: ['bom desempenho', 'falta de separação de responsabilidades', 'código seguro', 'nada'], answer: 1 },
+      { q: 'O objetivo de separar em camadas é:', options: ['deixar mais lento', 'facilitar manter e testar', 'usar mais arquivos por enfeite', 'esconder bugs'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x8-2',
+    unit: 'Fase 8 — Arquitetura e segurança',
+    title: 'Nunca confie no input do usuário',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Todo dado que vem de fora (formulário, URL, API) pode estar errado ou ser <strong>malicioso</strong>. Sempre <strong>valide no servidor</strong> — validar só no front não protege nada (dá pra burlar).</p>
+      <ul>
+        <li>Tipo e formato certos? (email é email, número é número)</li>
+        <li>Tamanho dentro do limite?</li>
+        <li>Em SQL, use <strong>queries parametrizadas</strong> (evita SQL injection) — nunca concatene texto do usuário direto na query.</li>
+      </ul>
+    `,
+    quiz: [
+      { q: 'Validar dados só no frontend é suficiente?', options: ['sim', 'não, dá pra burlar — valide no servidor', 'sim se usar React', 'só pra senha'], answer: 1 },
+      { q: 'O que evita SQL injection?', options: ['concatenar strings', 'queries parametrizadas', 'confiar no usuário', 'usar GET'], answer: 1 },
+      { q: 'Dado vindo do usuário deve ser tratado como:', options: ['sempre confiável', 'potencialmente perigoso', 'irrelevante', 'já validado'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x8-3',
+    unit: 'Fase 8 — Arquitetura e segurança',
+    title: 'Senhas: hash, nunca texto puro',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Senha <strong>jamais</strong> é salva como texto puro no banco. Salva-se um <strong>hash</strong> (ex: <code>bcrypt</code>) — uma transformação de via única.</p>
+      <pre><code>const hash = await bcrypt.hash(senha, 10);
+// no login:
+await bcrypt.compare(senhaDigitada, hash); // true/false</code></pre>
+      <p>Assim, mesmo se vazar o banco, ninguém lê as senhas. (O AraraDev faz exatamente isso.)</p>
+    `,
+    quiz: [
+      { q: 'Como senha deve ser guardada?', options: ['texto puro', 'hash (ex: bcrypt)', 'em maiúsculas', 'na URL'], answer: 1 },
+      { q: 'No login, como conferir a senha?', options: ['comparar texto puro', 'bcrypt.compare com o hash', 'olhar no banco', 'perguntar pra IA'], answer: 1 },
+      { q: 'Se o banco vazar e as senhas forem hash:', options: ['todas expostas em texto', 'continuam protegidas', 'viram públicas', 'somem'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x8-4',
+    unit: 'Fase 8 — Arquitetura e segurança',
+    title: 'Segredos fora do código',
+    type: 'theory',
+    xp: 15,
+    content: `
+      <p>Senhas de banco, chaves de API e tokens <strong>nunca</strong> ficam no código que vai pro Git. Ficam em <strong>variáveis de ambiente</strong> (arquivo <code>.env</code>), que entra no <code>.gitignore</code>.</p>
+      <pre><code>// .env (NÃO vai pro git)
+DB_PASS=segredo123
+
+// no código:
+process.env.DB_PASS</code></pre>
+      <p>Se um segredo vazar no Git ou num chat, considere-o <strong>comprometido</strong> e troque.</p>
+    `,
+    quiz: [
+      { q: 'Onde guardar a senha do banco?', options: ['no código', 'numa variável de ambiente (.env)', 'num comentário', 'no README'], answer: 1 },
+      { q: 'O <code>.env</code> deve estar no:', options: ['git, commitado', '.gitignore (fora do git)', 'README', 'frontend'], answer: 1 },
+      { q: 'Se uma chave de API vazou num chat, você deve:', options: ['ignorar', 'trocá-la (está comprometida)', 'commitar', 'nada'], answer: 1 },
+    ],
+  },
+  {
+    id: 'x8-5',
+    unit: 'Fase 8 — Arquitetura e segurança',
+    title: 'Auditoria de segurança de um projeto',
+    type: 'checklist',
+    xp: 10,
+    content: `
+      <p>Pegue um projeto seu (Codexy/Gontijo) e revise sem IA:</p>
+      <ol>
+        <li>Tem alguma <strong>senha/chave hardcoded</strong> no código? (move pro <code>.env</code>)</li>
+        <li>O <code>.env</code> está no <code>.gitignore</code>?</li>
+        <li>Input do usuário é <strong>validado no servidor</strong>?</li>
+        <li>Senhas estão com <strong>hash</strong>?</li>
+        <li>A API usa <strong>HTTPS</strong>?</li>
+      </ol>
+      <p>Anote o que falhou e o plano de correção. Marque concluído quando revisar os 5.</p>
     `,
   },
 
