@@ -46,7 +46,7 @@ async function ensureSchema() {
       UNIQUE KEY ux_xp_user_source_ref (user_id, source, ref_id),
       KEY idx_xp_period (created_at, amount),
       KEY idx_xp_user_period (user_id, created_at)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
 
   await pool.query(`
@@ -59,7 +59,7 @@ async function ensureSchema() {
       PRIMARY KEY (id),
       UNIQUE KEY ux_lesson_user_lesson (user_id, lesson_id),
       KEY idx_lesson_user_time (user_id, completed_at)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
 
   await pool.query(`
@@ -74,8 +74,29 @@ async function ensureSchema() {
       PRIMARY KEY (id),
       UNIQUE KEY ux_daily_user_date (user_id, challenge_date),
       KEY idx_daily_date (challenge_date)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS onboarding_preferences (
+      user_id VARCHAR(64) NOT NULL,
+      goal VARCHAR(60) NOT NULL,
+      confidence VARCHAR(80) NOT NULL,
+      time_commitment VARCHAR(60) NOT NULL,
+      learning_style VARCHAR(60) NOT NULL,
+      interests JSON NOT NULL,
+      completed_at BIGINT NOT NULL,
+      updated_at BIGINT NOT NULL,
+      PRIMARY KEY (user_id),
+      KEY idx_onboarding_goal (goal),
+      KEY idx_onboarding_completed (completed_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  `);
+
+  await pool.query('ALTER TABLE xp_events CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+  await pool.query('ALTER TABLE lesson_completions CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+  await pool.query('ALTER TABLE daily_challenges CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+  await pool.query('ALTER TABLE onboarding_preferences CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
 
   await backfillProgressTables();
 }
@@ -366,6 +387,54 @@ app.get('/api/ranking', requireAuth, async (req, res) => {
   });
 
   res.json(ranking);
+});
+
+// ── Onboarding ──────────────────────────────────────────────────────────────────
+
+app.get('/api/onboarding', requireAuth, async (req, res) => {
+  try {
+    const [[row]] = await pool.query(
+      'SELECT goal, confidence, time_commitment, learning_style, interests, completed_at FROM onboarding_preferences WHERE user_id = ?',
+      [req.session.userId]
+    );
+    if (!row) return res.json(null);
+    let interests = [];
+    try { interests = typeof row.interests === 'string' ? JSON.parse(row.interests) : (row.interests || []); } catch { interests = []; }
+    res.json({
+      goal: row.goal,
+      confidence: row.confidence,
+      time: row.time_commitment,
+      style: row.learning_style,
+      interests,
+      completedAt: Number(row.completed_at) || null,
+    });
+  } catch (e) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+app.post('/api/onboarding', requireAuth, async (req, res) => {
+  const { goal, confidence, time, style, interests } = req.body || {};
+  if (!goal || !confidence || !time || !style || !Array.isArray(interests) || !interests.length) {
+    return res.status(400).json({ error: 'Preencha todas as etapas' });
+  }
+  try {
+    const now = Date.now();
+    const interestsJson = JSON.stringify(interests.map(String).slice(0, 12));
+    await pool.query(
+      `INSERT INTO onboarding_preferences
+         (user_id, goal, confidence, time_commitment, learning_style, interests, completed_at, updated_at)
+       VALUES (?,?,?,?,?,?,?,?)
+       ON DUPLICATE KEY UPDATE
+         goal=VALUES(goal), confidence=VALUES(confidence), time_commitment=VALUES(time_commitment),
+         learning_style=VALUES(learning_style), interests=VALUES(interests), updated_at=VALUES(updated_at)`,
+      [req.session.userId, String(goal).slice(0, 60), String(confidence).slice(0, 80),
+       String(time).slice(0, 60), String(style).slice(0, 60), interestsJson, now, now]
+    );
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
 });
 
 // ── Admin HTML ────────────────────────────────────────────────────────────────

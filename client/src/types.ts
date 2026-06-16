@@ -85,3 +85,12 @@ export interface RankingEntry {
   streak: number;
   rank: number;
 }
+
+export interface OnboardingPreferences {
+  goal: string;
+  confidence: string;
+  time: string;
+  style: string;
+  interests: string[];
+  completedAt?: number;
+}

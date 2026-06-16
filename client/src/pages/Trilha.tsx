@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LESSONS } from '../data/lessons';
 import type { Lesson } from '../types';
 import { useProgress } from '../context/ProgressContext';
-import { getMe } from '../lib/api';
+import { getMe, getOnboardingPreferences } from '../lib/api';
 import Header from '../components/Header';
 import BottomNav, { type NavKey } from '../components/BottomNav';
 import Path from '../components/Path';
@@ -25,7 +25,13 @@ export default function Trilha() {
   const toastId = useRef(0);
 
   useEffect(() => {
-    getMe().then(() => setAuthChecked(true)).catch(() => navigate('/', { replace: true }));
+    getMe()
+      .then(() => getOnboardingPreferences())
+      .then(prefs => {
+        if (!prefs?.completedAt) navigate('/onboarding', { replace: true });
+        else setAuthChecked(true);
+      })
+      .catch(() => navigate('/', { replace: true }));
   }, [navigate]);
 
   const addToast = useCallback((html: string) => {

@@ -1,5 +1,5 @@
 import { Capacitor } from '@capacitor/core';
-import type { Progress, RankingEntry, User } from '../types';
+import type { OnboardingPreferences, Progress, RankingEntry, User } from '../types';
 
 export const API_BASE = Capacitor.isNativePlatform()
   ? 'http://80.241.218.217:3008'
@@ -93,4 +93,16 @@ export function recordDailyChallenge(date: string, correct: number, total: numbe
 
 export function getRanking(period: 'global' | 'weekly' | 'monthly') {
   return req<RankingEntry[]>(`/api/ranking?period=${period}`);
+}
+
+export function getOnboardingPreferences() {
+  return req<OnboardingPreferences | null>('/api/onboarding');
+}
+
+export function saveOnboardingPreferences(preferences: OnboardingPreferences) {
+  return req<{ ok: boolean }>('/api/onboarding', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(preferences),
+  });
 }

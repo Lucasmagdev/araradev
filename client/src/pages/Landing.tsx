@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMe, login, register, setToken, getToken } from '../lib/api';
+import { getMe, getOnboardingPreferences, login, register, setToken, getToken } from '../lib/api';
 
 type Mode = 'login' | 'register';
 
@@ -35,7 +35,10 @@ export default function Landing() {
   // Already logged in? Go to trilha.
   useEffect(() => {
     if (!getToken()) return;
-    getMe().then(() => navigate('/trilha')).catch(() => {});
+    getMe()
+      .then(() => getOnboardingPreferences())
+      .then(prefs => navigate(prefs?.completedAt ? '/trilha' : '/onboarding'))
+      .catch(() => {});
   }, [navigate]);
 
   function open(m: Mode) {
@@ -55,7 +58,12 @@ export default function Landing() {
       const name = nameRef.current?.value.trim() || '';
       const res = mode === 'login' ? await login(email, password) : await register(name, email, password);
       if (res.token) setToken(res.token);
-      navigate('/trilha');
+      if (mode === 'register') {
+        navigate('/onboarding');
+        return;
+      }
+      const prefs = await getOnboardingPreferences().catch(() => null);
+      navigate(prefs?.completedAt ? '/trilha' : '/onboarding');
     } catch (err) {
       setError((err as Error).message || 'Erro de conexão. Tente novamente.');
       setBusy(false);
