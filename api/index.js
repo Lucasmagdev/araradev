@@ -25,6 +25,7 @@ if (!process.env.ADMIN_USER || !process.env.ADMIN_PASS || !process.env.SESSION_S
 
 const pool = mysql.createPool({
   host:     process.env.DB_HOST     || 'localhost',
+  port:     process.env.DB_PORT     || 3306,
   user:     process.env.DB_USER     || 'araradev',
   password: process.env.DB_PASS     || 'Araradev2024!',
   database: process.env.DB_NAME     || 'araradev',
@@ -123,8 +124,9 @@ async function backfillProgressTables() {
 }
 
 const schemaReady = ensureSchema().catch((err) => {
-  console.error('FATAL: erro ao preparar schema do banco', err);
-  process.exit(1);
+  // Não derruba o boot: sem DB (ex.: dev local sem túnel) o server ainda sobe
+  // e serve admin/estáticos. Rotas que tocam o banco retornam erro tratado.
+  console.warn('AVISO: schema do banco não preparado (DB indisponível?):', err.code || err.message);
 });
 
 // ── Express setup ─────────────────────────────────────────────────────────────
@@ -407,112 +409,217 @@ const DASHBOARD_HTML = `<!DOCTYPE html>
 <title>Admin — AraraDev</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--surface:#15233a;--surface2:#1c2f4a;--border:#1e3a54;--green:#58cc02;--blue:#1cb0f6;--gold:#ffc800;--text:#e8f4ff;--muted:#6b8fa8;--red:#ff5b5b}
+:root{--surface:#15233a;--surface2:#1c2f4a;--border:#1e3a54;--green:#58cc02;--blue:#1cb0f6;--gold:#ffc800;--purple:#a974ff;--text:#e8f4ff;--muted:#6b8fa8;--red:#ff5b5b}
 html,body{min-height:100%;background:linear-gradient(180deg,#0d1a2e 0%,#091420 40%,#060e18 70%,#04090f 100%);color:var(--text);font-family:'Outfit',-apple-system,system-ui,sans-serif;font-size:15px}
-.adm-hdr{position:sticky;top:0;z-index:10;background:rgba(6,14,22,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.adm-hdr{position:sticky;top:0;z-index:20;background:rgba(6,14,22,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .adm-brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.1rem;color:var(--green)}
 .adm-brand img{width:36px;height:36px;border-radius:50%;border:2px solid var(--green);object-fit:cover}
-.adm-out{padding:8px 18px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit;transition:border-color .15s,color .15s}
-.adm-out:hover{border-color:var(--red);color:var(--red)}
-.adm-main{max-width:1200px;margin:0 auto;padding:28px 24px 60px}
-.adm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px}
-.adm-stat{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 22px;display:flex;align-items:center;gap:14px}
-.adm-stat-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
-.adm-stat:nth-child(1) .adm-stat-ico{background:rgba(88,204,2,.12)}
-.adm-stat:nth-child(2) .adm-stat-ico{background:rgba(28,176,246,.12)}
-.adm-stat:nth-child(3) .adm-stat-ico{background:rgba(255,200,0,.12)}
-.adm-stat-info{}
-.adm-stat-n{font-size:1.75rem;font-weight:900;line-height:1.1}
-.adm-stat:nth-child(1) .adm-stat-n{color:var(--green)}
-.adm-stat:nth-child(2) .adm-stat-n{color:var(--blue)}
-.adm-stat:nth-child(3) .adm-stat-n{color:var(--gold)}
-.adm-stat-l{font-size:.72rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.adm-actions{display:flex;align-items:center;gap:8px}
+.adm-btn{padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:700;font-family:inherit;transition:border-color .15s,color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.adm-btn:hover{border-color:var(--green);color:var(--green)}
+.adm-btn.out:hover{border-color:var(--red);color:var(--red)}
+.adm-main{max-width:1240px;margin:0 auto;padding:26px 24px 70px}
+.adm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:13px;margin-bottom:18px}
+.adm-stat{background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:16px 18px;display:flex;align-items:center;gap:13px}
+.adm-stat-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.c-green .adm-stat-ico{background:rgba(88,204,2,.12)} .c-green .adm-stat-n{color:var(--green)}
+.c-blue .adm-stat-ico{background:rgba(28,176,246,.12)} .c-blue .adm-stat-n{color:var(--blue)}
+.c-gold .adm-stat-ico{background:rgba(255,200,0,.12)} .c-gold .adm-stat-n{color:var(--gold)}
+.c-purple .adm-stat-ico{background:rgba(169,116,255,.12)} .c-purple .adm-stat-n{color:var(--purple)}
+.adm-stat-n{font-size:1.55rem;font-weight:900;line-height:1.1}
+.adm-stat-l{font-size:.68rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:18px}
+.panel-ttl{font-size:.82rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:16px}
+.chart{display:flex;align-items:flex-end;gap:10px;height:120px}
+.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.chart-bar{width:100%;max-width:46px;background:linear-gradient(180deg,var(--blue),rgba(28,176,246,.25));border-radius:6px 6px 0 0;min-height:3px;transition:height .4s ease;position:relative}
+.chart-bar span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.7rem;font-weight:800;color:var(--text)}
+.chart-x{font-size:.62rem;color:var(--muted);font-weight:700;white-space:nowrap}
 .adm-sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap}
-.adm-sec-ttl{font-size:1rem;font-weight:800}
+.adm-sec-ttl{font-size:1rem;font-weight:800}.adm-sec-ttl small{color:var(--muted);font-weight:600;font-size:.78rem;margin-left:6px}
 .adm-search-wrap{position:relative}
 .adm-search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:.85rem}
-.adm-search{padding:9px 14px 9px 34px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.85rem;font-family:inherit;outline:none;width:240px;transition:border-color .15s}
-.adm-search:focus{border-color:var(--green)}
-.adm-search::placeholder{color:var(--muted)}
+.adm-search{padding:9px 14px 9px 34px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.85rem;font-family:inherit;outline:none;width:260px;transition:border-color .15s}
+.adm-search:focus{border-color:var(--green)}.adm-search::placeholder{color:var(--muted)}
 .adm-tbl-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface)}
-table{width:100%;border-collapse:collapse;min-width:640px}
-thead th{background:var(--surface2);padding:12px 16px;text-align:left;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:800;white-space:nowrap;border-bottom:1px solid var(--border)}
-tbody td{padding:13px 16px;font-size:.85rem;border-top:1px solid rgba(255,255,255,.04);vertical-align:middle}
+table{width:100%;border-collapse:collapse;min-width:760px}
+thead th{background:var(--surface2);padding:12px 16px;text-align:left;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:800;white-space:nowrap;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+thead th.nosort{cursor:default}
+thead th .arr{opacity:.4;font-size:.6rem;margin-left:3px}
+thead th.asc .arr,thead th.desc .arr{opacity:1;color:var(--green)}
+tbody td{padding:12px 16px;font-size:.85rem;border-top:1px solid rgba(255,255,255,.04);vertical-align:middle;white-space:nowrap}
+tbody tr{cursor:pointer}
 tbody tr:hover td{background:rgba(88,204,2,.03)}
 .user-cell{display:flex;align-items:center;gap:10px}
 .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#58cc02,#3d9100);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;color:#06280a;flex-shrink:0;text-transform:uppercase}
-.td-name{font-weight:700}
-.td-email{color:var(--muted);font-size:.78rem}
+.td-name{font-weight:700}.td-email{color:var(--muted);font-size:.78rem}
 .xp-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(28,176,246,.1);color:var(--blue);border:1px solid rgba(28,176,246,.2);border-radius:7px;padding:3px 9px;font-size:.76rem;font-weight:800}
 .str-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,200,0,.1);color:var(--gold);border:1px solid rgba(255,200,0,.2);border-radius:7px;padding:3px 9px;font-size:.76rem;font-weight:800}
-.del-btn{padding:6px 12px;background:transparent;border:1px solid rgba(255,91,91,.25);color:var(--red);border-radius:8px;cursor:pointer;font-size:.76rem;font-weight:700;font-family:inherit;transition:background .12s,border-color .12s}
-.del-btn:hover{background:rgba(255,91,91,.1);border-color:var(--red)}
+.muted{color:var(--muted)}
+.act-btns{display:flex;gap:6px}
+.icon-btn{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:.85rem;transition:all .12s}
+.icon-btn:hover{border-color:var(--green)}
+.icon-btn.danger:hover{border-color:var(--red);background:rgba(255,91,91,.1)}
 .empty-td{color:var(--muted);text-align:center;padding:52px;font-size:.9rem}
 #toast{position:fixed;bottom:24px;right:24px;z-index:99;padding:12px 20px;border-radius:12px;font-size:.85rem;font-weight:700;opacity:0;transform:translateY(12px);transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
 #toast.show{opacity:1;transform:translateY(0)}
 #toast.ok{background:#162e1a;color:var(--green);border:1px solid rgba(88,204,2,.3)}
 #toast.err{background:#3a1818;color:var(--red);border:1px solid rgba(255,91,91,.3)}
-@media(max-width:640px){.adm-main{padding:20px 14px 50px}.adm-search{width:160px}}
+.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer-bg.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;background:#0e1a2b;border-left:1px solid var(--border);z-index:31;transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);overflow-y:auto;padding:24px}
+.drawer.open{transform:translateX(0)}
+.drawer-close{position:absolute;top:18px;right:18px;width:32px;height:32px;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:8px;cursor:pointer;font-size:1rem}
+.drawer-close:hover{border-color:var(--red);color:var(--red)}
+.d-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.d-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#58cc02,#3d9100);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.5rem;color:#06280a;text-transform:uppercase;flex-shrink:0}
+.d-name{font-size:1.2rem;font-weight:800}.d-email{color:var(--muted);font-size:.82rem;word-break:break-all}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.d-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.d-stat-n{font-size:1.3rem;font-weight:900}.d-stat-l{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:2px}
+.d-sec{font-size:.74rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:18px 0 10px}
+.d-row{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid rgba(255,255,255,.05);font-size:.83rem}
+.d-row .muted{font-size:.78rem}
+.d-badges{display:flex;flex-wrap:wrap;gap:6px}
+.d-badge{background:rgba(88,204,2,.1);border:1px solid rgba(88,204,2,.25);color:var(--green);border-radius:7px;padding:3px 9px;font-size:.74rem;font-weight:700}
+.d-del{width:100%;margin-top:24px;padding:11px;background:transparent;border:1px solid rgba(255,91,91,.3);color:var(--red);border-radius:10px;cursor:pointer;font-weight:800;font-family:inherit;font-size:.85rem;transition:background .12s}
+.d-del:hover{background:rgba(255,91,91,.12)}
+@media(max-width:640px){.adm-main{padding:18px 14px 50px}.adm-search{width:100%}.adm-search-wrap{flex:1}}
 </style>
 </head>
 <body>
 <header class="adm-hdr">
   <div class="adm-brand"><img src="/logoararadev.jpeg" alt="AraraDev">AraraDev Admin</div>
-  <form method="POST" action="/admin/logout"><button class="adm-out" type="submit">Sair →</button></form>
+  <div class="adm-actions">
+    <button class="adm-btn" onclick="load()">↻ Atualizar</button>
+    <a class="adm-btn" href="/admin/api/export">⬇ CSV</a>
+    <form method="POST" action="/admin/logout" style="display:inline"><button class="adm-btn out" type="submit">Sair →</button></form>
+  </div>
 </header>
 <main class="adm-main">
   <div class="adm-stats">
-    <div class="adm-stat"><div class="adm-stat-ico">👥</div><div class="adm-stat-info"><div class="adm-stat-n" id="st-u">–</div><div class="adm-stat-l">Usuários</div></div></div>
-    <div class="adm-stat"><div class="adm-stat-ico">⚡</div><div class="adm-stat-info"><div class="adm-stat-n" id="st-x">–</div><div class="adm-stat-l">XP Total</div></div></div>
-    <div class="adm-stat"><div class="adm-stat-ico">📚</div><div class="adm-stat-info"><div class="adm-stat-n" id="st-l">–</div><div class="adm-stat-l">Lições concluídas</div></div></div>
+    <div class="adm-stat c-green"><div class="adm-stat-ico">👥</div><div><div class="adm-stat-n" id="st-u">–</div><div class="adm-stat-l">Usuários</div></div></div>
+    <div class="adm-stat c-green"><div class="adm-stat-ico">🟢</div><div><div class="adm-stat-n" id="st-act">–</div><div class="adm-stat-l">Ativos (7d)</div></div></div>
+    <div class="adm-stat c-purple"><div class="adm-stat-ico">✨</div><div><div class="adm-stat-n" id="st-new">–</div><div class="adm-stat-l">Novos (7d)</div></div></div>
+    <div class="adm-stat c-blue"><div class="adm-stat-ico">⚡</div><div><div class="adm-stat-n" id="st-x">–</div><div class="adm-stat-l">XP Total</div></div></div>
+    <div class="adm-stat c-gold"><div class="adm-stat-ico">📚</div><div><div class="adm-stat-n" id="st-l">–</div><div class="adm-stat-l">Lições</div></div></div>
+    <div class="adm-stat c-purple"><div class="adm-stat-ico">🎯</div><div><div class="adm-stat-n" id="st-d">–</div><div class="adm-stat-l">Desafios</div></div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-ttl">Cadastros — últimas 8 semanas</div>
+    <div class="chart" id="chart"></div>
   </div>
   <div class="adm-sec-hdr">
-    <span class="adm-sec-ttl">Usuários cadastrados</span>
+    <span class="adm-sec-ttl">Usuários <small id="count"></small></span>
     <div class="adm-search-wrap"><span class="adm-search-ico">🔍</span><input class="adm-search" id="search" type="search" placeholder="Buscar nome ou email…" oninput="filter()"></div>
   </div>
   <div class="adm-tbl-wrap">
     <table>
-      <thead><tr><th>Nome</th><th>Email</th><th>XP</th><th>Streak</th><th>Lições</th><th>Cadastro</th><th></th></tr></thead>
+      <thead><tr>
+        <th data-k="name">Usuário<span class="arr">▼</span></th>
+        <th data-k="xp">XP<span class="arr">▼</span></th>
+        <th data-k="streak">Streak<span class="arr">▼</span></th>
+        <th data-k="lessons">Lições<span class="arr">▼</span></th>
+        <th data-k="lastActive">Último acesso<span class="arr">▼</span></th>
+        <th data-k="created_at">Cadastro<span class="arr">▼</span></th>
+        <th class="nosort"></th>
+      </tr></thead>
       <tbody id="tbody"><tr><td colspan="7" class="empty-td">Carregando…</td></tr></tbody>
     </table>
   </div>
 </main>
 <div id="toast"></div>
+<div class="drawer-bg" id="drawerBg" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer"><button class="drawer-close" onclick="closeDrawer()">✕</button><div id="drawerBody"></div></aside>
 <script>
-let all=[];
-const fmt=ts=>new Date(ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'});
+let all=[], sortKey='created_at', sortDir=-1;
+const fmtD=ts=>ts?new Date(Number(ts)).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ago=ts=>{if(!ts)return'nunca';const d=Date.now()-Number(ts);const m=Math.floor(d/60000),h=Math.floor(d/3600000),dy=Math.floor(d/86400000);if(m<1)return'agora';if(m<60)return m+'min';if(h<24)return h+'h';if(dy<30)return dy+'d';return fmtD(ts)};
 function toast(m,t='ok'){const e=document.getElementById('toast');e.textContent=m;e.className='show '+t;setTimeout(()=>{e.className=''},3000)}
-function render(users){
+function drawChart(b){
+  const max=Math.max(1,...b);
+  document.getElementById('chart').innerHTML=b.map((n,i)=>{
+    const wk=b.length-1-i;const lbl=wk===0?'agora':wk+'sem';
+    return \`<div class="chart-col"><div class="chart-bar" style="height:\${Math.round(n/max*100)}%">\${n>0?'<span>'+n+'</span>':''}</div><div class="chart-x">\${lbl}</div></div>\`;
+  }).join('');
+}
+function setSort(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=k==='name'?1:-1}filter()}
+function sortRows(rows){
+  return rows.slice().sort((a,b)=>{
+    let x=a[sortKey],y=b[sortKey];
+    if(sortKey==='name'){x=(x||'').toLowerCase();y=(y||'').toLowerCase();return x<y?-sortDir:x>y?sortDir:0}
+    return(Number(x||0)-Number(y||0))*sortDir;
+  });
+}
+function render(rows){
+  document.querySelectorAll('thead th[data-k]').forEach(th=>{th.classList.remove('asc','desc');if(th.dataset.k===sortKey)th.classList.add(sortDir>0?'asc':'desc')});
   const tb=document.getElementById('tbody');
-  if(!users.length){tb.innerHTML='<tr><td colspan="7" class="empty-td">Nenhum usuário encontrado.</td></tr>';return;}
-  tb.innerHTML=users.map(u=>\`<tr id="row-\${u.id}">
-    <td><div class="user-cell"><div class="avatar">\${esc(u.name.charAt(0))}</div><span class="td-name">\${esc(u.name)}</span></div></td>
-    <td class="td-email">\${esc(u.email)}</td>
-    <td><span class="xp-badge">⚡ \${u.xp.toLocaleString('pt-BR')}</span></td>
-    <td><span class="str-badge">🔥 \${u.streak}</span></td>
-    <td>\${u.lessons}</td>
-    <td>\${fmt(u.created_at)}</td>
-    <td><button class="del-btn" onclick="del('\${u.id}')">Deletar</button></td>
+  if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty-td">Nenhum usuário encontrado.</td></tr>';return}
+  tb.innerHTML=sortRows(rows).map(u=>\`<tr onclick="openUser('\${u.id}')">
+    <td><div class="user-cell"><div class="avatar">\${esc((u.name||'?').charAt(0))}</div><div><div class="td-name">\${esc(u.name)}</div><div class="td-email">\${esc(u.email)}</div></div></div></td>
+    <td><span class="xp-badge">⚡ \${(u.xp||0).toLocaleString('pt-BR')}</span></td>
+    <td><span class="str-badge">🔥 \${u.streak||0}</span></td>
+    <td>\${u.lessons||0}</td>
+    <td class="muted">\${ago(u.lastActive)}</td>
+    <td class="muted">\${fmtD(u.created_at)}</td>
+    <td><div class="act-btns"><button class="icon-btn" title="Ver" onclick="event.stopPropagation();openUser('\${u.id}')">👁</button><button class="icon-btn danger" title="Deletar" onclick="event.stopPropagation();del('\${u.id}','\${esc(u.name)}')">🗑</button></div></td>
   </tr>\`).join('');
 }
-function filter(){const q=document.getElementById('search').value.toLowerCase();render(all.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)))}
-async function del(id){
-  if(!confirm('Deletar este usuário e todo o progresso?'))return;
+function filter(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const f=all.filter(u=>(u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));
+  document.getElementById('count').textContent='('+f.length+')';
+  render(f);
+}
+async function openUser(id){
+  const bg=document.getElementById('drawerBg'),dr=document.getElementById('drawer');
+  bg.classList.add('open');dr.classList.add('open');
+  document.getElementById('drawerBody').innerHTML='<p class="muted" style="margin-top:40px">Carregando…</p>';
+  try{
+    const u=await fetch('/admin/api/users/'+id).then(r=>r.json());
+    if(u.error)throw new Error(u.error);
+    const badges=(u.badges||[]).length?u.badges.map(b=>'<span class="d-badge">'+esc(b)+'</span>').join(''):'<span class="muted">nenhuma</span>';
+    const less=(u.recentLessons||[]).length?u.recentLessons.map(l=>\`<div class="d-row"><span>\${esc(l.id)}</span><span class="muted">\${l.at?fmtD(l.at):''} · +\${l.xp}xp</span></div>\`).join(''):'<p class="muted" style="font-size:.82rem">Nenhuma lição registrada.</p>';
+    document.getElementById('drawerBody').innerHTML=\`
+      <div class="d-head"><div class="d-avatar">\${esc((u.name||'?').charAt(0))}</div><div><div class="d-name">\${esc(u.name)}</div><div class="d-email">\${esc(u.email)}</div></div></div>
+      <div class="d-grid">
+        <div class="d-stat"><div class="d-stat-n" style="color:var(--blue)">\${(u.xp||0).toLocaleString('pt-BR')}</div><div class="d-stat-l">XP total</div></div>
+        <div class="d-stat"><div class="d-stat-n" style="color:var(--gold)">🔥 \${u.streak||0}</div><div class="d-stat-l">Streak</div></div>
+        <div class="d-stat"><div class="d-stat-n" style="color:var(--green)">\${u.totalLessons||0}</div><div class="d-stat-l">Lições</div></div>
+        <div class="d-stat"><div class="d-stat-n" style="color:var(--purple)">\${u.dailyChallenges||0}</div><div class="d-stat-l">Desafios</div></div>
+      </div>
+      <div class="d-row"><span class="muted">Cadastro</span><span>\${fmtD(u.created_at)}</span></div>
+      <div class="d-row"><span class="muted">Último acesso</span><span>\${ago(u.lastActive)}</span></div>
+      <div class="d-sec">Conquistas</div><div class="d-badges">\${badges}</div>
+      <div class="d-sec">Lições recentes</div>\${less}
+      <button class="d-del" onclick="del('\${u.id}','\${esc(u.name)}',true)">Deletar usuário</button>\`;
+  }catch(e){document.getElementById('drawerBody').innerHTML='<p class="muted" style="margin-top:40px">Erro ao carregar detalhes.</p>'}
+}
+function closeDrawer(){document.getElementById('drawerBg').classList.remove('open');document.getElementById('drawer').classList.remove('open')}
+async function del(id,name,fromDrawer){
+  if(!confirm('Deletar "'+name+'" e todo o progresso? Esta ação é permanente.'))return;
   const r=await fetch('/admin/api/users/'+id,{method:'DELETE'});
   const j=await r.json();
-  if(j.ok){all=all.filter(u=>u.id!==id);filter();document.getElementById('st-u').textContent=all.length;toast('Usuário deletado.')}
-  else toast('Erro: '+j.error,'err');
+  if(j.ok){all=all.filter(u=>u.id!==id);filter();if(fromDrawer)closeDrawer();toast('Usuário deletado.')}
+  else toast('Erro: '+(j.error||'falhou'),'err');
 }
 async function load(){
   try{
     const[stats,users]=await Promise.all([fetch('/admin/api/stats').then(r=>r.json()),fetch('/admin/api/users').then(r=>r.json())]);
+    if(stats.error||users.error)throw new Error('api');
     document.getElementById('st-u').textContent=stats.totalUsers;
-    document.getElementById('st-x').textContent=stats.totalXp.toLocaleString('pt-BR');
+    document.getElementById('st-act').textContent=stats.activeUsers;
+    document.getElementById('st-new').textContent=stats.newUsers;
+    document.getElementById('st-x').textContent=(stats.totalXp||0).toLocaleString('pt-BR');
     document.getElementById('st-l').textContent=stats.totalLessons;
-    all=users;render(users);
-  }catch(e){document.getElementById('tbody').innerHTML='<tr><td colspan="7" class="empty-td">Erro ao carregar.</td></tr>';}
+    document.getElementById('st-d').textContent=stats.totalDaily;
+    drawChart(stats.signups||[]);
+    all=users;filter();
+  }catch(e){document.getElementById('tbody').innerHTML='<tr><td colspan="7" class="empty-td">Erro ao carregar dados.</td></tr>'}
 }
+document.querySelectorAll('thead th[data-k]').forEach(th=>th.onclick=()=>setSort(th.dataset.k));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 load();
 </script>
 </body></html>`;
@@ -539,47 +646,113 @@ app.post('/admin/logout', (req, res) => {
 
 app.get('/admin/dashboard', requireAdmin, (req, res) => res.send(DASHBOARD_HTML));
 
+// Parse defensivo do JSON de progress (coluna pode vir string ou objeto)
+function parseProgress(data) {
+  if (!data) return {};
+  if (typeof data !== 'string') return data;
+  try { return JSON.parse(data); } catch { return {}; }
+}
+
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
 app.get('/admin/api/stats', requireAdmin, async (req, res) => {
   try {
-    const [[{ totalUsers }]] = await pool.query('SELECT COUNT(*) as totalUsers FROM users');
-    const [[{ totalXp }]] = await pool.query('SELECT COALESCE(SUM(amount), 0) as totalXp FROM xp_events');
-    const [[{ totalLessons }]] = await pool.query('SELECT COUNT(*) as totalLessons FROM lesson_completions');
-    res.json({ totalUsers, totalXp, totalLessons });
+    const weekAgo = Date.now() - WEEK_MS;
+    const [[{ totalUsers }]]   = await pool.query('SELECT COUNT(*) AS totalUsers FROM users');
+    const [[{ totalXp }]]      = await pool.query('SELECT COALESCE(SUM(amount), 0) AS totalXp FROM xp_events');
+    const [[{ totalLessons }]] = await pool.query('SELECT COUNT(*) AS totalLessons FROM lesson_completions');
+    const [[{ totalDaily }]]   = await pool.query('SELECT COUNT(*) AS totalDaily FROM daily_challenges');
+    const [[{ newUsers }]]     = await pool.query('SELECT COUNT(*) AS newUsers FROM users WHERE created_at >= ?', [weekAgo]);
+    const [[{ activeUsers }]]  = await pool.query('SELECT COUNT(*) AS activeUsers FROM progress WHERE updated_at >= ?', [weekAgo]);
+
+    // Cadastros por semana (últimas 8) pro gráfico
+    const [signupRows] = await pool.query('SELECT created_at FROM users');
+    const weeks = 8, now = Date.now();
+    const buckets = Array.from({ length: weeks }, () => 0);
+    for (const r of signupRows) {
+      const idx = weeks - 1 - Math.floor((now - Number(r.created_at)) / WEEK_MS);
+      if (idx >= 0 && idx < weeks) buckets[idx]++;
+    }
+
+    res.json({
+      totalUsers, totalXp: Number(totalXp), totalLessons,
+      totalDaily, newUsers, activeUsers, signups: buckets,
+    });
   } catch (e) {
     res.status(503).json({ error: 'Banco indisponível' });
   }
 });
 
+// Agrega em JS (evita JOIN entre colunas de collations diferentes)
+async function buildUserRows() {
+  const [users]    = await pool.query('SELECT id, name, email, created_at FROM users ORDER BY created_at DESC');
+  const [xpRows]   = await pool.query('SELECT user_id, SUM(amount) AS xp FROM xp_events GROUP BY user_id');
+  const [lsRows]   = await pool.query('SELECT user_id, COUNT(*) AS lessons FROM lesson_completions GROUP BY user_id');
+  const [progRows] = await pool.query('SELECT user_id, data, updated_at FROM progress');
+  const xp = {}, ls = {}, pr = {}, act = {};
+  for (const r of xpRows) xp[r.user_id] = Number(r.xp || 0);
+  for (const r of lsRows) ls[r.user_id] = Number(r.lessons || 0);
+  for (const r of progRows) { pr[r.user_id] = parseProgress(r.data); act[r.user_id] = Number(r.updated_at || 0); }
+  return users.map(u => {
+    const p = pr[u.id] || {};
+    return {
+      id: u.id, name: u.name, email: u.email,
+      xp: xp[u.id] || Number(p.xp) || 0,
+      streak: p.streak?.count || 0,
+      lessons: ls[u.id] || Object.keys(p.completed || {}).length,
+      lastActive: act[u.id] || null,
+      created_at: u.created_at,
+    };
+  });
+}
+
 app.get('/admin/api/users', requireAdmin, async (req, res) => {
   try {
-    const [users] = await pool.query(`
-      SELECT
-        u.id,
-        u.name,
-        u.email,
-        u.created_at,
-        COALESCE(x.xp, 0) AS xp,
-        COALESCE(l.lessons, 0) AS lessons
-      FROM users u
-      LEFT JOIN (
-        SELECT user_id, SUM(amount) AS xp
-        FROM xp_events
-        GROUP BY user_id
-      ) x ON x.user_id = u.id
-      LEFT JOIN (
-        SELECT user_id, COUNT(*) AS lessons
-        FROM lesson_completions
-        GROUP BY user_id
-      ) l ON l.user_id = u.id
-      ORDER BY u.created_at DESC
-    `);
-    const [progress] = await pool.query('SELECT user_id, data FROM progress');
-    const progMap = {};
-    for (const p of progress) progMap[p.user_id] = typeof p.data === 'string' ? JSON.parse(p.data) : p.data;
-    res.json(users.map(u => {
-      const p = progMap[u.id] || {};
-      return { id: u.id, name: u.name, email: u.email, xp: Number(u.xp || 0), streak: p.streak?.count || 0, lessons: Number(u.lessons || 0), created_at: u.created_at };
-    }));
+    res.json(await buildUserRows());
+  } catch (e) {
+    res.status(503).json({ error: 'Banco indisponível' });
+  }
+});
+
+app.get('/admin/api/users/:userId', requireAdmin, async (req, res) => {
+  try {
+    const [[user]] = await pool.query('SELECT id, name, email, avatar, created_at FROM users WHERE id = ?', [req.params.userId]);
+    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+    const [[prog]]   = await pool.query('SELECT data, updated_at FROM progress WHERE user_id = ?', [req.params.userId]);
+    const [[{ xp }]] = await pool.query('SELECT COALESCE(SUM(amount), 0) AS xp FROM xp_events WHERE user_id = ?', [req.params.userId]);
+    const [[{ daily }]] = await pool.query('SELECT COUNT(*) AS daily FROM daily_challenges WHERE user_id = ?', [req.params.userId]);
+    const [lessons] = await pool.query('SELECT lesson_id, xp, completed_at FROM lesson_completions WHERE user_id = ? ORDER BY completed_at DESC LIMIT 25', [req.params.userId]);
+    const p = prog ? parseProgress(prog.data) : {};
+    res.json({
+      id: user.id, name: user.name, email: user.email, avatar: user.avatar, created_at: user.created_at,
+      lastActive: prog ? Number(prog.updated_at) : null,
+      xp: Number(xp) || Number(p.xp) || 0,
+      streak: p.streak?.count || 0,
+      badges: p.badges || [],
+      totalLessons: lessons.length,
+      dailyChallenges: daily,
+      recentLessons: lessons.map(l => ({ id: l.lesson_id, xp: l.xp, at: Number(l.completed_at) })),
+    });
+  } catch (e) {
+    res.status(503).json({ error: 'Banco indisponível' });
+  }
+});
+
+app.get('/admin/api/export', requireAdmin, async (req, res) => {
+  try {
+    const rows = await buildUserRows();
+    const esc = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+    const out = ['Nome,Email,XP,Streak,Licoes,UltimoAcesso,Cadastro'];
+    for (const u of rows) {
+      out.push([
+        esc(u.name), esc(u.email), u.xp, u.streak, u.lessons,
+        esc(u.lastActive ? new Date(u.lastActive).toISOString() : ''),
+        esc(new Date(Number(u.created_at)).toISOString()),
+      ].join(','));
+    }
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="araradev-usuarios.csv"');
+    res.send('﻿' + out.join('\r\n'));
   } catch (e) {
     res.status(503).json({ error: 'Banco indisponível' });
   }
