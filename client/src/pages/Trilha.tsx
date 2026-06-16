@@ -1,9 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LESSONS } from '../data/lessons';
-import type { Lesson } from '../types';
+import type { Lesson, OnboardingPreferences } from '../types';
 import { useProgress } from '../context/ProgressContext';
 import { getMe, getOnboardingPreferences } from '../lib/api';
+
+const GOAL_MSG: Record<string, string> = {
+  'dev': 'Seu plano foca em virar dev: base sólida primeiro — lógica, estruturas, algoritmos e projetos.',
+  'ai-autonomy': 'Seu plano foca em autonomia: resolver código sem depender da IA. Tudo começa pela lógica.',
+  'logic': 'Foco em firmar sua lógica: loops, acumulador e funções — a base que destrava o resto.',
+  'work-study': 'Foco no que trabalho e faculdade cobram: lógica, SQL e algoritmos aplicados.',
+  'practice': 'Bora praticar: lições curtas e diretas, no seu ritmo.',
+};
+const BANNER_KEY = 'araradev_trail_banner_dismissed';
 import Header from '../components/Header';
 import BottomNav, { type NavKey } from '../components/BottomNav';
 import Path from '../components/Path';
@@ -22,17 +31,24 @@ export default function Trilha() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [pendingPhase, setPendingPhase] = useState<string | null>(null);
+  const [prefs, setPrefs] = useState<OnboardingPreferences | null>(null);
+  const [bannerOff, setBannerOff] = useState(() => localStorage.getItem(BANNER_KEY) === '1');
   const toastId = useRef(0);
 
   useEffect(() => {
     getMe()
       .then(() => getOnboardingPreferences())
-      .then(prefs => {
-        if (!prefs?.completedAt) navigate('/onboarding', { replace: true });
-        else setAuthChecked(true);
+      .then(p => {
+        if (!p?.completedAt) navigate('/onboarding', { replace: true });
+        else { setPrefs(p); setAuthChecked(true); }
       })
       .catch(() => navigate('/', { replace: true }));
   }, [navigate]);
+
+  function dismissBanner() {
+    setBannerOff(true);
+    localStorage.setItem(BANNER_KEY, '1');
+  }
 
   const addToast = useCallback((html: string) => {
     const id = ++toastId.current;
@@ -78,6 +94,13 @@ export default function Trilha() {
     <>
       <div id="app-shell">
         <Header />
+        {!bannerOff && prefs?.goal && (
+          <div className="trail-banner">
+            <span className="trail-banner-ico">🎯</span>
+            <p>{GOAL_MSG[prefs.goal] || 'Sua trilha começa pela lógica e avança no seu ritmo.'}</p>
+            <button className="trail-banner-close" onClick={dismissBanner} aria-label="Fechar">✕</button>
+          </div>
+        )}
         <Path onOpenLesson={openLesson} />
         <BottomNav active={nav} onNav={onNav} />
       </div>

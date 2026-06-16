@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../context/ProgressContext';
 import { BADGES, getLevel, LEVELS } from '../lib/progress';
-import { getMe, getRanking } from '../lib/api';
+import { getMe, getRanking, logout, clearToken } from '../lib/api';
 import { getDailyQuestions, todayKey } from '../lib/daily';
 import type { RankingEntry, User } from '../types';
 
@@ -180,7 +181,16 @@ export function RankingModal({ onClose }: { onClose: () => void }) {
 }
 
 export function SettingsModal({ onClose }: { onClose: () => void }) {
-  const { reset } = useProgress();
+  const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
+
+  async function sair() {
+    setBusy(true);
+    try { await logout(); } catch { /* segue mesmo offline */ }
+    clearToken();
+    navigate('/', { replace: true });
+  }
+
   return (
     <Overlay onClose={onClose}>
       <button className="close" onClick={onClose}>×</button>
@@ -188,12 +198,10 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
       <div className="settings-list">
         <div className="settings-row">
           <div>
-            <strong>Apagar progresso</strong>
-            <p className="level-hint">Remove todo o progresso salvo neste dispositivo.</p>
+            <strong>Sair da conta</strong>
+            <p className="level-hint">Encerra a sessão neste dispositivo.</p>
           </div>
-          <button className="danger-btn" onClick={() => {
-            if (confirm('Apagar todo o progresso salvo?')) { reset(); onClose(); }
-          }}>Resetar</button>
+          <button className="danger-btn" onClick={sair} disabled={busy}>Sair</button>
         </div>
       </div>
       <p className="app-version">AraraDev v1.0</p>

@@ -175,16 +175,70 @@ html { scroll-behavior: smooth; }
 
 .lp-hero-visual {
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
 }
 
-.lp-hero-mascot {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  border: 4px solid var(--green);
-  object-fit: cover;
-  box-shadow: 0 0 60px rgba(88,204,2,0.25), 0 0 120px rgba(88,204,2,0.1);
-  animation: mascot-bob 3s ease-in-out infinite;
+/* Mockup de celular mostrando a trilha (prova visual no hero) */
+.lp-phone {
+  width: 248px;
+  height: 506px;
+  border-radius: 36px;
+  background: #060e18;
+  border: 8px solid #1a2940;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04),
+    0 0 80px rgba(88,204,2,0.12);
+  padding: 14px 12px;
+  animation: mascot-bob 4s ease-in-out infinite;
+}
+
+.lp-phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #0d1a2e, #07111d);
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.lp-mini-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.lp-mini-brand { font-size: 0.78rem; font-weight: 900; color: var(--green); }
+.lp-mini-xp {
+  font-size: 0.68rem; font-weight: 800; color: #90caf9;
+  background: rgba(28,176,246,0.12); border: 1px solid rgba(28,176,246,0.25);
+  border-radius: 999px; padding: 2px 8px;
+}
+.lp-mini-fase {
+  font-size: 0.62rem; font-weight: 800; color: #fff; text-transform: uppercase;
+  letter-spacing: .04em; background: rgba(88,204,2,0.14);
+  border: 1px solid rgba(88,204,2,0.3); border-radius: 10px;
+  padding: 8px 10px; margin-bottom: 18px; line-height: 1.3;
+}
+.lp-mini-trail {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.lp-mini-node {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; flex-shrink: 0;
+}
+.lp-mini-node.done { background: var(--green); color: #06280a; box-shadow: 0 4px 12px rgba(88,204,2,0.4); }
+.lp-mini-node.current {
+  background: var(--green); color: #fff;
+  box-shadow: 0 0 0 4px rgba(88,204,2,0.25), 0 6px 16px rgba(88,204,2,0.5);
+}
+.lp-mini-node.lock { background: #1a2d42; color: #4a6b85; border: 1px solid #243b54; }
+.lp-mini-line { width: 4px; height: 16px; background: var(--green); border-radius: 2px; }
+.lp-mini-line.dim { background: #1e3a54; }
+.lp-mini-label {
+  font-size: 0.6rem; font-weight: 700; color: var(--text); margin: 2px 0;
 }
 
 @keyframes mascot-bob {
@@ -446,6 +500,24 @@ html { scroll-behavior: smooth; }
   transition: border-color 0.15s;
 }
 .auth-field input:focus { border-color: var(--green); }
+
+.auth-pass { position: relative; display: flex; }
+.auth-pass input { flex: 1; padding-right: 44px; width: 100%; }
+.auth-pass-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.75;
+}
+.auth-pass-toggle:hover { opacity: 1; }
 
 #auth-form { display: flex; flex-direction: column; gap: 14px; }
 

@@ -35,7 +35,7 @@ const FASE_DECOS: Deco[][] = [
   [{ t: '<JSX>', big: true, l: '-12%', top: '10%' }, { t: 'props', r: '-10%', top: '28%' }, { t: 'useState', l: '-8%', top: '50%' }, { t: '.map()', r: '-8%', top: '68%' }, { t: 'key', l: '-10%', top: '84%' }],
 ];
 
-const FASE_COLORS = ['#ff4b4b', '#1cb0f6', '#a560e8', '#ff9600', '#2ec4b6', '#ce82ff', '#58cc02', '#4c6ef5', '#ff6b6b', '#ffd43b', '#f783ac', '#20c997'];
+const FASE_COLORS = ['#58cc02', '#1cb0f6', '#a560e8', '#ff9600', '#2ec4b6', '#ce82ff', '#22b8cf', '#4c6ef5', '#ff922b', '#ffd43b', '#f783ac', '#20c997'];
 const FASE_ICONS = ['{ }', '[ ]', 'fn()', 'O(n)', 'SQL', 'bug', 'test()', 'arch', 'REST', 'git', 'async', 'JSX'];
 
 function faseIndex(unit: string): number {
