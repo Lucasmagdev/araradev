@@ -1,0 +1,31 @@
+# Deploy do frontend React (client/) no Netlify.
+# API e banco continuam na VPS (http://80.241.218.217:3008).
+#
+# Netlify serve HTTPS; a API é HTTP. Browser bloqueia chamada HTTPS→HTTP
+# (mixed content). Por isso /api e /auth são PROXIADOS pelo Netlify:
+# o browser fala HTTPS com o Netlify e o Netlify repassa pra VPS por HTTP
+# (server-side, sem mixed content e sem CORS, pois o browser vê same-origin).
+
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "dist"
+
+# Proxy das chamadas de API pra VPS (status 200 = rewrite, não redirect)
+[[redirects]]
+  from = "/api/*"
+  to = "http://80.241.218.217:3008/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/auth/*"
+  to = "http://80.241.218.217:3008/auth/:splat"
+  status = 200
+  force = true
+
+# SPA fallback — React Router cuida das rotas no client
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
