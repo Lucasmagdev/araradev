@@ -17,6 +17,124 @@
 
 html { scroll-behavior: smooth; }
 
+/* ── Fundo animado 3D ──────────────────────────────────────── */
+.lp-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: 900px;
+}
+/* conteúdo acima do fundo */
+.lp-header, .lp-hero, .lp-features, .lp-phases, .lp-cta-bottom, .lp-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Aurora — manchas de luz que derivam */
+.lp-bg-aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.lp-bg-aurora.a1 {
+  width: 540px; height: 540px;
+  background: radial-gradient(circle, rgba(88,204,2,0.55), transparent 70%);
+  top: -140px; left: -120px;
+  animation: aurora1 18s ease-in-out infinite;
+}
+.lp-bg-aurora.a2 {
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(28,176,246,0.5), transparent 70%);
+  top: 20%; right: -160px;
+  animation: aurora2 22s ease-in-out infinite;
+}
+.lp-bg-aurora.a3 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(169,116,255,0.42), transparent 70%);
+  bottom: -120px; left: 30%;
+  animation: aurora3 26s ease-in-out infinite;
+}
+@keyframes aurora1 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(120px,80px) scale(1.18); }
+}
+@keyframes aurora2 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-100px,60px) scale(1.22); }
+}
+@keyframes aurora3 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(80px,-70px) scale(1.15); }
+}
+
+/* Grid em perspectiva (chão tron) */
+.lp-bg-grid {
+  position: absolute;
+  left: -25%;
+  right: -25%;
+  bottom: -10%;
+  height: 70%;
+  background-image:
+    linear-gradient(rgba(88,204,2,0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,204,2,0.18) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: rotateX(70deg);
+  transform-origin: center bottom;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 75%);
+  mask-image: linear-gradient(to top, #000 0%, transparent 75%);
+  animation: gridmove 6s linear infinite;
+  opacity: 0.55;
+}
+@keyframes gridmove {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 48px, 48px 0; }
+}
+
+/* Formas 3D flutuando */
+.lp-bg-shapes { position: absolute; inset: 0; transform-style: preserve-3d; }
+.lp-shape {
+  position: absolute;
+  display: block;
+  will-change: transform;
+  opacity: 0.6;
+}
+.lp-shape.ring {
+  border: 3px solid rgba(28,176,246,0.55);
+  border-radius: 50%;
+}
+.lp-shape.cube {
+  border: 3px solid rgba(88,204,2,0.5);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(88,204,2,0.12), transparent);
+}
+.lp-shape.dot {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, rgba(255,200,0,0.7) 45%, transparent 70%);
+  box-shadow: 0 0 14px rgba(255,200,0,0.6);
+}
+.lp-shape.s1 { width: 90px; height: 90px; top: 16%; left: 12%; animation: float3d 14s ease-in-out infinite; }
+.lp-shape.s2 { width: 64px; height: 64px; top: 60%; left: 8%; animation: spin3d 16s linear infinite; }
+.lp-shape.s3 { width: 130px; height: 130px; top: 70%; right: 12%; animation: float3d 19s ease-in-out infinite reverse; }
+.lp-shape.s4 { width: 12px; height: 12px; top: 28%; right: 22%; animation: float3d 9s ease-in-out infinite; }
+.lp-shape.s5 { width: 46px; height: 46px; top: 34%; right: 32%; animation: spin3d 12s linear infinite reverse; }
+.lp-shape.s6 { width: 9px; height: 9px; top: 78%; left: 42%; animation: float3d 11s ease-in-out infinite; }
+@keyframes float3d {
+  0%,100% { transform: translateY(0) translateZ(0) rotateX(0) rotateY(0); }
+  50% { transform: translateY(-34px) translateZ(60px) rotateX(35deg) rotateY(45deg); }
+}
+@keyframes spin3d {
+  from { transform: rotateX(0) rotateY(0) rotateZ(0); }
+  to { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-bg-aurora, .lp-bg-grid, .lp-shape { animation: none; }
+}
+
 /* ── Header ────────────────────────────────────────────────── */
 .lp-header {
   position: fixed;

@@ -49,6 +49,10 @@ export default function Landing() {
     setTimeout(() => (m === 'login' ? emailRef.current : nameRef.current)?.focus(), 50);
   }
 
+  function startSignup() {
+    navigate('/onboarding');
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
@@ -77,6 +81,21 @@ export default function Landing() {
 
   return (
     <div className="lp-page">
+      <div className="lp-bg" aria-hidden="true">
+        <div className="lp-bg-aurora a1" />
+        <div className="lp-bg-aurora a2" />
+        <div className="lp-bg-aurora a3" />
+        <div className="lp-bg-grid" />
+        <div className="lp-bg-shapes">
+          <span className="lp-shape ring s1" />
+          <span className="lp-shape cube s2" />
+          <span className="lp-shape ring s3" />
+          <span className="lp-shape dot s4" />
+          <span className="lp-shape cube s5" />
+          <span className="lp-shape dot s6" />
+        </div>
+      </div>
+
       <header className="lp-header">
         <div className="lp-header-inner">
           <a href="/" className="lp-brand">
@@ -85,7 +104,7 @@ export default function Landing() {
           </a>
           <nav className="lp-nav">
             <button className="lp-btn-ghost" onClick={() => open('login')}>Entrar</button>
-            <button className="lp-btn-primary" onClick={() => open('register')}>Cadastre-se</button>
+            <button className="lp-btn-primary" onClick={startSignup}>Cadastre-se</button>
           </nav>
         </div>
       </header>
@@ -102,7 +121,7 @@ export default function Landing() {
             SQL, algoritmos, debug, testes e arquitetura — sem depender de IA.
           </p>
           <div className="lp-hero-cta">
-            <button className="lp-btn-primary lp-btn-lg" onClick={() => open('register')}>Começar agora</button>
+            <button className="lp-btn-primary lp-btn-lg" onClick={startSignup}>Começar agora</button>
             <a href="#fases" className="lp-btn-ghost lp-btn-lg">Ver trilha ↓</a>
           </div>
         </div>
@@ -162,7 +181,7 @@ export default function Landing() {
         <div className="lp-container lp-cta-inner">
           <h2>Pronto pra começar?</h2>
           <p>Crie sua conta grátis e inicie a trilha agora.</p>
-          <button className="lp-btn-primary lp-btn-lg" onClick={() => open('register')}>Criar conta grátis</button>
+          <button className="lp-btn-primary lp-btn-lg" onClick={startSignup}>Criar conta grátis</button>
         </div>
       </section>
 
