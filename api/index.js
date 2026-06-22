@@ -6,6 +6,13 @@ const crypto  = require('crypto');
 const bcrypt  = require('bcryptjs');
 const path    = require('path');
 const mysql   = require('mysql2/promise');
+const rateLimit = require('express-rate-limit');
+
+// Token de API: guardado no banco como hash sha256 (nunca em texto puro).
+// Validade de 90 dias; renova no login.
+const TOKEN_TTL_MS = 90 * 24 * 60 * 60 * 1000;
+const MAX_XP_PER_EVENT = 100; // teto anti-fraude por lição/desafio
+const sha256hex = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 
 const ALLOWED_ORIGINS = [
   'capacitor://localhost',
@@ -98,6 +105,21 @@ async function ensureSchema() {
   await pool.query('ALTER TABLE daily_challenges CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
   await pool.query('ALTER TABLE onboarding_preferences CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
 
+  // Migração de segurança dos tokens: passa a guardar hash sha256 (não texto puro)
+  // + validade. Roda uma vez (quando a coluna ainda não existe).
+  const [tcol] = await pool.query(
+    "SELECT COUNT(*) AS c FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'users' AND column_name = 'token_expires_at'"
+  );
+  if (!tcol[0].c) {
+    await pool.query('ALTER TABLE users ADD COLUMN token_expires_at BIGINT NULL');
+    await pool.query('ALTER TABLE users MODIFY token VARCHAR(64) NULL'); // hash sha256 = 64 chars
+    // tokens existentes são UUID em texto puro (36 chars): vira hash + ganha validade
+    await pool.query(
+      'UPDATE users SET token = SHA2(token, 256), token_expires_at = ? WHERE token IS NOT NULL AND CHAR_LENGTH(token) = 36',
+      [Date.now() + TOKEN_TTL_MS]
+    );
+  }
+
   await backfillProgressTables();
 }
 
@@ -154,6 +176,25 @@ const schemaReady = ensureSchema().catch((err) => {
 
 const app = express();
 
+// Atrás do nginx: usa X-Forwarded-For pro IP real (rate-limit por cliente).
+app.set('trust proxy', 1);
+
+// Rate-limit anti brute-force. Mensagem genérica, conta por IP.
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,                       // 20 tentativas / 15min / IP em login+registro
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Muitas tentativas. Tente de novo em alguns minutos.' },
+});
+const adminLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,                       // admin é mais sensível: 10 / 15min / IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Muitas tentativas. Tente de novo em alguns minutos.',
+});
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS.includes(origin)) {
@@ -205,7 +246,10 @@ async function requireAuth(req, res, next) {
   const auth = req.headers['authorization'];
   if (auth && auth.startsWith('Bearer ')) {
     const token = auth.slice(7);
-    const [rows] = await pool.query('SELECT id FROM users WHERE token = ?', [token]);
+    const [rows] = await pool.query(
+      'SELECT id FROM users WHERE token = ? AND (token_expires_at IS NULL OR token_expires_at > ?)',
+      [sha256hex(token), Date.now()]
+    );
     if (rows.length) { req.session.userId = rows[0].id; return next(); }
   }
   res.status(401).json({ error: 'Não autenticado' });
@@ -213,7 +257,7 @@ async function requireAuth(req, res, next) {
 
 // ── Auth routes ───────────────────────────────────────────────────────────────
 
-app.post('/auth/register', async (req, res) => {
+app.post('/auth/register', authLimiter, async (req, res) => {
   const { email, password, name } = req.body;
   if (!email || !password || !name) return res.status(400).json({ error: 'Preencha todos os campos' });
   if (password.length < 6) return res.status(400).json({ error: 'Senha mínimo 6 caracteres' });
@@ -227,8 +271,8 @@ app.post('/auth/register', async (req, res) => {
     const id    = crypto.randomUUID();
     const token = crypto.randomUUID();
     await pool.query(
-      'INSERT INTO users (id, email, password_hash, name, avatar, token, created_at) VALUES (?,?,?,?,?,?,?)',
-      [id, emailKey, hash, name.trim(), '🦜', token, Date.now()]
+      'INSERT INTO users (id, email, password_hash, name, avatar, token, token_expires_at, created_at) VALUES (?,?,?,?,?,?,?,?)',
+      [id, emailKey, hash, name.trim(), '🦜', sha256hex(token), Date.now() + TOKEN_TTL_MS, Date.now()]
     );
 
     req.session.userId = id;
@@ -239,7 +283,7 @@ app.post('/auth/register', async (req, res) => {
   }
 });
 
-app.post('/auth/login', async (req, res) => {
+app.post('/auth/login', authLimiter, async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Preencha todos os campos' });
 
@@ -252,20 +296,27 @@ app.post('/auth/login', async (req, res) => {
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(401).json({ error: 'Email ou senha inválidos' });
 
-    if (!user.token) {
-      user.token = crypto.randomUUID();
-      await pool.query('UPDATE users SET token = ? WHERE id = ?', [user.token, user.id]);
-    }
+    // Token novo a cada login (guardado como hash; o plaintext só vai pro cliente agora).
+    const token = crypto.randomUUID();
+    await pool.query('UPDATE users SET token = ?, token_expires_at = ? WHERE id = ?', [sha256hex(token), Date.now() + TOKEN_TTL_MS, user.id]);
 
     req.session.userId = user.id;
-    res.json({ ok: true, token: user.token, user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar } });
+    res.json({ ok: true, token, user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar } });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Erro interno' });
   }
 });
 
-app.post('/auth/logout', (req, res) => {
+app.post('/auth/logout', async (req, res) => {
+  try {
+    const auth = req.headers['authorization'];
+    if (auth && auth.startsWith('Bearer ')) {
+      await pool.query('UPDATE users SET token = NULL, token_expires_at = NULL WHERE token = ?', [sha256hex(auth.slice(7))]);
+    } else if (req.session?.userId) {
+      await pool.query('UPDATE users SET token = NULL, token_expires_at = NULL WHERE id = ?', [req.session.userId]);
+    }
+  } catch { /* ignore */ }
   req.session.destroy(() => res.json({ ok: true }));
 });
 
@@ -301,7 +352,7 @@ app.post('/api/progress', requireAuth, async (req, res) => {
 app.post('/api/lesson-completions', requireAuth, async (req, res) => {
   const { lessonId, xp } = req.body;
   const amount = Number(xp);
-  if (!lessonId || !Number.isInteger(amount) || amount <= 0) return res.status(400).json({ error: 'Dados inválidos' });
+  if (!lessonId || !Number.isInteger(amount) || amount <= 0 || amount > MAX_XP_PER_EVENT) return res.status(400).json({ error: 'Dados inválidos' });
 
   const now = Date.now();
   await pool.query(
@@ -320,7 +371,7 @@ app.post('/api/daily-challenges', requireAuth, async (req, res) => {
   const amount = Number(xp);
   const correctCount = Number(correct);
   const totalCount = Number(total);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(date)) || !Number.isInteger(amount) || amount <= 0 || !Number.isInteger(correctCount) || !Number.isInteger(totalCount)) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(date)) || !Number.isInteger(amount) || amount <= 0 || amount > MAX_XP_PER_EVENT || !Number.isInteger(correctCount) || !Number.isInteger(totalCount)) {
     return res.status(400).json({ error: 'Dados inválidos' });
   }
 
@@ -700,7 +751,7 @@ app.get('/admin', (req, res) => {
   res.send(LOGIN_HTML);
 });
 
-app.post('/admin/login', (req, res) => {
+app.post('/admin/login', adminLoginLimiter, (req, res) => {
   const { username = '', password = '' } = req.body;
   if (safeCompare(username, process.env.ADMIN_USER) && safeCompare(password, process.env.ADMIN_PASS)) {
     req.session.isAdmin = true;
@@ -810,7 +861,12 @@ app.get('/admin/api/users/:userId', requireAdmin, async (req, res) => {
 app.get('/admin/api/export', requireAdmin, async (req, res) => {
   try {
     const rows = await buildUserRows();
-    const esc = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+    const esc = v => {
+      let s = String(v ?? '');
+      // neutraliza CSV/formula injection (nome tipo "=HYPERLINK(..)" no Excel)
+      if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    };
     const out = ['Nome,Email,XP,Streak,Licoes,UltimoAcesso,Cadastro'];
     for (const u of rows) {
       out.push([
