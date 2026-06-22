@@ -16,8 +16,8 @@ const ALLOWED_ORIGINS = [
 
 const PORT = process.env.PORT || 3008;
 
-if (!process.env.ADMIN_USER || !process.env.ADMIN_PASS || !process.env.SESSION_SECRET) {
-  console.error('FATAL: ADMIN_USER, ADMIN_PASS e SESSION_SECRET precisam estar no .env');
+if (!process.env.ADMIN_USER || !process.env.ADMIN_PASS || !process.env.SESSION_SECRET || !process.env.DB_PASS) {
+  console.error('FATAL: ADMIN_USER, ADMIN_PASS, SESSION_SECRET e DB_PASS precisam estar no .env');
   process.exit(1);
 }
 
@@ -27,7 +27,7 @@ const pool = mysql.createPool({
   host:     process.env.DB_HOST     || 'localhost',
   port:     process.env.DB_PORT     || 3306,
   user:     process.env.DB_USER     || 'araradev',
-  password: process.env.DB_PASS     || 'Araradev2024!',
+  password: process.env.DB_PASS,
   database: process.env.DB_NAME     || 'araradev',
   waitForConnections: true,
   connectionLimit: 10,
