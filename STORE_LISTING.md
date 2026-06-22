@@ -2,12 +2,15 @@
 
 ## Política de privacidade
 
-Arquivo: `docs/privacy.html`
+Arquivo: `docs/privacy.html` (fonte) — **publicada** em:
 
-Pra publicar a URL:
-1. GitHub → Settings → Pages → Source: branch `main`, folder `/docs`
-2. URL fica algo como `https://lucasmagdev.github.io/<repo>/privacy.html`
-3. Cole essa URL no Play Console (App content → Privacy policy)
+```
+https://trilhadev.app.br/privacy.html
+```
+
+Hospedada no próprio VPS (nginx, `/var/www/trilhadev/privacy.html`). Cole essa
+URL no Play Console (App content → Privacy policy). Pra atualizar: editar
+`docs/privacy.html` e reenviar pro VPS.
 
 ## Descrição curta (máx. 80 caracteres)
 
@@ -47,6 +50,18 @@ Crie sua conta, comece pela Fase 1 e siga a trilha. Seu progresso fica salvo
 e sincronizado com sua conta.
 ```
 
+## Assets gráficos
+
+- **Ícone** 512×512: `assets/icon-512.png` ✓
+- **Feature graphic** 1024×500: `docs/store-screenshots/feature-graphic.png` ✓
+  (fonte editável: `docs/store-screenshots/feature-graphic.html`)
+- **Screenshots de phone** (mín. 2): `docs/store-screenshots/`
+  - `03-trilha.png` — a trilha com as 12 fases
+  - `04-licao.png` — lição (múltipla escolha) com vidas/timer
+  - Capturados do site live (`https://trilhadev.app.br`). Pra portrait perfeito,
+    dá pra recapturar num device/emulador real depois — mas a proporção atual já
+    é aceita pelo Play (entre 16:9 e 9:16).
+
 ## Categoria sugerida
 
 Educação
@@ -69,10 +84,11 @@ App é puramente educacional (lições de programação).
 | Senha | Sim (criptografada) | Autenticação | Não |
 | Dados de uso (progresso nas lições) | Sim | Funcionalidade do app | Não |
 
-- Dados criptografados em trânsito: **marcar "Não"** enquanto a API estiver em HTTP
-  (ver pendência em `RELEASE.md`). Depois de migrar pra HTTPS, atualizar pra "Sim".
-- Usuário pode solicitar exclusão dos dados: **Sim** → link: `docs/privacy.html`
-  (seção "Exclusão de conta e dados")
+- Dados criptografados em trânsito: **Sim** (API migrada pra HTTPS via
+  `https://trilhadev.app.br`, 2026-06-22).
+- Usuário pode solicitar exclusão dos dados: **Sim** → e-mail `codexyctti@gmail.com`
+  (seção "Exclusão de conta e dados" da política). Play também pede uma URL de
+  exclusão: usar `https://trilhadev.app.br/privacy.html`.
 - Anúncios: Não
 - Finalidade de coleta: "Funcionalidade do app" (App functionality) — não é
   "Personalização" nem "Publicidade"
