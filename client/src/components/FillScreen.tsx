@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Lesson } from '../types';
 import { useProgress } from '../context/ProgressContext';
+import { formatCreditTimer } from '../lib/progress';
 import { playSound, launchConfetti } from '../lib/effects';
 import { IconClose } from './icons';
 import Mascote, { type MascoteEstado } from './Mascote';
@@ -25,8 +26,16 @@ export default function FillScreen({ lesson, onComplete, onClose }: Props) {
   const [values, setValues] = useState<string[]>(() => blanks.map(() => ''));
   const [answered, setAnswered] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
 
   const alreadyDone = !!progress.completed[lesson.id];
+  const creditTimer = formatCreditTimer(progress.credits.nextRechargeAt, now);
+
+  useEffect(() => {
+    if (!progress.credits.nextRechargeAt) return;
+    const id = window.setInterval(() => setNow(Date.now()), 30000);
+    return () => window.clearInterval(id);
+  }, [progress.credits.nextRechargeAt]);
 
   const results = useMemo(
     () => blanks.map((b, i) => b.accept.some(a => norm(a) === norm(values[i] || ''))),
@@ -63,7 +72,7 @@ export default function FillScreen({ lesson, onComplete, onClose }: Props) {
       <div className="ls-header">
         <button className="ls-close" onClick={onClose} aria-label="Fechar lição"><IconClose /></button>
         <div className="ls-progress-wrap"><div className="ls-progress-fill" style={{ width: finished ? '100%' : '0%' }} /></div>
-        <div className={'ls-credits' + (progress.credits.current === 0 ? ' empty' : '')}>♥ {progress.credits.current}</div>
+        <div className={'ls-credits' + (progress.credits.current === 0 ? ' empty' : '')} title={creditTimer ? `Recarrega em ${creditTimer}` : 'Vidas cheias'}>♥ {progress.credits.current}{creditTimer && <span className="ls-credits-timer">{creditTimer}</span>}</div>
       </div>
 
       <div className="ls-body">
@@ -116,7 +125,7 @@ export default function FillScreen({ lesson, onComplete, onClose }: Props) {
             disabled={!allFilled || (!alreadyDone && progress.credits.current <= 0)}
             onClick={verify}
           >
-            {!alreadyDone && progress.credits.current <= 0 ? 'SEM CRÉDITOS' : 'VERIFICAR'}
+            {!alreadyDone && progress.credits.current <= 0 ? (creditTimer ? `SEM VIDAS · VOLTA EM ${creditTimer}` : 'SEM VIDAS') : 'VERIFICAR'}
           </button>
         </div>
       )}
@@ -128,9 +137,7 @@ export default function FillScreen({ lesson, onComplete, onClose }: Props) {
             <div>
               <div className="ls-feedback-title">{allCorrect ? 'Arrasou!' : 'Quase lá!'}</div>
               {!allCorrect && (
-                <div className="ls-feedback-hint">
-                  Resposta certa: {blanks.map((b, i) => <code key={i} style={{ marginRight: 6 }}>{b.accept[0]}</code>)}
-                </div>
+                <div className="ls-feedback-hint">Revê o código e tenta de novo.</div>
               )}
             </div>
           </div>

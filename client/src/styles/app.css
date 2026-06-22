@@ -1749,6 +1749,16 @@ body {
   color: var(--text-muted);
 }
 
+.ls-credits-timer {
+  display: inline-block;
+  margin-left: 6px;
+  padding-left: 6px;
+  border-left: 1px solid currentColor;
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
 .ls-body {
   flex: 1;
   overflow-y: auto;

@@ -38,7 +38,7 @@ function CodeBody({ lesson, done, credits, consumeCredit, onComplete, saveCode, 
 
   function run() {
     if (!done && credits <= 0) {
-      setMsg('Sem créditos agora. Volte quando recarregar.');
+      setMsg('Sem vidas agora. Volte quando recarregar.');
       return;
     }
     saveCode(lesson.id, code);
@@ -47,7 +47,7 @@ function CodeBody({ lesson, done, credits, consumeCredit, onComplete, saveCode, 
       if (!done) consumeCredit();
       setError(out.error);
       setResults(null);
-      setMsg('Erro no código. Perdeu 1 crédito.');
+      setMsg('Erro no código. Perdeu 1 vida.');
       return;
     }
     setError(null);
@@ -57,14 +57,14 @@ function CodeBody({ lesson, done, credits, consumeCredit, onComplete, saveCode, 
       if (!done) onComplete(lesson);
     } else {
       if (!done) consumeCredit();
-      setMsg('Quase lá — perdeu 1 crédito. Ajusta o código e roda de novo.');
+      setMsg('Quase lá — perdeu 1 vida. Ajusta o código e roda de novo.');
     }
   }
 
   return (
     <>
       <div className="lesson-content" dangerouslySetInnerHTML={{ __html: lesson.content }} />
-      {!done && <div className={'modal-credits' + (credits === 0 ? ' empty' : '')}>♥ {credits} créditos restantes</div>}
+      {!done && <div className={'modal-credits' + (credits === 0 ? ' empty' : '')}>♥ {credits} vidas restantes</div>}
       <textarea id="code-input" rows={8} value={code} onChange={(e) => setCode(e.target.value)} spellCheck={false} />
       <div className="actions">
         <button onClick={run}>Rodar testes</button>

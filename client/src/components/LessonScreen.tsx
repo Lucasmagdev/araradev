@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Lesson } from '../types';
 import { useProgress } from '../context/ProgressContext';
+import { formatCreditTimer } from '../lib/progress';
 import { playSound, launchConfetti } from '../lib/effects';
 import { IconClose } from './icons';
 import Mascote, { type MascoteEstado } from './Mascote';
@@ -19,10 +20,18 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
   const [answered, setAnswered] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
 
   const alreadyDone = !!progress.completed[lesson.id];
   const q = quiz[qi];
   const total = quiz.length;
+  const creditTimer = formatCreditTimer(progress.credits.nextRechargeAt, now);
+
+  useEffect(() => {
+    if (!progress.credits.nextRechargeAt) return;
+    const id = window.setInterval(() => setNow(Date.now()), 30000);
+    return () => window.clearInterval(id);
+  }, [progress.credits.nextRechargeAt]);
 
   function verify() {
     if (selected === null || answered) return;
@@ -34,6 +43,11 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
       if (!alreadyDone) recordCorrectAnswer();
     }
     playSound(ok ? 'correct' : 'wrong');
+  }
+
+  function tryAgain() {
+    setSelected(null);
+    setAnswered(false);
   }
 
   function next() {
@@ -67,7 +81,7 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
       <div className="ls-header">
         <button className="ls-close" onClick={onClose} aria-label="Fechar lição"><IconClose /></button>
         <div className="ls-progress-wrap"><div className="ls-progress-fill" style={{ width: progressPct + '%' }} /></div>
-        <div className={'ls-credits' + (progress.credits.current === 0 ? ' empty' : '')}>♥ {progress.credits.current}</div>
+        <div className={'ls-credits' + (progress.credits.current === 0 ? ' empty' : '')} title={creditTimer ? `Recarrega em ${creditTimer}` : 'Vidas cheias'}>♥ {progress.credits.current}{creditTimer && <span className="ls-credits-timer">{creditTimer}</span>}</div>
       </div>
 
       <div className="ls-body">
@@ -96,8 +110,9 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
               {q.options.map((opt, oi) => {
                 let cls = 'ls-opt';
                 if (answered) {
-                  if (oi === q.answer) cls += ' correct';
-                  else if (oi === selected) cls += ' wrong';
+                  // Só destaca a opção que a pessoa escolheu (verde se acertou, vermelho se errou).
+                  // Nunca revela qual é a certa quando erra.
+                  if (oi === selected) cls += selected === q.answer ? ' correct' : ' wrong';
                 } else if (oi === selected) cls += ' selected';
                 return (
                   <button key={oi} className={cls} disabled={answered}
@@ -117,7 +132,7 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
             disabled={selected === null || (!alreadyDone && progress.credits.current <= 0)}
             onClick={verify}
           >
-            {!alreadyDone && progress.credits.current <= 0 ? 'SEM CRÉDITOS' : 'VERIFICAR'}
+            {!alreadyDone && progress.credits.current <= 0 ? (creditTimer ? `SEM VIDAS · VOLTA EM ${creditTimer}` : 'SEM VIDAS') : 'VERIFICAR'}
           </button>
         </div>
       )}
@@ -129,11 +144,13 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
             <div>
               <div className="ls-feedback-title">{selected === q.answer ? 'Arrasou!' : 'Quase lá!'}</div>
               {selected !== q.answer && (
-                <div className="ls-feedback-hint" dangerouslySetInnerHTML={{ __html: 'Resposta certa: ' + q.options[q.answer] }} />
+                <div className="ls-feedback-hint">Pensa de novo e escolhe outra.</div>
               )}
             </div>
           </div>
-          <button className="ls-continue-btn" onClick={next}>CONTINUAR</button>
+          {selected === q.answer
+            ? <button className="ls-continue-btn" onClick={next}>CONTINUAR</button>
+            : <button className="ls-continue-btn" onClick={tryAgain}>TENTAR DE NOVO</button>}
         </div>
       )}
     </div>

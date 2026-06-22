@@ -30,7 +30,7 @@ export default function Header() {
             <span>{progress.streak.count}</span>
           </div>
 
-          <div className={'credits-card' + (progress.credits.current === 0 ? ' empty' : '')} title={creditTimer ? `Recarga em ${creditTimer}` : 'Créditos cheios'}>
+          <div className={'credits-card' + (progress.credits.current === 0 ? ' empty' : '')} title={creditTimer ? `Vidas recarregam em ${creditTimer}` : 'Vidas cheias'}>
             <IconHeart />
             <span>{progress.credits.current}</span>
             {creditTimer && <span className="credits-timer">{creditTimer}</span>}

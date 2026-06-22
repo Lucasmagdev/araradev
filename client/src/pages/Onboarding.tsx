@@ -70,6 +70,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(1);
   const [prefs, setPrefs] = useState<OnboardingPreferences>(defaults);
   const [saving, setSaving] = useState(false);
+  const [loadPct, setLoadPct] = useState(0);
   const [account, setAccount] = useState({ name: '', email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
@@ -113,20 +114,28 @@ export default function Onboarding() {
     }));
   }
 
-  async function finish() {
+  function finish() {
+    setLoadPct(0);
     setSaving(true);
-    const payload = { ...prefs, completedAt: Date.now() };
-    if (hasAuth) {
-      await saveOnboardingPreferences(payload);
-      setTimeout(() => navigate('/trilha', { replace: true }), 1800);
-      return;
-    }
-
-    setTimeout(() => {
-      setSaving(false);
-      setStep(7);
-    }, 1400);
+    // Quem já está logado salva agora; o avanço é controlado pela animação 0→100%.
+    if (hasAuth) void saveOnboardingPreferences({ ...prefs, completedAt: Date.now() });
   }
+
+  // Anima a barra/anel de "Montando sua trilha" e só avança ao chegar em 100%.
+  useEffect(() => {
+    if (!saving) return;
+    let pct = 0;
+    const id = window.setInterval(() => {
+      pct = Math.min(100, pct + 2);
+      setLoadPct(pct);
+      if (pct >= 100) {
+        window.clearInterval(id);
+        if (hasAuth) navigate('/trilha', { replace: true });
+        else { setSaving(false); setStep(7); }
+      }
+    }, 30);
+    return () => window.clearInterval(id);
+  }, [saving, hasAuth, navigate]);
 
   async function createAccount(e: React.FormEvent) {
     e.preventDefault();
@@ -249,12 +258,12 @@ export default function Onboarding() {
       {step === 6 && saving && (
         <section className="ob-card analyzing">
           <h1>Montando sua trilha AraraDev</h1>
-          <div className="ob-ring"><span>100%</span></div>
+          <div className="ob-ring" style={{ background: `conic-gradient(var(--green) 0 ${loadPct}%, rgba(255,255,255,0.12) ${loadPct}% 100%)` }}><span>{loadPct}%</span></div>
           <div className="ob-checklist">
-            <span>✓ Analisando {selectedGoalLabel.toLowerCase()}</span>
-            <span>✓ Ajustando seu ritmo de estudo</span>
-            <span>✓ Definindo ponto de partida</span>
-            <span>✓ Preparando exercícios sem muleta de IA</span>
+            <span style={{ opacity: loadPct > 15 ? 1 : 0.35 }}>{loadPct > 15 ? '✓' : '⋯'} Analisando {selectedGoalLabel.toLowerCase()}</span>
+            <span style={{ opacity: loadPct > 40 ? 1 : 0.35 }}>{loadPct > 40 ? '✓' : '⋯'} Ajustando seu ritmo de estudo</span>
+            <span style={{ opacity: loadPct > 65 ? 1 : 0.35 }}>{loadPct > 65 ? '✓' : '⋯'} Definindo ponto de partida</span>
+            <span style={{ opacity: loadPct > 90 ? 1 : 0.35 }}>{loadPct > 90 ? '✓' : '⋯'} Preparando exercícios sem muleta de IA</span>
           </div>
         </section>
       )}

@@ -66,7 +66,7 @@ export default function Trilha() {
   const openLesson = useCallback((index: number) => {
     const lesson = LESSONS[index];
     if (!progress.completed[lesson.id] && progress.credits.current <= 0) {
-      addToast('Sem créditos agora. Eles recarregam automaticamente a cada <strong>48h</strong>.');
+      addToast('Sem vidas agora. Elas recarregam automaticamente a cada <strong>48h</strong>.');
       return;
     }
     setOpenIndex(index);

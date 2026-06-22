@@ -1,7 +1,7 @@
 import type { Progress } from '../types';
 import { LESSONS } from '../data/lessons';
 
-export const MAX_CREDITS = 5;
+export const MAX_CREDITS = 4;
 export const CREDIT_RECHARGE_MS = 48 * 60 * 60 * 1000;
 
 export interface Badge {
@@ -86,9 +86,10 @@ export function normalizeProgress(progress: Partial<Progress> | null | undefined
   const credits = { ...base.credits, ...(progress?.credits || {}) };
   const stats = { ...base.stats, ...(progress?.stats || {}) };
   const dailyChallenge = { ...base.dailyChallenge, ...(progress?.dailyChallenge || {}) };
+  // max sempre = MAX_CREDITS (constante global). Migra quem salvou max antigo (ex: 5 -> 4).
   merged.credits = {
-    current: Math.max(0, Math.min(credits.current, credits.max || MAX_CREDITS)),
-    max: credits.max || MAX_CREDITS,
+    current: Math.max(0, Math.min(credits.current, MAX_CREDITS)),
+    max: MAX_CREDITS,
     nextRechargeAt: credits.nextRechargeAt || null,
   };
   merged.stats = stats;
