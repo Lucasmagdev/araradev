@@ -24,7 +24,7 @@ const BADGES = [
   { id: 'first-lesson',   icon: '🌱', name: 'Primeira lição',   check: (p) => Object.keys(p.completed).length >= 1 },
   { id: 'ten-lessons',    icon: '📚', name: '10 lições',         check: (p) => Object.keys(p.completed).length >= 10 },
   { id: 'thirty-lessons', icon: '🎯', name: '30 lições',         check: (p) => Object.keys(p.completed).length >= 30 },
-  { id: 'all-lessons',    icon: '🦜', name: 'AraraDev Master',   check: (p) => Object.keys(p.completed).length >= LESSONS.length },
+  { id: 'all-lessons',    icon: '🦜', name: 'TrilhaDev Master',   check: (p) => Object.keys(p.completed).length >= LESSONS.length },
   { id: 'streak-3',       icon: '🔥', name: 'Streak 3 dias',     check: (p) => p.streak.count >= 3 },
   { id: 'streak-7',       icon: '⚡', name: 'Streak 7 dias',     check: (p) => p.streak.count >= 7 },
   { id: 'xp-50',          icon: '⭐', name: '50 XP',             check: (p) => p.xp >= 50 },
@@ -183,7 +183,7 @@ function renderProfileHTML() {
   return `
     <button class="close" onclick="closeModal()">×</button>
     <div style="text-align:center;margin-bottom:4px">
-      <img src="logoararadev.jpeg" class="avatar-display" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--green);" alt="AraraDev" />
+      <img src="logoararadev.jpeg" class="avatar-display" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--green);" alt="TrilhaDev" />
       <input id="nome-input" class="nome-input" type="text" placeholder="Seu nome" value="${escapeHtml(nome)}" maxlength="30" />
     </div>
     <div class="profile-level">
@@ -237,7 +237,7 @@ function renderSettingsHTML() {
         <button id="settings-reset-btn" class="danger-btn">Resetar</button>
       </div>
     </div>
-    <p class="app-version">AraraDev v1.0</p>
+    <p class="app-version">TrilhaDev v1.0</p>
   `;
 }
 
@@ -423,7 +423,7 @@ function renderPath() {
       mascotWrap.className = 'mascot';
       const mascotImg = document.createElement('img');
       mascotImg.src = 'araradev.jpeg';
-      mascotImg.alt = 'AraraDev';
+      mascotImg.alt = 'TrilhaDev';
       mascotImg.className = 'mascot-img';
       mascotWrap.appendChild(mascotImg);
       wrap.appendChild(mascotWrap);
