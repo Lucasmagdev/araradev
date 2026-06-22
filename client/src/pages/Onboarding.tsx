@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMe, getOnboardingPreferences, saveOnboardingPreferences } from '../lib/api';
+import { getMe, getOnboardingPreferences, getToken, login, register, saveOnboardingPreferences, setToken } from '../lib/api';
 import type { OnboardingPreferences } from '../types';
 
 const TOTAL_STEPS = 6;
@@ -65,19 +65,36 @@ function OptionButton({ active, children, onClick }: { active: boolean; children
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const [authChecked, setAuthChecked] = useState(false);
+  const [authChecked, setAuthChecked] = useState(() => !getToken());
+  const [hasAuth, setHasAuth] = useState(false);
   const [step, setStep] = useState(1);
   const [prefs, setPrefs] = useState<OnboardingPreferences>(defaults);
   const [saving, setSaving] = useState(false);
+  const [account, setAccount] = useState({ name: '', email: '', password: '' });
+  const [showPass, setShowPass] = useState(false);
+  const [error, setError] = useState('');
+  // Login pra quem já tem conta (reinstalou o app / trocou de aparelho).
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [loginError, setLoginError] = useState('');
+  const [loginBusy, setLoginBusy] = useState(false);
 
   useEffect(() => {
+    if (!getToken()) return;
+
     getMe()
       .then(() => getOnboardingPreferences())
       .then(existing => {
         if (existing?.completedAt) navigate('/trilha', { replace: true });
-        else setAuthChecked(true);
+        else {
+          setHasAuth(true);
+          setAuthChecked(true);
+        }
       })
-      .catch(() => navigate('/', { replace: true }));
+      .catch(() => {
+        setHasAuth(false);
+        setAuthChecked(true);
+      });
   }, [navigate]);
 
   const selectedGoalLabel = useMemo(() => goals.find(([id]) => id === prefs.goal)?.[1] || 'seu objetivo', [prefs.goal]);
@@ -99,8 +116,63 @@ export default function Onboarding() {
   async function finish() {
     setSaving(true);
     const payload = { ...prefs, completedAt: Date.now() };
-    await saveOnboardingPreferences(payload);
-    setTimeout(() => navigate('/trilha', { replace: true }), 1800);
+    if (hasAuth) {
+      await saveOnboardingPreferences(payload);
+      setTimeout(() => navigate('/trilha', { replace: true }), 1800);
+      return;
+    }
+
+    setTimeout(() => {
+      setSaving(false);
+      setStep(7);
+    }, 1400);
+  }
+
+  async function createAccount(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+    const name = account.name.trim();
+    const email = account.email.trim();
+    const password = account.password;
+
+    if (!name) { setError('Informe seu nome.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('Email invalido.'); return; }
+    if (password.length < 6) { setError('Senha precisa de no minimo 6 caracteres.'); return; }
+
+    setSaving(true);
+    try {
+      const res = await register(name, email, password);
+      setToken(res.token);
+      await saveOnboardingPreferences({ ...prefs, completedAt: Date.now() });
+      navigate('/trilha', { replace: true });
+    } catch (err) {
+      setSaving(false);
+      setError((err as Error).message || 'Erro ao criar conta. Tente novamente.');
+    }
+  }
+
+  async function doLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setLoginError('');
+    const email = loginData.email.trim();
+    const password = loginData.password;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setLoginError('Email invalido.'); return; }
+    if (password.length < 6) { setLoginError('Senha precisa de no minimo 6 caracteres.'); return; }
+    setLoginBusy(true);
+    try {
+      const res = await login(email, password);
+      setToken(res.token);
+      const existing = await getOnboardingPreferences().catch(() => null);
+      navigate(existing?.completedAt ? '/trilha' : '/onboarding', { replace: true });
+      if (existing?.completedAt) return;
+      // tem conta mas nunca completou onboarding: segue o questionario logado
+      setHasAuth(true);
+      setLoginOpen(false);
+      setLoginBusy(false);
+    } catch (err) {
+      setLoginBusy(false);
+      setLoginError((err as Error).message || 'Email ou senha incorretos.');
+    }
   }
 
   if (!authChecked) {
@@ -117,6 +189,7 @@ export default function Onboarding() {
           <h1>Vamos montar sua trilha?</h1>
           <p>Antes de começar, responda rapidinho para o AraraDev ajustar ritmo, foco e ponto de partida.</p>
           <button className="ob-primary" onClick={() => setStep(2)}>Continuar</button>
+          <button className="ob-login-link" onClick={() => { setLoginError(''); setLoginOpen(true); }}>Já tenho conta? Entrar</button>
         </section>
       )}
 
@@ -184,6 +257,89 @@ export default function Onboarding() {
             <span>✓ Preparando exercícios sem muleta de IA</span>
           </div>
         </section>
+      )}
+
+      {step === 7 && (
+        <section className="ob-card account">
+          <img src="/logoararadev.jpeg" className="ob-mascot" alt="AraraDev" />
+          <h1>Sua trilha esta pronta</h1>
+          <p>Crie sua conta gratis para salvar o plano, XP, vidas e progresso.</p>
+          <form className="ob-account-form" onSubmit={createAccount}>
+            <div className="auth-field">
+              <label>Nome</label>
+              <input
+                type="text"
+                value={account.name}
+                onChange={e => setAccount(a => ({ ...a, name: e.target.value }))}
+                placeholder="Seu nome"
+                autoComplete="name"
+              />
+            </div>
+            <div className="auth-field">
+              <label>Email</label>
+              <input
+                type="email"
+                value={account.email}
+                onChange={e => setAccount(a => ({ ...a, email: e.target.value }))}
+                placeholder="seu@email.com"
+                autoComplete="email"
+                inputMode="email"
+              />
+            </div>
+            <div className="auth-field">
+              <label>Senha</label>
+              <div className="auth-pass">
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  value={account.password}
+                  onChange={e => setAccount(a => ({ ...a, password: e.target.value }))}
+                  placeholder="Minimo 6 caracteres"
+                  autoComplete="new-password"
+                />
+                <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(s => !s)} aria-label={showPass ? 'Ocultar senha' : 'Mostrar senha'}>
+                  {showPass ? 'Ocultar' : 'Mostrar'}
+                </button>
+              </div>
+            </div>
+            {error && <p className="auth-error" style={{ display: 'block' }}>{error}</p>}
+            <button type="submit" className="ob-primary" disabled={saving}>
+              {saving ? 'Salvando...' : 'Criar conta e comecar'}
+            </button>
+          </form>
+          <button className="ob-login-link" onClick={() => { setLoginError(''); setLoginOpen(true); }}>Já tenho conta? Entrar</button>
+        </section>
+      )}
+
+      {loginOpen && (
+        <div className="auth-overlay" onClick={(e) => { if (e.target === e.currentTarget) setLoginOpen(false); }}>
+          <div className="auth-card">
+            <button className="auth-close" onClick={() => setLoginOpen(false)}>✕</button>
+            <div className="auth-brand">
+              <img src="/logoararadev.jpeg" className="auth-logo" alt="AraraDev" />
+              <span className="auth-brand-name">AraraDev</span>
+            </div>
+            <h2 style={{ textAlign: 'center', margin: '0 0 16px' }}>Entrar</h2>
+            <form onSubmit={doLogin}>
+              <div className="auth-field">
+                <label>Email</label>
+                <input type="email" value={loginData.email} onChange={e => setLoginData(d => ({ ...d, email: e.target.value }))} placeholder="seu@email.com" autoComplete="email" inputMode="email" />
+              </div>
+              <div className="auth-field">
+                <label>Senha</label>
+                <div className="auth-pass">
+                  <input type={showPass ? 'text' : 'password'} value={loginData.password} onChange={e => setLoginData(d => ({ ...d, password: e.target.value }))} placeholder="Sua senha" autoComplete="current-password" />
+                  <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(s => !s)} aria-label={showPass ? 'Ocultar senha' : 'Mostrar senha'}>
+                    {showPass ? 'Ocultar' : 'Mostrar'}
+                  </button>
+                </div>
+              </div>
+              {loginError && <p className="auth-error" style={{ display: 'block' }}>{loginError}</p>}
+              <button type="submit" className="auth-btn" disabled={loginBusy}>
+                {loginBusy ? 'Entrando...' : 'ENTRAR'}
+              </button>
+            </form>
+          </div>
+        </div>
       )}
     </main>
   );

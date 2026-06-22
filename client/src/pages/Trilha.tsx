@@ -17,6 +17,7 @@ import Header from '../components/Header';
 import BottomNav, { type NavKey } from '../components/BottomNav';
 import Path from '../components/Path';
 import LessonScreen from '../components/LessonScreen';
+import FillScreen from '../components/FillScreen';
 import LessonModal from '../components/LessonModal';
 import { ProfileModal, AchievementsModal, SettingsModal, PhaseCompleteModal, DailyChallengeModal, RankingModal } from '../components/Modals';
 import Toasts, { type Toast } from '../components/Toasts';
@@ -84,6 +85,7 @@ export default function Trilha() {
 
   const lesson = openIndex !== null ? LESSONS[openIndex] : null;
   const isTheoryQuiz = lesson?.type === 'theory' && (lesson.quiz?.length ?? 0) > 0;
+  const isFill = lesson?.type === 'fill';
 
   function onNav(k: NavKey) {
     setNav(k);
@@ -108,7 +110,10 @@ export default function Trilha() {
       {lesson && isTheoryQuiz && (
         <LessonScreen lesson={lesson} onComplete={handleComplete} onClose={closeLesson} />
       )}
-      {lesson && !isTheoryQuiz && (
+      {lesson && isFill && (
+        <FillScreen lesson={lesson} onComplete={handleComplete} onClose={closeLesson} />
+      )}
+      {lesson && !isTheoryQuiz && !isFill && (
         <LessonModal lesson={lesson} onComplete={handleComplete} onClose={closeLesson} />
       )}
 

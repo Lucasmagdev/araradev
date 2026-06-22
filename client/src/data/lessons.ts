@@ -77,46 +77,39 @@ while (n &lt; 3) {
     id: 'm1-4',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Acumulador: soma de lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Um <strong>acumulador</strong> é uma variável que guarda um resultado parcial e vai sendo atualizada a cada volta do loop.</p>
-      <pre><code>function exemplo(lista) {
-  let total = 0; // acumulador
-  for (let i = 0; i &lt; lista.length; i++) {
-    total = total + lista[i];
+      <p>Um <strong>acumulador</strong> guarda um resultado parcial e é atualizado a cada volta do loop. Complete a linha que soma o item atual no acumulador.</p>
+    `,
+    fillCode: `function soma(lista) {
+  let total = 0;
+  for (let i = 0; i < lista.length; i++) {
+    total = total ◻;
   }
   return total;
-}</code></pre>
-      <p>Agora é sua vez: escreva <code>soma(lista)</code> que retorna a soma de todos os números da lista.</p>
-    `,
-    starter: 'function soma(lista) {\n  // seu código aqui\n}',
-    funcName: 'soma',
-    tests: [
-      { args: [[1, 2, 3]], expected: 6 },
-      { args: [[]], expected: 0 },
-      { args: [[10, -5, 5]], expected: 10 },
-    ],
+}`,
+    fillBlanks: [{ accept: ['+ lista[i]', '+lista[i]'] }],
+    fillHint: 'Some o item da posição i: lista[i].',
   },
   {
     id: 'm1-5',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Contar pares',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Use o mesmo padrão de acumulador, mas agora ele <strong>conta</strong> em vez de somar.</p>
-      <p>Escreva <code>contarPares(lista)</code> que retorna quantos números pares existem na lista.</p>
-      <p>Dica: <code>numero % 2 === 0</code> é verdadeiro quando o número é par.</p>
+      <p>Mesmo padrão de acumulador, mas <strong>contando</strong> em vez de somar. Um número é par quando o resto da divisão por 2 é zero. Complete o teste de "é par".</p>
     `,
-    starter: 'function contarPares(lista) {\n  // seu código aqui\n}',
-    funcName: 'contarPares',
-    tests: [
-      { args: [[1, 2, 3, 4]], expected: 2 },
-      { args: [[]], expected: 0 },
-      { args: [[2, 4, 6]], expected: 3 },
-      { args: [[1, 3, 5]], expected: 0 },
-    ],
+    fillCode: `function contarPares(lista) {
+  let total = 0;
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i] % 2 ◻ 0) total = total + 1;
+  }
+  return total;
+}`,
+    fillBlanks: [{ accept: ['===', '=='] }],
+    fillHint: 'Compare o resto com 0 usando igualdade estrita.',
   },
   {
     id: 'm1-6',
@@ -144,20 +137,20 @@ dobro(10); // 20</code></pre>
     id: 'm1-7',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Inverter string',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>inverter(texto)</code> que devolve o texto invertido. Ex: <code>"abc"</code> → <code>"cba"</code>.</p>
-      <p>Dica: percorra o texto de trás pra frente e vá acumulando os caracteres num resultado (string também aceita <code>+=</code>).</p>
+      <p>Pra inverter, o loop percorre o texto <strong>de trás pra frente</strong>, acumulando cada caractere. Complete o passo do loop pra ele <strong>diminuir</strong> o índice.</p>
     `,
-    starter: 'function inverter(texto) {\n  // seu código aqui\n}',
-    funcName: 'inverter',
-    tests: [
-      { args: ['abc'], expected: 'cba' },
-      { args: [''], expected: '' },
-      { args: ['a'], expected: 'a' },
-      { args: ['Lucas'], expected: 'sacuL' },
-    ],
+    fillCode: `function inverter(texto) {
+  let resultado = '';
+  for (let i = texto.length - 1; i >= 0; i◻) {
+    resultado += texto[i];
+  }
+  return resultado;
+}`,
+    fillBlanks: [{ accept: ['--'] }],
+    fillHint: 'Operador que subtrai 1 do índice a cada volta.',
   },
   {
     id: 'm1-8',
@@ -233,98 +226,97 @@ if (idade &gt;= 18 &amp;&amp; temCarteira) {
     id: 'm1-11',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Contar vogais',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>contarVogais(texto)</code> que retorna quantas vogais (a, e, i, o, u) existem no texto. Considere só letras minúsculas — os testes usam texto em minúsculo.</p>
+      <p>Pra cada caractere, testamos se ele está na lista de vogais com <code>'aeiou'.includes(...)</code>. Complete o que é passado pro <code>includes</code>.</p>
     `,
-    starter: 'function contarVogais(texto) {\n  // seu código aqui\n}',
-    funcName: 'contarVogais',
-    tests: [
-      { args: ['programacao'], expected: 5 },
-      { args: [''], expected: 0 },
-      { args: ['xyz'], expected: 0 },
-      { args: ['aeiou'], expected: 5 },
-    ],
+    fillCode: `function contarVogais(texto) {
+  let total = 0;
+  for (let i = 0; i < texto.length; i++) {
+    if ('aeiou'.includes(◻)) total++;
+  }
+  return total;
+}`,
+    fillBlanks: [{ accept: ['texto[i]'] }],
+    fillHint: 'O caractere na posição i do texto.',
   },
   {
     id: 'm1-12',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Menor valor da lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Mesma ideia do exercício de maior valor, agora ao contrário: escreva <code>menorValor(lista)</code> que retorna o menor número da lista.</p>
+      <p>Guarde um "menor até agora" e atualize sempre que achar um número <strong>menor</strong>. Complete a comparação.</p>
     `,
-    starter: 'function menorValor(lista) {\n  // seu código aqui\n}',
-    funcName: 'menorValor',
-    tests: [
-      { args: [[3, 1, 2]], expected: 1 },
-      { args: [[5]], expected: 5 },
-      { args: [[-1, -5, 2]], expected: -5 },
-      { args: [[10, 2, 8]], expected: 2 },
-    ],
+    fillCode: `function menorValor(lista) {
+  let menor = lista[0];
+  for (let i = 1; i < lista.length; i++) {
+    if (lista[i] ◻ menor) menor = lista[i];
+  }
+  return menor;
+}`,
+    fillBlanks: [{ accept: ['<'] }],
+    fillHint: 'Quando o item atual é menor que o guardado.',
   },
   {
     id: 'm1-13',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Produto de uma lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>produto(lista)</code> que retorna a multiplicação de todos os números da lista.</p>
-      <p>Dica: o acumulador da multiplicação começa em <code>1</code> (não em 0) — multiplicar por 0 zeraria tudo.</p>
+      <p>No acumulador de multiplicação, o valor inicial <strong>não</strong> pode ser 0 — senão zera tudo. Complete o valor inicial certo.</p>
     `,
-    starter: 'function produto(lista) {\n  // seu código aqui\n}',
-    funcName: 'produto',
-    tests: [
-      { args: [[1, 2, 3, 4]], expected: 24 },
-      { args: [[5]], expected: 5 },
-      { args: [[2, 0, 3]], expected: 0 },
-      { args: [[]], expected: 1 },
-    ],
+    fillCode: `function produto(lista) {
+  let total = ◻;
+  for (let i = 0; i < lista.length; i++) {
+    total = total * lista[i];
+  }
+  return total;
+}`,
+    fillBlanks: [{ accept: ['1'] }],
+    fillHint: 'Elemento neutro da multiplicação.',
   },
   {
     id: 'm1-14',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Palíndromo',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Palíndromo é uma palavra que se lê igual de trás pra frente, ex: "arara", "ovo".</p>
-      <p>Escreva <code>ehPalindromo(texto)</code> que retorna <code>true</code> ou <code>false</code>. Dica: reaproveite a lógica de <code>inverter</code>.</p>
+      <p>Palíndromo se lê igual de trás pra frente (ex: "arara"). Invertemos o texto e comparamos com o original. Complete a comparação que devolve <code>true</code>/<code>false</code>.</p>
     `,
-    starter: 'function ehPalindromo(texto) {\n  // seu código aqui\n}',
-    funcName: 'ehPalindromo',
-    tests: [
-      { args: ['arara'], expected: true },
-      { args: ['abc'], expected: false },
-      { args: [''], expected: true },
-      { args: ['ovo'], expected: true },
-    ],
+    fillCode: `function ehPalindromo(texto) {
+  let invertido = '';
+  for (let i = texto.length - 1; i >= 0; i--) {
+    invertido += texto[i];
+  }
+  return texto ◻ invertido;
+}`,
+    fillBlanks: [{ accept: ['===', '=='] }],
+    fillHint: 'Igualdade estrita entre original e invertido.',
   },
   {
     id: 'm1-15',
     unit: 'Fase 1 — Lógica de programação',
     title: 'FizzBuzz',
-    type: 'code',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>Clássico FizzBuzz. Escreva <code>fizzbuzz(n)</code> que retorna uma lista de 1 até n (incluindo n), onde:</p>
-      <ul>
-        <li>múltiplos de 3 → <code>"Fizz"</code></li>
-        <li>múltiplos de 5 → <code>"Buzz"</code></li>
-        <li>múltiplos de 3 e 5 → <code>"FizzBuzz"</code></li>
-        <li>os demais → o próprio número</li>
-      </ul>
+      <p>Clássico <strong>FizzBuzz</strong>: de 1 até n, múltiplos de 3 viram <code>"Fizz"</code>, de 5 viram <code>"Buzz"</code>, de 3 <strong>e</strong> 5 viram <code>"FizzBuzz"</code>, o resto fica o próprio número.</p>
+      <pre><code>for (let i = 1; i &lt;= n; i++) {
+  if (i % 15 === 0)      resultado.push("FizzBuzz");
+  else if (i % 3 === 0)  resultado.push("Fizz");
+  else if (i % 5 === 0)  resultado.push("Buzz");
+  else                   resultado.push(i);
+}</code></pre>
     `,
-    starter: 'function fizzbuzz(n) {\n  // seu código aqui\n}',
-    funcName: 'fizzbuzz',
-    tests: [
-      { args: [3], expected: [1, 2, 'Fizz'] },
-      { args: [5], expected: [1, 2, 'Fizz', 4, 'Buzz'] },
-      { args: [1], expected: [1] },
-      { args: [15], expected: [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Fizz', 'Buzz', 11, 'Fizz', 13, 14, 'FizzBuzz'] },
+    quiz: [
+      { q: 'Por que o teste de <code>% 15</code> (ou 3 <strong>e</strong> 5) vem <strong>antes</strong> dos outros?', options: ['por estética', 'senão o número cai em "Fizz" ou "Buzz" e nunca chega em "FizzBuzz"', 'porque 15 é maior', 'tanto faz a ordem'], answer: 1 },
+      { q: 'Pra <code>fizzbuzz(5)</code>, qual a saída?', options: ['[1, 2, Fizz, 4, Buzz]', '[Fizz, Buzz, 1, 2, 4]', '[1, 2, 3, 4, 5]', '[1, 2, Buzz, 4, Fizz]'], answer: 0 },
+      { q: 'O que <code>i % 3 === 0</code> verifica?', options: ['se i é igual a 3', 'se i é múltiplo de 3 (resto zero)', 'se i é par', 'se i é maior que 3'], answer: 1 },
     ],
   },
 
@@ -332,39 +324,38 @@ if (idade &gt;= 18 &amp;&amp; temCarteira) {
     id: 'x1-1',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Média de uma lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Pra calcular a <strong>média</strong>: some todos os números e divida pela quantidade.</p>
-      <pre><code>soma / quantidade</code></pre>
-      <p>Escreva <code>media(lista)</code> que retorna a média dos números. Se a lista estiver vazia, retorne 0.</p>
+      <p>A <strong>média</strong> é a soma dividida pela quantidade. Complete a operação que devolve a média.</p>
     `,
-    starter: 'function media(lista) {\n  // seu código aqui\n}',
-    funcName: 'media',
-    tests: [
-      { args: [[2, 4, 6]], expected: 4 },
-      { args: [[10]], expected: 10 },
-      { args: [[]], expected: 0 },
-      { args: [[1, 2]], expected: 1.5 },
-    ],
+    fillCode: `function media(lista) {
+  if (lista.length === 0) return 0;
+  let total = 0;
+  for (let i = 0; i < lista.length; i++) total += lista[i];
+  return total ◻ lista.length;
+}`,
+    fillBlanks: [{ accept: ['/'] }],
+    fillHint: 'Divida a soma pela quantidade de itens.',
   },
   {
     id: 'x1-2',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Contar ocorrências',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Percorra a lista e use um <strong>acumulador</strong> pra contar quantas vezes um valor aparece.</p>
-      <p>Escreva <code>contar(lista, alvo)</code> que retorna quantas vezes <code>alvo</code> aparece em <code>lista</code>.</p>
+      <p>Conte quantas vezes <code>alvo</code> aparece na lista. Complete o que o item atual deve ser comparado.</p>
     `,
-    starter: 'function contar(lista, alvo) {\n  // seu código aqui\n}',
-    funcName: 'contar',
-    tests: [
-      { args: [[1, 2, 2, 3, 2], 2], expected: 3 },
-      { args: [['a', 'b', 'a'], 'a'], expected: 2 },
-      { args: [[1, 2, 3], 9], expected: 0 },
-    ],
+    fillCode: `function contar(lista, alvo) {
+  let total = 0;
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i] === ◻) total++;
+  }
+  return total;
+}`,
+    fillBlanks: [{ accept: ['alvo'] }],
+    fillHint: 'O valor procurado, recebido como parâmetro.',
   },
   {
     id: 'x1-3',
@@ -389,41 +380,35 @@ if (idade &gt;= 18 &amp;&amp; temCarteira) {
     id: 'x1-4',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Maior número da lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Guarde um "maior até agora" e atualize sempre que achar um número maior.</p>
-      <pre><code>let maior = lista[0];
-for (...) { if (atual &gt; maior) maior = atual; }</code></pre>
-      <p>Escreva <code>maiorDaLista(lista)</code> que retorna o maior número. Pode assumir que a lista tem ao menos 1 item.</p>
+      <p>Guarde um "maior até agora" e atualize quando achar um número <strong>maior</strong>. Complete a comparação.</p>
     `,
-    starter: 'function maiorDaLista(lista) {\n  // seu código aqui\n}',
-    funcName: 'maiorDaLista',
-    tests: [
-      { args: [[1, 9, 3, 7]], expected: 9 },
-      { args: [[-5, -2, -10]], expected: -2 },
-      { args: [[42]], expected: 42 },
-    ],
+    fillCode: `function maiorDaLista(lista) {
+  let maior = lista[0];
+  for (let i = 1; i < lista.length; i++) {
+    if (lista[i] ◻ maior) maior = lista[i];
+  }
+  return maior;
+}`,
+    fillBlanks: [{ accept: ['>'] }],
+    fillHint: 'Quando o item atual é maior que o guardado.',
   },
   {
     id: 'x1-5',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Está no intervalo?',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Combine duas condições com <strong>&amp;&amp;</strong> (e). Um número está no intervalo se for maior-ou-igual ao mínimo <strong>e</strong> menor-ou-igual ao máximo.</p>
-      <p>Escreva <code>noIntervalo(n, min, max)</code> que retorna <code>true</code> se <code>n</code> está entre <code>min</code> e <code>max</code> (incluindo as pontas).</p>
+      <p>Um número está no intervalo se for <code>&gt;= min</code> <strong>e</strong> <code>&lt;= max</code>. Complete o operador que combina as duas condições.</p>
     `,
-    starter: 'function noIntervalo(n, min, max) {\n  // seu código aqui\n}',
-    funcName: 'noIntervalo',
-    tests: [
-      { args: [5, 1, 10], expected: true },
-      { args: [1, 1, 10], expected: true },
-      { args: [10, 1, 10], expected: true },
-      { args: [0, 1, 10], expected: false },
-      { args: [11, 1, 10], expected: false },
-    ],
+    fillCode: `function noIntervalo(n, min, max) {
+  return n >= min ◻ n <= max;
+}`,
+    fillBlanks: [{ accept: ['&&'] }],
+    fillHint: 'Operador lógico "E" — só true se ambos forem true.',
   },
 
   // ===== FASE 2 — Estruturas de dados =====
@@ -454,37 +439,39 @@ lista.length;  // 4</code></pre>
     id: 'm2-2',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Filtrar lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>filtrarPares(lista)</code> que retorna uma <strong>nova lista</strong> contendo só os números pares.</p>
-      <p>Diferente do exercício de contar pares: aqui o acumulador guarda itens, não uma soma.</p>
+      <p>Aqui o acumulador é uma <strong>lista</strong>: adicionamos só os pares. Complete o método que adiciona o item no fim do array.</p>
     `,
-    starter: 'function filtrarPares(lista) {\n  // seu código aqui\n}',
-    funcName: 'filtrarPares',
-    tests: [
-      { args: [[1, 2, 3, 4]], expected: [2, 4] },
-      { args: [[]], expected: [] },
-      { args: [[1, 3, 5]], expected: [] },
-      { args: [[2, 4, 6]], expected: [2, 4, 6] },
-    ],
+    fillCode: `function filtrarPares(lista) {
+  let resultado = [];
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i] % 2 === 0) resultado.◻(lista[i]);
+  }
+  return resultado;
+}`,
+    fillBlanks: [{ accept: ['push'] }],
+    fillHint: 'Método de array que adiciona no final.',
   },
   {
     id: 'm2-3',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Transformar lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>dobrarValores(lista)</code> que retorna uma nova lista com cada valor multiplicado por 2.</p>
+      <p>Crie uma nova lista com cada valor <strong>multiplicado por 2</strong>. Complete o que é adicionado ao resultado.</p>
     `,
-    starter: 'function dobrarValores(lista) {\n  // seu código aqui\n}',
-    funcName: 'dobrarValores',
-    tests: [
-      { args: [[1, 2, 3]], expected: [2, 4, 6] },
-      { args: [[]], expected: [] },
-      { args: [[-1, 0, 5]], expected: [-2, 0, 10] },
-    ],
+    fillCode: `function dobrarValores(lista) {
+  let resultado = [];
+  for (let i = 0; i < lista.length; i++) {
+    resultado.push(◻);
+  }
+  return resultado;
+}`,
+    fillBlanks: [{ accept: ['lista[i] * 2', 'lista[i]*2', '2 * lista[i]', '2*lista[i]'] }],
+    fillHint: 'O item atual vezes 2.',
   },
   {
     id: 'm2-4',
@@ -513,91 +500,96 @@ clientes[1].idade; // 17</code></pre>
     id: 'm2-5',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Maior valor da lista',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>maiorValor(lista)</code> que retorna o maior número da lista. Combine acumulador + condicional.</p>
+      <p>Acumulador + condicional: quando o item é maior que o guardado, atualizamos. Complete o que o "maior" recebe.</p>
     `,
-    starter: 'function maiorValor(lista) {\n  // seu código aqui\n}',
-    funcName: 'maiorValor',
-    tests: [
-      { args: [[1, 5, 3]], expected: 5 },
-      { args: [[-1, -5, -3]], expected: -1 },
-      { args: [[7]], expected: 7 },
-      { args: [[2, 8, 8, 1]], expected: 8 },
-    ],
+    fillCode: `function maiorValor(lista) {
+  let maior = lista[0];
+  for (let i = 1; i < lista.length; i++) {
+    if (lista[i] > maior) maior = ◻;
+  }
+  return maior;
+}`,
+    fillBlanks: [{ accept: ['lista[i]'] }],
+    fillHint: 'O novo maior é o item atual.',
   },
   {
     id: 'm2-6',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Somar campo de uma lista de objetos',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Dados como <code>[{valor: 10}, {valor: 20}]</code> são comuns vindos de API/banco.</p>
-      <p>Escreva <code>totalPedidos(pedidos)</code> que soma o campo <code>valor</code> de cada item.</p>
+      <p>Dados como <code>[{valor: 10}, {valor: 20}]</code> vêm de API/banco. Some o campo <code>valor</code> de cada objeto. Complete o acesso ao campo.</p>
     `,
-    starter: 'function totalPedidos(pedidos) {\n  // seu código aqui\n}',
-    funcName: 'totalPedidos',
-    tests: [
-      { args: [[{ valor: 10 }, { valor: 20 }]], expected: 30 },
-      { args: [[]], expected: 0 },
-      { args: [[{ valor: 5 }]], expected: 5 },
-    ],
+    fillCode: `function totalPedidos(pedidos) {
+  let total = 0;
+  for (let i = 0; i < pedidos.length; i++) {
+    total += pedidos[i].◻;
+  }
+  return total;
+}`,
+    fillBlanks: [{ accept: ['valor'] }],
+    fillHint: 'O nome do campo que queremos somar.',
   },
   {
     id: 'm2-7',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Encontrar item por campo',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>encontrarPorNome(lista, nome)</code> que percorre a lista de objetos <code>{nome, ...}</code> e retorna o objeto cujo <code>nome</code> seja igual ao parâmetro. Se não achar, retorna <code>null</code>.</p>
+      <p>Percorra a lista de objetos e, ao achar o de <code>nome</code> igual, devolva <strong>o objeto inteiro</strong>. Complete o que é retornado.</p>
     `,
-    starter: 'function encontrarPorNome(lista, nome) {\n  // seu código aqui\n}',
-    funcName: 'encontrarPorNome',
-    tests: [
-      { args: [[{ nome: 'Ana', idade: 30 }, { nome: 'Bruno', idade: 17 }], 'Bruno'], expected: { nome: 'Bruno', idade: 17 } },
-      { args: [[{ nome: 'Ana', idade: 30 }], 'Carlos'], expected: null },
-      { args: [[], 'Ana'], expected: null },
-    ],
+    fillCode: `function encontrarPorNome(lista, nome) {
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].nome === nome) return ◻;
+  }
+  return null;
+}`,
+    fillBlanks: [{ accept: ['lista[i]'] }],
+    fillHint: 'O objeto da posição atual.',
   },
   {
     id: 'm2-8',
     unit: 'Fase 2 — Estruturas de dados',
-    title: 'Contar ocorrências',
-    type: 'code',
+    title: 'Contar ocorrências (objeto)',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>contarOcorrencias(lista)</code> que retorna um objeto contando quantas vezes cada valor aparece na lista.</p>
-      <p>Ex: <code>["a","b","a"]</code> → <code>{a: 2, b: 1}</code>.</p>
-      <p>Dica: <code>objeto[chave] = (objeto[chave] || 0) + 1</code> — se a chave ainda não existe, <code>objeto[chave]</code> é <code>undefined</code>, e <code>undefined || 0</code> vira <code>0</code>.</p>
+      <p>Usamos um objeto como contador. Se a chave ainda não existe, <code>contagem[chave]</code> é <code>undefined</code> — o <code>|| 0</code> faz virar 0. Complete o operador que dá esse "valor padrão".</p>
     `,
-    starter: 'function contarOcorrencias(lista) {\n  // seu código aqui\n}',
-    funcName: 'contarOcorrencias',
-    tests: [
-      { args: [['a', 'b', 'a', 'c', 'b', 'a']], expected: { a: 3, b: 2, c: 1 } },
-      { args: [[]], expected: {} },
-      { args: [['x']], expected: { x: 1 } },
-    ],
+    fillCode: `function contarOcorrencias(lista) {
+  let contagem = {};
+  for (let i = 0; i < lista.length; i++) {
+    let chave = lista[i];
+    contagem[chave] = (contagem[chave] ◻ 0) + 1;
+  }
+  return contagem;
+}`,
+    fillBlanks: [{ accept: ['||'] }],
+    fillHint: 'Operador "OU" — usa 0 quando o valor é undefined.',
   },
   {
     id: 'm2-9',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Remover duplicados',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>removerDuplicados(lista)</code> que retorna uma nova lista sem valores repetidos, mantendo a ordem da primeira vez que cada valor aparece.</p>
-      <p>Dica: use uma lista de resultado e verifique com <code>resultado.includes(item)</code> antes de adicionar.</p>
+      <p>Só adicionamos um item se ele <strong>ainda não estiver</strong> no resultado. Complete o método que testa se o array já contém o item.</p>
     `,
-    starter: 'function removerDuplicados(lista) {\n  // seu código aqui\n}',
-    funcName: 'removerDuplicados',
-    tests: [
-      { args: [[1, 2, 2, 3, 1]], expected: [1, 2, 3] },
-      { args: [[]], expected: [] },
-      { args: [[5, 5, 5]], expected: [5] },
-    ],
+    fillCode: `function removerDuplicados(lista) {
+  let resultado = [];
+  for (let i = 0; i < lista.length; i++) {
+    if (!resultado.◻(lista[i])) resultado.push(lista[i]);
+  }
+  return resultado;
+}`,
+    fillBlanks: [{ accept: ['includes'] }],
+    fillHint: 'Método de array que retorna true se o valor existe.',
   },
   {
     id: 'm2-10',
@@ -627,40 +619,35 @@ clientes[1].idade; // 17</code></pre>
   {
     id: 'x2-1',
     unit: 'Fase 2 — Estruturas de dados',
-    title: 'Remover duplicados',
-    type: 'code',
+    title: 'Remover duplicados (Set)',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Um <strong>Set</strong> guarda só valores únicos. Dá pra transformar array em Set e voltar pra array:</p>
-      <pre><code>[...new Set(lista)]</code></pre>
-      <p>Escreva <code>semDuplicados(lista)</code> que retorna a lista sem valores repetidos, na ordem original.</p>
+      <p>Um <strong>Set</strong> guarda só valores únicos. Convertemos a lista em Set e espalhamos de volta num array. Complete a estrutura usada.</p>
     `,
-    starter: 'function semDuplicados(lista) {\n  // seu código aqui\n}',
-    funcName: 'semDuplicados',
-    tests: [
-      { args: [[1, 2, 2, 3, 1]], expected: [1, 2, 3] },
-      { args: [['a', 'a', 'b']], expected: ['a', 'b'] },
-      { args: [[]], expected: [] },
-    ],
+    fillCode: `function semDuplicados(lista) {
+  return [...new ◻(lista)];
+}`,
+    fillBlanks: [{ accept: ['Set'] }],
+    fillHint: 'Estrutura que só aceita valores únicos (maiúscula).',
   },
   {
     id: 'x2-2',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Somar valores de um objeto',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p><code>Object.values(obj)</code> devolve um array com os valores do objeto. Daí é só somar.</p>
-      <pre><code>Object.values({a: 1, b: 2}) // [1, 2]</code></pre>
-      <p>Escreva <code>somaValores(obj)</code> que retorna a soma de todos os valores (números) do objeto.</p>
+      <p><code>Object.values(obj)</code> devolve um array com os valores do objeto. Complete o método que extrai os valores.</p>
     `,
-    starter: 'function somaValores(obj) {\n  // seu código aqui\n}',
-    funcName: 'somaValores',
-    tests: [
-      { args: [{ a: 1, b: 2, c: 3 }], expected: 6 },
-      { args: [{ x: 10 }], expected: 10 },
-      { args: [{}], expected: 0 },
-    ],
+    fillCode: `function somaValores(obj) {
+  let total = 0;
+  let valores = Object.◻(obj);
+  for (let i = 0; i < valores.length; i++) total += valores[i];
+  return total;
+}`,
+    fillBlanks: [{ accept: ['values'] }],
+    fillHint: 'Object.??? devolve os valores (não as chaves).',
   },
   {
     id: 'x2-3',
@@ -689,39 +676,41 @@ m.size;     // 1</code></pre>
     id: 'x2-4',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Interseção de duas listas',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>A <strong>interseção</strong> são os itens que aparecem nas duas listas. <code>lista.includes(x)</code> testa se <code>x</code> está numa lista.</p>
-      <p>Escreva <code>intersecao(a, b)</code> que retorna os valores presentes em <strong>ambas</strong>, sem repetir.</p>
+      <p>Interseção = itens em <strong>ambas</strong> as listas, sem repetir. Adicionamos quando o item está em <code>b</code> <strong>e</strong> ainda não está no resultado. Complete o operador.</p>
     `,
-    starter: 'function intersecao(a, b) {\n  // seu código aqui\n}',
-    funcName: 'intersecao',
-    tests: [
-      { args: [[1, 2, 3], [2, 3, 4]], expected: [2, 3] },
-      { args: [[1, 2], [3, 4]], expected: [] },
-      { args: [[1, 1, 2], [1, 2]], expected: [1, 2] },
-    ],
+    fillCode: `function intersecao(a, b) {
+  let resultado = [];
+  for (let i = 0; i < a.length; i++) {
+    if (b.includes(a[i]) ◻ !resultado.includes(a[i])) resultado.push(a[i]);
+  }
+  return resultado;
+}`,
+    fillBlanks: [{ accept: ['&&'] }],
+    fillHint: 'Precisa das DUAS condições verdadeiras.',
   },
   {
     id: 'x2-5',
     unit: 'Fase 2 — Estruturas de dados',
     title: 'Agrupar por primeira letra',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Dá pra usar um <strong>objeto como agrupador</strong>: a chave é a categoria, o valor é um array.</p>
-      <pre><code>if (!grupos[chave]) grupos[chave] = [];
-grupos[chave].push(item);</code></pre>
-      <p>Escreva <code>agrupar(palavras)</code> que retorna um objeto agrupando as palavras pela <strong>primeira letra</strong>.</p>
+      <p>Objeto como agrupador: a chave é a primeira letra, o valor é um array de palavras. Complete o que é adicionado ao grupo.</p>
     `,
-    starter: 'function agrupar(palavras) {\n  // seu código aqui\n}',
-    funcName: 'agrupar',
-    tests: [
-      { args: [['ana', 'bia', 'alex']], expected: { a: ['ana', 'alex'], b: ['bia'] } },
-      { args: [[]], expected: {} },
-      { args: [['casa']], expected: { c: ['casa'] } },
-    ],
+    fillCode: `function agrupar(palavras) {
+  let grupos = {};
+  for (let i = 0; i < palavras.length; i++) {
+    let letra = palavras[i][0];
+    if (!grupos[letra]) grupos[letra] = [];
+    grupos[letra].push(◻);
+  }
+  return grupos;
+}`,
+    fillBlanks: [{ accept: ['palavras[i]'] }],
+    fillHint: 'A palavra atual entra no array do grupo.',
   },
 
   // ===== FASE 3 — Recursão =====
@@ -750,57 +739,49 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
     id: 'rec-2',
     unit: 'Fase 3 — Recursão',
     title: 'Fatorial',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>fatorial(n)</code> que retorna o fatorial de n (n! = n × (n-1) × ... × 1, e <code>fatorial(0) = 1</code>). Pode usar recursão (como no exemplo da lição anterior) ou loop — o importante é o resultado certo.</p>
+      <p><code>n! = n × (n-1)!</code>, com caso base <code>n &lt;= 1</code> → 1. Complete a chamada recursiva com o problema <strong>menor</strong>.</p>
     `,
-    starter: 'function fatorial(n) {\n  // seu código aqui\n}',
-    funcName: 'fatorial',
-    tests: [
-      { args: [0], expected: 1 },
-      { args: [1], expected: 1 },
-      { args: [5], expected: 120 },
-      { args: [3], expected: 6 },
-    ],
+    fillCode: `function fatorial(n) {
+  if (n <= 1) return 1;
+  return n * fatorial(◻);
+}`,
+    fillBlanks: [{ accept: ['n - 1', 'n-1'] }],
+    fillHint: 'Chame a função com um a menos.',
   },
   {
     id: 'rec-3',
     unit: 'Fase 3 — Recursão',
     title: 'Fibonacci',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>A sequência de Fibonacci: cada número é a soma dos dois anteriores. <code>fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5...</code></p>
-      <p>Escreva <code>fibonacci(n)</code> que retorna o n-ésimo número da sequência (começando do índice 0).</p>
+      <p>Cada número é a <strong>soma dos dois anteriores</strong>. Caso base: <code>n &lt; 2</code> retorna o próprio n. Complete o operador que junta as duas chamadas.</p>
     `,
-    starter: 'function fibonacci(n) {\n  // seu código aqui\n}',
-    funcName: 'fibonacci',
-    tests: [
-      { args: [0], expected: 0 },
-      { args: [1], expected: 1 },
-      { args: [5], expected: 5 },
-      { args: [7], expected: 13 },
-    ],
+    fillCode: `function fibonacci(n) {
+  if (n < 2) return n;
+  return fibonacci(n - 1) ◻ fibonacci(n - 2);
+}`,
+    fillBlanks: [{ accept: ['+'] }],
+    fillHint: 'Soma dos dois anteriores.',
   },
   {
     id: 'rec-4',
     unit: 'Fase 3 — Recursão',
     title: 'Soma recursiva',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Reescreva o exercício de soma (da Fase 1), agora usando <strong>recursão</strong> em vez de loop: caso base = lista vazia (soma 0), caso recursivo = primeiro item + soma do restante da lista.</p>
-      <p>Dica: <code>lista.slice(1)</code> retorna a lista sem o primeiro item.</p>
+      <p>Soma = primeiro item + soma do <strong>resto</strong> da lista. <code>lista.slice(1)</code> devolve a lista sem o primeiro item. Complete o método que pega o resto.</p>
     `,
-    starter: 'function somaRecursiva(lista) {\n  // seu código aqui\n}',
-    funcName: 'somaRecursiva',
-    tests: [
-      { args: [[1, 2, 3]], expected: 6 },
-      { args: [[]], expected: 0 },
-      { args: [[10, -5, 5]], expected: 10 },
-      { args: [[4]], expected: 4 },
-    ],
+    fillCode: `function somaRecursiva(lista) {
+  if (lista.length === 0) return 0;
+  return lista[0] + somaRecursiva(lista.◻(1));
+}`,
+    fillBlanks: [{ accept: ['slice'] }],
+    fillHint: 'Método que corta a lista a partir do índice 1.',
   },
   {
     id: 'rec-5',
@@ -850,78 +831,66 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
   {
     id: 'x3-2',
     unit: 'Fase 3 — Recursão',
-    title: 'Soma recursiva',
-    type: 'code',
+    title: 'Soma recursiva (caso base)',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Soma de <code>[1,2,3]</code> = <code>1 + soma([2,3])</code>. O caso base é a lista vazia (soma 0).</p>
-      <p>Use <code>lista.slice(1)</code> pra pegar a lista sem o primeiro item. Escreva <code>somaRec(lista)</code> <strong>com recursão</strong>.</p>
+      <p>Toda recursão precisa de um <strong>caso base</strong> que para. Aqui, lista vazia deve devolver a soma neutra. Complete o valor retornado no caso base.</p>
     `,
-    starter: 'function somaRec(lista) {\n  // seu código aqui\n}',
-    funcName: 'somaRec',
-    tests: [
-      { args: [[1, 2, 3]], expected: 6 },
-      { args: [[]], expected: 0 },
-      { args: [[5]], expected: 5 },
-      { args: [[10, -5]], expected: 5 },
-    ],
+    fillCode: `function somaRec(lista) {
+  if (lista.length === 0) return ◻;
+  return lista[0] + somaRec(lista.slice(1));
+}`,
+    fillBlanks: [{ accept: ['0'] }],
+    fillHint: 'Soma de uma lista vazia.',
   },
   {
     id: 'x3-3',
     unit: 'Fase 3 — Recursão',
     title: 'Potência recursiva',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p><code>base^exp</code> = <code>base × base^(exp-1)</code>. Caso base: qualquer número elevado a 0 é 1.</p>
-      <p>Escreva <code>potencia(base, exp)</code> usando recursão (<code>exp</code> é inteiro &ge; 0).</p>
+      <p><code>base^exp = base × base^(exp-1)</code>, com caso base <code>exp === 0</code> → 1. Complete o expoente <strong>menor</strong> na chamada recursiva.</p>
     `,
-    starter: 'function potencia(base, exp) {\n  // seu código aqui\n}',
-    funcName: 'potencia',
-    tests: [
-      { args: [2, 3], expected: 8 },
-      { args: [5, 0], expected: 1 },
-      { args: [3, 2], expected: 9 },
-      { args: [2, 10], expected: 1024 },
-    ],
+    fillCode: `function potencia(base, exp) {
+  if (exp === 0) return 1;
+  return base * potencia(base, ◻);
+}`,
+    fillBlanks: [{ accept: ['exp - 1', 'exp-1'] }],
+    fillHint: 'Expoente com um a menos.',
   },
   {
     id: 'x3-4',
     unit: 'Fase 3 — Recursão',
     title: 'Contar dígitos',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Cada divisão inteira por 10 "remove" um dígito: <code>Math.floor(n / 10)</code>. Caso base: número menor que 10 tem 1 dígito.</p>
-      <p>Escreva <code>contaDigitos(n)</code> que conta os dígitos de um inteiro positivo, com recursão.</p>
+      <p>Cada divisão inteira por 10 "remove" um dígito. Caso base: <code>n &lt; 10</code> tem 1 dígito. Complete o operador da divisão dentro do <code>Math.floor</code>.</p>
     `,
-    starter: 'function contaDigitos(n) {\n  // seu código aqui\n}',
-    funcName: 'contaDigitos',
-    tests: [
-      { args: [5], expected: 1 },
-      { args: [42], expected: 2 },
-      { args: [1000], expected: 4 },
-      { args: [9], expected: 1 },
-    ],
+    fillCode: `function contaDigitos(n) {
+  if (n < 10) return 1;
+  return 1 + contaDigitos(Math.floor(n ◻ 10));
+}`,
+    fillBlanks: [{ accept: ['/'] }],
+    fillHint: 'Divida por 10 e arredonde pra baixo.',
   },
   {
     id: 'x3-5',
     unit: 'Fase 3 — Recursão',
     title: 'Inverter string recursivo',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Inverter <code>"abc"</code> = inverter <code>"bc"</code> + <code>"a"</code> no fim. Caso base: string vazia.</p>
-      <p>Use <code>s[0]</code> (primeiro) e <code>s.slice(1)</code> (resto). Escreva <code>inverteRec(s)</code> com recursão.</p>
+      <p>Inverter <code>"abc"</code> = inverter <code>"bc"</code> e colocar o <code>"a"</code> no fim. Caso base: string vazia. Complete o operador que junta o resto invertido com o primeiro caractere.</p>
     `,
-    starter: 'function inverteRec(s) {\n  // seu código aqui\n}',
-    funcName: 'inverteRec',
-    tests: [
-      { args: ['abc'], expected: 'cba' },
-      { args: [''], expected: '' },
-      { args: ['a'], expected: 'a' },
-      { args: ['arara'], expected: 'arara' },
-    ],
+    fillCode: `function inverteRec(s) {
+  if (s === '') return '';
+  return inverteRec(s.slice(1)) ◻ s[0];
+}`,
+    fillBlanks: [{ accept: ['+'] }],
+    fillHint: 'Concatena strings.',
   },
 
   // ===== FASE 4 — Algoritmos clássicos =====
@@ -950,56 +919,59 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
     id: 'alg-2',
     unit: 'Fase 4 — Algoritmos clássicos',
     title: 'Busca linear',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>buscaLinear(lista, alvo)</code> que percorre a lista do início ao fim e retorna o <strong>índice</strong> de <code>alvo</code>, ou <code>-1</code> se não encontrar. Isso é <code>O(n)</code>.</p>
+      <p>Percorra a lista do início ao fim; ao achar o alvo, devolva o <strong>índice</strong>. Complete o que é retornado quando encontra.</p>
     `,
-    starter: 'function buscaLinear(lista, alvo) {\n  // seu código aqui\n}',
-    funcName: 'buscaLinear',
-    tests: [
-      { args: [[1, 2, 3], 2], expected: 1 },
-      { args: [[1, 2, 3], 5], expected: -1 },
-      { args: [[], 1], expected: -1 },
-      { args: [[7], 7], expected: 0 },
-    ],
+    fillCode: `function buscaLinear(lista, alvo) {
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i] === alvo) return ◻;
+  }
+  return -1;
+}`,
+    fillBlanks: [{ accept: ['i'] }],
+    fillHint: 'A posição atual do loop.',
   },
   {
     id: 'alg-3',
     unit: 'Fase 4 — Algoritmos clássicos',
     title: 'Busca binária',
-    type: 'code',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>Se a lista já está <strong>ordenada</strong>, dá pra buscar muito mais rápido: compare com o item do meio, descarte a metade que não pode ter o valor, repita. Isso é <code>O(log n)</code> — bem mais rápido que busca linear em listas grandes.</p>
-      <p>Escreva <code>buscaBinaria(lista, alvo)</code> (lista já vem ordenada) retornando o índice de <code>alvo</code> ou <code>-1</code>.</p>
+      <p>Em lista <strong>ordenada</strong>, a busca binária olha o <strong>meio</strong>, descarta metade e repete — <code>O(log n)</code>.</p>
+      <pre><code>let lo = 0, hi = lista.length - 1;
+while (lo &lt;= hi) {
+  let meio = Math.floor((lo + hi) / 2);
+  if (lista[meio] === alvo) return meio;
+  else if (alvo &lt; lista[meio]) hi = meio - 1; // vai pra esquerda
+  else lo = meio + 1;                          // vai pra direita
+}
+return -1;</code></pre>
     `,
-    starter: 'function buscaBinaria(lista, alvo) {\n  // seu código aqui\n}',
-    funcName: 'buscaBinaria',
-    tests: [
-      { args: [[1, 3, 5, 7, 9], 7], expected: 3 },
-      { args: [[1, 3, 5, 7, 9], 2], expected: -1 },
-      { args: [[1], 1], expected: 0 },
-      { args: [[], 5], expected: -1 },
+    quiz: [
+      { q: 'Pré-requisito pra busca binária funcionar:', options: ['a lista estar ordenada', 'a lista ter números pares', 'a lista ser pequena', 'nenhum'], answer: 0 },
+      { q: 'Se o alvo é <strong>menor</strong> que o item do meio, a busca continua:', options: ['na metade da direita', 'na metade da esquerda', 'na lista inteira de novo', 'para com -1'], answer: 1 },
+      { q: 'Por que ela é <code>O(log n)</code> e não <code>O(n)</code>?', options: ['porque descarta metade dos itens a cada passo', 'porque usa recursão', 'porque a lista é ordenada', 'porque é mais lenta'], answer: 0 },
     ],
   },
   {
     id: 'alg-4',
     unit: 'Fase 4 — Algoritmos clássicos',
     title: 'Ordenar lista',
-    type: 'code',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>Escreva <code>ordenar(lista)</code> que retorna uma <strong>nova lista</strong> com os números em ordem crescente.</p>
-      <p>Tente implementar você mesmo (ex: bubble sort — comparar vizinhos e trocar quando estiverem fora de ordem), sem usar <code>.sort()</code> direto, pra entender o que acontece por dentro.</p>
+      <p>Ordenar = deixar em ordem crescente. O <code>.sort()</code> nativo resolve, mas tem uma pegadinha com números:</p>
+      <pre><code>[10, 2, 1].sort()             // [1, 10, 2]  errado! comparou como texto
+[10, 2, 1].sort((a, b) => a - b) // [1, 2, 10]  certo, comparador numérico</code></pre>
+      <p>Por baixo, algoritmos simples (como bubble sort) comparam pares e trocam quando estão fora de ordem.</p>
     `,
-    starter: 'function ordenar(lista) {\n  // seu código aqui\n}',
-    funcName: 'ordenar',
-    tests: [
-      { args: [[3, 1, 2]], expected: [1, 2, 3] },
-      { args: [[]], expected: [] },
-      { args: [[5, 5, 1]], expected: [1, 5, 5] },
-      { args: [[-1, -3, 2]], expected: [-3, -1, 2] },
+    quiz: [
+      { q: 'Por que <code>[10, 2, 1].sort()</code> devolve <code>[1, 10, 2]</code>?', options: ['bug do JavaScript', 'sem comparador, o sort ordena como texto', 'a lista está corrompida', 'sort() não funciona com números'], answer: 1 },
+      { q: 'Qual ordena números corretamente em ordem crescente?', options: ['lista.sort()', 'lista.sort((a, b) => a - b)', 'lista.order()', 'lista.sort((a, b) => b - a)'], answer: 1 },
+      { q: 'A ideia central do bubble sort é:', options: ['comparar vizinhos e trocar quando fora de ordem', 'dividir a lista pela metade', 'usar recursão sempre', 'remover duplicados'], answer: 0 },
     ],
   },
   {
@@ -1027,40 +999,43 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
   {
     id: 'x4-1',
     unit: 'Fase 4 — Algoritmos clássicos',
-    title: 'Busca binária',
-    type: 'code',
+    title: 'Busca binária: passo a passo',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>Em lista <strong>ordenada</strong>, a busca binária corta o problema pela metade a cada passo (muito mais rápida que olhar item por item).</p>
-      <p>Olhe o meio: se for o alvo, achou; se o alvo for menor, busque na metade esquerda; senão na direita.</p>
-      <p>Escreva <code>buscaBinaria(lista, alvo)</code> que retorna o <strong>índice</strong> do alvo, ou <code>-1</code> se não existir.</p>
+      <p>Vamos rastrear a busca de <code>alvo = 7</code> em <code>[1, 3, 5, 7, 9]</code> (índices 0 a 4):</p>
+      <pre><code>lo=0, hi=4 → meio=2 → lista[2]=5; 7 &gt; 5 → vai pra direita (lo=3)
+lo=3, hi=4 → meio=3 → lista[3]=7; achou! → retorna 3</code></pre>
+      <p>A cada passo, metade dos candidatos é descartada.</p>
     `,
-    starter: 'function buscaBinaria(lista, alvo) {\n  // seu código aqui\n}',
-    funcName: 'buscaBinaria',
-    tests: [
-      { args: [[1, 3, 5, 7, 9], 7], expected: 3 },
-      { args: [[1, 3, 5, 7, 9], 1], expected: 0 },
-      { args: [[1, 3, 5, 7, 9], 4], expected: -1 },
-      { args: [[], 5], expected: -1 },
+    quiz: [
+      { q: 'No primeiro passo, qual é o índice do meio (lo=0, hi=4)?', options: ['2', '1', '3', '4'], answer: 0 },
+      { q: 'Como o alvo 7 é maior que <code>lista[2]=5</code>, o que acontece?', options: ['descarta a metade esquerda (lo vira 3)', 'descarta a metade direita (hi vira 1)', 'retorna -1', 'recomeça do zero'], answer: 0 },
+      { q: 'Buscar em uma lista de 1000 itens ordenados leva cerca de quantos passos?', options: ['~10 (log₂ de 1000)', '~1000', '~500', '~1'], answer: 0 },
     ],
   },
   {
     id: 'x4-2',
     unit: 'Fase 4 — Algoritmos clássicos',
     title: 'Bubble sort',
-    type: 'code',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>O <strong>bubble sort</strong> compara pares vizinhos e troca quando estão fora de ordem, repetindo até ninguém trocar mais.</p>
-      <p>Escreva <code>bubbleSort(lista)</code> que retorna uma nova lista ordenada do menor pro maior. (Não use <code>.sort()</code> — faça na mão.)</p>
+      <p>O <strong>bubble sort</strong> compara pares vizinhos e troca quando estão fora de ordem, repetindo até ninguém trocar mais:</p>
+      <pre><code>for (let i = 0; i &lt; lista.length; i++) {
+  for (let j = 0; j &lt; lista.length - 1; j++) {
+    if (lista[j] &gt; lista[j + 1]) {
+      let tmp = lista[j];
+      lista[j] = lista[j + 1];
+      lista[j + 1] = tmp;        // troca os dois
+    }
+  }
+}</code></pre>
     `,
-    starter: 'function bubbleSort(lista) {\n  // seu código aqui\n}',
-    funcName: 'bubbleSort',
-    tests: [
-      { args: [[3, 1, 2]], expected: [1, 2, 3] },
-      { args: [[5, 4, 3, 2, 1]], expected: [1, 2, 3, 4, 5] },
-      { args: [[]], expected: [] },
-      { args: [[1]], expected: [1] },
+    quiz: [
+      { q: 'Quando o bubble sort troca dois vizinhos?', options: ['quando o da esquerda é maior que o da direita', 'sempre', 'quando são iguais', 'nunca'], answer: 0 },
+      { q: 'Pra que serve a variável <code>tmp</code> na troca?', options: ['guardar um valor enquanto sobrescreve o outro, sem perder', 'contar as trocas', 'acelerar o loop', 'nada, é opcional'], answer: 0 },
+      { q: 'Por que bubble sort é considerado <code>O(n²)</code>?', options: ['tem um loop dentro de outro percorrendo a lista', 'usa recursão', 'troca elementos', 'é rápido demais'], answer: 0 },
     ],
   },
   {
@@ -1089,38 +1064,42 @@ fatorial(4); // 4 * 3 * 2 * 1 = 24</code></pre>
     id: 'x4-4',
     unit: 'Fase 4 — Algoritmos clássicos',
     title: 'Dois números que somam o alvo',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Problema clássico de entrevista. Veja se existem dois números na lista que somados dão o alvo.</p>
-      <p>Escreva <code>somaPar(lista, alvo)</code> que retorna <code>true</code> se algum par soma <code>alvo</code>, senão <code>false</code>. (Não use o mesmo elemento duas vezes.)</p>
+      <p>Clássico de entrevista: dois loops testam cada par (j começa em <code>i + 1</code> pra não repetir o mesmo elemento). Complete o valor com que a soma do par é comparada.</p>
     `,
-    starter: 'function somaPar(lista, alvo) {\n  // seu código aqui\n}',
-    funcName: 'somaPar',
-    tests: [
-      { args: [[1, 2, 3], 5], expected: true },
-      { args: [[1, 2, 3], 7], expected: false },
-      { args: [[4, 4], 8], expected: true },
-      { args: [[4], 8], expected: false },
-    ],
+    fillCode: `function somaPar(lista, alvo) {
+  for (let i = 0; i < lista.length; i++) {
+    for (let j = i + 1; j < lista.length; j++) {
+      if (lista[i] + lista[j] === ◻) return true;
+    }
+  }
+  return false;
+}`,
+    fillBlanks: [{ accept: ['alvo'] }],
+    fillHint: 'O valor que o par precisa somar.',
   },
   {
     id: 'x4-5',
     unit: 'Fase 4 — Algoritmos clássicos',
     title: 'Mínimo e máximo numa passada',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Dá pra achar o menor e o maior em um <strong>único</strong> loop (O(n)), guardando os dois ao mesmo tempo.</p>
-      <p>Escreva <code>minMax(lista)</code> que retorna um array <code>[min, max]</code>. Pode assumir lista não-vazia.</p>
+      <p>Num único loop guardamos o menor e o maior ao mesmo tempo, e devolvemos <code>[min, max]</code>. Complete o segundo item do array retornado.</p>
     `,
-    starter: 'function minMax(lista) {\n  // seu código aqui\n}',
-    funcName: 'minMax',
-    tests: [
-      { args: [[3, 1, 4, 1, 5]], expected: [1, 5] },
-      { args: [[7]], expected: [7, 7] },
-      { args: [[-2, -9, -1]], expected: [-9, -1] },
-    ],
+    fillCode: `function minMax(lista) {
+  let min = lista[0];
+  let max = lista[0];
+  for (let i = 1; i < lista.length; i++) {
+    if (lista[i] < min) min = lista[i];
+    if (lista[i] > max) max = lista[i];
+  }
+  return [min, ◻];
+}`,
+    fillBlanks: [{ accept: ['max'] }],
+    fillHint: 'O maior valor encontrado.',
   },
 
   // ===== FASE 5 — SQL e modelagem =====
@@ -1344,20 +1323,20 @@ undefined (reading 'nome')
     id: 'x6-2',
     unit: 'Fase 6 — Debug e leitura de código IA',
     title: 'Conserte o off-by-one',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>O código abaixo deveria somar de 1 até n, mas tem um <strong>bug clássico</strong> (off-by-one): ele para cedo demais.</p>
-      <pre><code>for (let i = 1; i &lt; n; i++)</code></pre>
-      <p>Conserte <code>somaAteN(n)</code> pra somar de 1 até n <strong>inclusive</strong>.</p>
+      <p>Esse código deveria somar de 1 até n <strong>inclusive</strong>, mas o operador <code>&lt;</code> faz parar cedo demais (clássico bug "off-by-one"). Complete o operador certo na condição do loop.</p>
     `,
-    starter: 'function somaAteN(n) {\n  let total = 0;\n  for (let i = 1; i < n; i++) {\n    total += i;\n  }\n  return total;\n}',
-    funcName: 'somaAteN',
-    tests: [
-      { args: [5], expected: 15 },
-      { args: [1], expected: 1 },
-      { args: [10], expected: 55 },
-    ],
+    fillCode: `function somaAteN(n) {
+  let total = 0;
+  for (let i = 1; i ◻ n; i++) {
+    total += i;
+  }
+  return total;
+}`,
+    fillBlanks: [{ accept: ['<='] }],
+    fillHint: 'Pra incluir o próprio n, use "menor ou igual".',
   },
   {
     id: 'x6-3',
@@ -1383,19 +1362,17 @@ undefined (reading 'nome')
     id: 'x6-4',
     unit: 'Fase 6 — Debug e leitura de código IA',
     title: 'Conserte o acesso a undefined',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>A função pega o primeiro nome de uma lista de usuários, mas quebra quando a lista está <strong>vazia</strong> (<code>Cannot read properties of undefined</code>).</p>
-      <p>Conserte <code>primeiroNome(users)</code> pra retornar o nome do primeiro usuário, ou <code>'ninguém'</code> se a lista estiver vazia.</p>
+      <p><code>users[0].nome</code> quebra quando a lista está <strong>vazia</strong>. Adicionamos uma "guarda" antes. Complete o valor retornado quando não há ninguém.</p>
     `,
-    starter: "function primeiroNome(users) {\n  return users[0].nome;\n}",
-    funcName: 'primeiroNome',
-    tests: [
-      { args: [[{ nome: 'Lucas' }, { nome: 'Ana' }]], expected: 'Lucas' },
-      { args: [[]], expected: 'ninguém' },
-      { args: [[{ nome: 'Bia' }]], expected: 'Bia' },
-    ],
+    fillCode: `function primeiroNome(users) {
+  if (users.length === 0) return ◻;
+  return users[0].nome;
+}`,
+    fillBlanks: [{ accept: ["'ninguém'", '"ninguém"'] }],
+    fillHint: 'O texto ninguém entre aspas.',
   },
   {
     id: 'x6-5',
@@ -1486,20 +1463,19 @@ test("dobro de 4 é 8", () => {
     id: 'm5-5',
     unit: 'Fase 7 — Testes automatizados',
     title: 'Média (pensando em edge cases)',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Escreva <code>media(lista)</code> que retorna a média dos números da lista.</p>
-      <p>Pense no <strong>caso de borda</strong>: o que devolver se a lista estiver vazia? (Os testes definem: lista vazia → 0, pra evitar divisão por zero.)</p>
+      <p>O <strong>caso de borda</strong> aqui é a lista vazia: dividir por zero dá problema, então tratamos antes. Complete o tamanho que dispara o retorno antecipado.</p>
     `,
-    starter: 'function media(lista) {\n  // seu código aqui\n}',
-    funcName: 'media',
-    tests: [
-      { args: [[2, 4, 6]], expected: 4 },
-      { args: [[]], expected: 0 },
-      { args: [[5]], expected: 5 },
-      { args: [[1, 2, 3, 4]], expected: 2.5 },
-    ],
+    fillCode: `function media(lista) {
+  if (lista.length === ◻) return 0;
+  let total = 0;
+  for (let i = 0; i < lista.length; i++) total += lista[i];
+  return total / lista.length;
+}`,
+    fillBlanks: [{ accept: ['0'] }],
+    fillHint: 'Tamanho de uma lista vazia.',
   },
 
   {
@@ -1552,41 +1528,35 @@ expect(r).toBe(6);              // assert</code></pre>
     id: 'x7-3',
     unit: 'Fase 7 — Testes automatizados',
     title: 'Implemente pra passar nos testes',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>Vire a mesa: os testes já existem (veja abaixo), você escreve a função pra <strong>passar em todos</strong> — incluindo os casos de borda.</p>
-      <p>Escreva <code>ehPalindromo(s)</code> que retorna <code>true</code> se a string é igual lida de trás pra frente. String vazia conta como palíndromo.</p>
+      <p>Invertemos a string e comparamos com a original (string vazia conta como palíndromo). Complete a comparação final.</p>
     `,
-    starter: 'function ehPalindromo(s) {\n  // seu código aqui\n}',
-    funcName: 'ehPalindromo',
-    tests: [
-      { args: ['arara'], expected: true },
-      { args: ['casa'], expected: false },
-      { args: [''], expected: true },
-      { args: ['a'], expected: true },
-      { args: ['abba'], expected: true },
-    ],
+    fillCode: `function ehPalindromo(s) {
+  let invertido = '';
+  for (let i = s.length - 1; i >= 0; i--) invertido += s[i];
+  return s ◻ invertido;
+}`,
+    fillBlanks: [{ accept: ['===', '=='] }],
+    fillHint: 'Igualdade estrita entre original e invertido.',
   },
   {
     id: 'x7-4',
     unit: 'Fase 7 — Testes automatizados',
     title: 'Conserte a validação de email',
-    type: 'code',
+    type: 'fill',
     xp: 20,
     content: `
-      <p>A função deveria aceitar email com <code>@</code> e um ponto depois. Mas ela passa em <code>"a@b"</code> (sem ponto) — falha num caso de borda.</p>
-      <p>Conserte <code>emailValido(s)</code>: precisa ter algo antes do <code>@</code>, algo entre <code>@</code> e <code>.</code>, e algo depois do <code>.</code></p>
+      <p>Um email válido precisa de algo antes do <code>@</code>, algo entre <code>@</code> e <code>.</code>, e o ponto <strong>não</strong> pode ser o último caractere. Complete a comparação que garante que o ponto não é o último.</p>
     `,
-    starter: "function emailValido(s) {\n  return s.includes('@');\n}",
-    funcName: 'emailValido',
-    tests: [
-      { args: ['lucas@email.com'], expected: true },
-      { args: ['a@b'], expected: false },
-      { args: ['semarroba.com'], expected: false },
-      { args: ['x@y.z'], expected: true },
-      { args: [''], expected: false },
-    ],
+    fillCode: `function emailValido(s) {
+  let arroba = s.indexOf('@');
+  let ponto = s.lastIndexOf('.');
+  return arroba > 0 && ponto > arroba + 1 && ponto ◻ s.length - 1;
+}`,
+    fillBlanks: [{ accept: ['<'] }],
+    fillHint: 'O ponto tem que vir antes da última posição.',
   },
   {
     id: 'x7-5',
@@ -1942,59 +1912,40 @@ fetch('/api/perfil', {
     id: 'api-5',
     unit: 'Fase 9 — APIs REST e HTTP',
     title: 'Exercício: extrair dados de JSON',
-    type: 'code',
+    type: 'fill',
     xp: 25,
     content: `
-      <p>Dada uma lista de produtos (array de objetos), retorne array com os <strong>nomes</strong> dos produtos com <strong>preço maior que 50</strong>.</p>
-      <pre><code>const produtos = [
-  { nome: "Caneta", preco: 5 },
-  { nome: "Notebook", preco: 3500 },
-  { nome: "Mouse", preco: 80 },
-  { nome: "Borracha", preco: 2 }
-];
-// esperado: ["Notebook", "Mouse"]</code></pre>
+      <p>De uma lista de produtos, queremos os <strong>nomes</strong> dos que custam mais de 50. Complete o campo do produto que entra no resultado.</p>
     `,
-    starter: `function nomesCaros(produtos) {
-  // retorne array com nomes dos produtos com preco > 50
+    fillCode: `function nomesCaros(produtos) {
+  let resultado = [];
+  for (let i = 0; i < produtos.length; i++) {
+    if (produtos[i].preco > 50) resultado.push(produtos[i].◻);
+  }
+  return resultado;
 }`,
-    funcName: 'nomesCaros',
-    tests: [
-      {
-        args: [[{ nome: 'Caneta', preco: 5 }, { nome: 'Notebook', preco: 3500 }, { nome: 'Mouse', preco: 80 }, { nome: 'Borracha', preco: 2 }]],
-        expected: ['Notebook', 'Mouse'],
-      },
-      { args: [[{ nome: 'X', preco: 50 }, { nome: 'Y', preco: 51 }]], expected: ['Y'] },
-      { args: [[]], expected: [] },
-    ],
+    fillBlanks: [{ accept: ['nome'] }],
+    fillHint: 'Queremos o nome, não o preço.',
   },
   {
     id: 'api-6',
     unit: 'Fase 9 — APIs REST e HTTP',
     title: 'Exercício: agrupar por status',
-    type: 'code',
+    type: 'fill',
     xp: 25,
     content: `
-      <p>Dada uma lista de pedidos, retorne um objeto com a <strong>contagem</strong> de pedidos por <strong>status</strong>.</p>
-      <pre><code>const pedidos = [
-  { id: 1, status: 'pendente' },
-  { id: 2, status: 'enviado' },
-  { id: 3, status: 'pendente' },
-  { id: 4, status: 'entregue' },
-];
-// esperado: { pendente: 2, enviado: 1, entregue: 1 }</code></pre>
+      <p>Conte os pedidos por <strong>status</strong> num objeto. O <code>(contagem[s] || 0)</code> garante começar em 0. Complete o operador que <strong>incrementa</strong> a contagem.</p>
     `,
-    starter: `function contarPorStatus(pedidos) {
-  // retorne { status: contagem, ... }
+    fillCode: `function contarPorStatus(pedidos) {
+  let contagem = {};
+  for (let i = 0; i < pedidos.length; i++) {
+    let s = pedidos[i].status;
+    contagem[s] = (contagem[s] || 0) ◻ 1;
+  }
+  return contagem;
 }`,
-    funcName: 'contarPorStatus',
-    tests: [
-      {
-        args: [[{ id: 1, status: 'pendente' }, { id: 2, status: 'enviado' }, { id: 3, status: 'pendente' }, { id: 4, status: 'entregue' }]],
-        expected: { pendente: 2, enviado: 1, entregue: 1 },
-      },
-      { args: [[{ id: 1, status: 'ok' }, { id: 2, status: 'ok' }]], expected: { ok: 2 } },
-      { args: [[]], expected: {} },
-    ],
+    fillBlanks: [{ accept: ['+'] }],
+    fillHint: 'Some 1 ao valor atual.',
   },
   {
     id: 'api-7',
@@ -2249,20 +2200,20 @@ console.log("3");
     id: 'async-5',
     unit: 'Fase 11 — Assíncrono',
     title: 'Consolidar resultados',
-    type: 'code',
+    type: 'fill',
     xp: 25,
     content: `
-      <p>Quando você dispara várias chamadas, costuma receber uma lista de resultados, cada um marcando se deu certo. Ex: <code>[{ok: true, valor: 10}, {ok: false, valor: 5}]</code>.</p>
-      <p>Escreva <code>somarSucessos(resultados)</code> que retorna a soma do campo <code>valor</code> <strong>apenas</strong> dos itens com <code>ok === true</code>.</p>
+      <p>De uma lista tipo <code>[{ok: true, valor: 10}, ...]</code>, some <code>valor</code> só onde <code>ok</code> for <code>true</code>. Complete a comparação que filtra os sucessos.</p>
     `,
-    starter: 'function somarSucessos(resultados) {\n  // some valor só onde ok for true\n}',
-    funcName: 'somarSucessos',
-    tests: [
-      { args: [[{ ok: true, valor: 10 }, { ok: false, valor: 5 }, { ok: true, valor: 3 }]], expected: 13 },
-      { args: [[]], expected: 0 },
-      { args: [[{ ok: false, valor: 9 }]], expected: 0 },
-      { args: [[{ ok: true, valor: 7 }]], expected: 7 },
-    ],
+    fillCode: `function somarSucessos(resultados) {
+  let total = 0;
+  for (let i = 0; i < resultados.length; i++) {
+    if (resultados[i].ok ◻ true) total += resultados[i].valor;
+  }
+  return total;
+}`,
+    fillBlanks: [{ accept: ['===', '=='] }],
+    fillHint: 'Compare o campo ok com true (igualdade estrita).',
   },
   {
     id: 'async-6',
@@ -2389,26 +2340,19 @@ function Contador() {
     id: 'react-5',
     unit: 'Fase 12 — React e componentes',
     title: 'Lógica de um componente',
-    type: 'code',
+    type: 'fill',
     xp: 25,
     content: `
-      <p>Componentes muitas vezes calculam coisas com funções puras antes de renderizar. Ex: montar a <code>className</code> de um botão conforme o estado.</p>
-      <p>Escreva <code>classeBotao(ativo, desabilitado)</code> que retorna uma string:</p>
-      <ul>
-        <li>começa sempre com <code>"btn"</code></li>
-        <li>se <code>ativo</code> for true, adiciona <code>" ativo"</code></li>
-        <li>se <code>desabilitado</code> for true, adiciona <code>" off"</code></li>
-      </ul>
-      <p>Ex: <code>classeBotao(true, false)</code> → <code>"btn ativo"</code>.</p>
+      <p>Componentes montam a <code>className</code> conforme o estado. Começa com <code>"btn"</code> e vai <strong>acrescentando</strong> conforme as flags. Complete o operador que acumula no texto.</p>
     `,
-    starter: 'function classeBotao(ativo, desabilitado) {\n  // monte e retorne a className\n}',
-    funcName: 'classeBotao',
-    tests: [
-      { args: [false, false], expected: 'btn' },
-      { args: [true, false], expected: 'btn ativo' },
-      { args: [false, true], expected: 'btn off' },
-      { args: [true, true], expected: 'btn ativo off' },
-    ],
+    fillCode: `function classeBotao(ativo, desabilitado) {
+  let c = 'btn';
+  if (ativo) c += ' ativo';
+  if (desabilitado) c ◻ ' off';
+  return c;
+}`,
+    fillBlanks: [{ accept: ['+='] }],
+    fillHint: 'Mesmo operador usado na linha de cima (acumula texto).',
   },
   {
     id: 'react-6',

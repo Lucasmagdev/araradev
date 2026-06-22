@@ -1,0 +1,6 @@
+# AraraDev — trilha de fundamentos técnicos
+User-agent: *
+Allow: /
+
+# TODO: trocar pela URL real do deploy
+Sitemap: https://araradev.netlify.app/sitemap.xml

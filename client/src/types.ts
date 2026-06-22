@@ -1,4 +1,4 @@
-export type LessonType = 'theory' | 'code' | 'checklist';
+export type LessonType = 'theory' | 'code' | 'checklist' | 'fill';
 
 export interface QuizQuestion {
   q: string;
@@ -9,6 +9,13 @@ export interface QuizQuestion {
 export interface CodeTest {
   args: unknown[];
   expected: unknown;
+}
+
+// fill: código pronto com lacunas marcadas pelo caractere ◻.
+// Cada ◻ vira um campo; fillBlanks[i].accept lista as respostas aceitas
+// (comparação ignora espaços, sensível a maiúsculas).
+export interface FillBlank {
+  accept: string[];
 }
 
 export interface Lesson {
@@ -24,6 +31,10 @@ export interface Lesson {
   starter?: string;
   funcName?: string;
   tests?: CodeTest[];
+  // fill
+  fillCode?: string;
+  fillBlanks?: FillBlank[];
+  fillHint?: string;
 }
 
 export interface Streak {
