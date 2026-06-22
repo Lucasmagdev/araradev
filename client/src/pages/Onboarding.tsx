@@ -194,9 +194,9 @@ export default function Onboarding() {
 
       {step === 1 && (
         <section className="ob-card intro">
-          <img src="/logoararadev.jpeg" className="ob-mascot" alt="AraraDev" />
+          <img src="/logoararadev.jpeg" className="ob-mascot" alt="TrilhaDev" />
           <h1>Vamos montar sua trilha?</h1>
-          <p>Antes de começar, responda rapidinho para o AraraDev ajustar ritmo, foco e ponto de partida.</p>
+          <p>Antes de começar, responda rapidinho para o TrilhaDev ajustar ritmo, foco e ponto de partida.</p>
           <button className="ob-primary" onClick={() => setStep(2)}>Continuar</button>
           <button className="ob-login-link" onClick={() => { setLoginError(''); setLoginOpen(true); }}>Já tenho conta? Entrar</button>
         </section>
@@ -257,7 +257,7 @@ export default function Onboarding() {
 
       {step === 6 && saving && (
         <section className="ob-card analyzing">
-          <h1>Montando sua trilha AraraDev</h1>
+          <h1>Montando sua trilha TrilhaDev</h1>
           <div className="ob-ring" style={{ background: `conic-gradient(var(--green) 0 ${loadPct}%, rgba(255,255,255,0.12) ${loadPct}% 100%)` }}><span>{loadPct}%</span></div>
           <div className="ob-checklist">
             <span style={{ opacity: loadPct > 15 ? 1 : 0.35 }}>{loadPct > 15 ? '✓' : '⋯'} Analisando {selectedGoalLabel.toLowerCase()}</span>
@@ -270,7 +270,7 @@ export default function Onboarding() {
 
       {step === 7 && (
         <section className="ob-card account">
-          <img src="/logoararadev.jpeg" className="ob-mascot" alt="AraraDev" />
+          <img src="/logoararadev.jpeg" className="ob-mascot" alt="TrilhaDev" />
           <h1>Sua trilha esta pronta</h1>
           <p>Crie sua conta gratis para salvar o plano, XP, vidas e progresso.</p>
           <form className="ob-account-form" onSubmit={createAccount}>
@@ -324,8 +324,8 @@ export default function Onboarding() {
           <div className="auth-card">
             <button className="auth-close" onClick={() => setLoginOpen(false)}>✕</button>
             <div className="auth-brand">
-              <img src="/logoararadev.jpeg" className="auth-logo" alt="AraraDev" />
-              <span className="auth-brand-name">AraraDev</span>
+              <img src="/logoararadev.jpeg" className="auth-logo" alt="TrilhaDev" />
+              <span className="auth-brand-name">TrilhaDev</span>
             </div>
             <h2 style={{ textAlign: 'center', margin: '0 0 16px' }}>Entrar</h2>
             <form onSubmit={doLogin}>

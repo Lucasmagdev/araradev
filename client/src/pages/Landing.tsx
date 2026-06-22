@@ -177,8 +177,8 @@ export default function Landing() {
       <header className="lp-header">
         <div className="lp-header-inner">
           <a href="/" className="lp-brand">
-            <img src="/logoararadev.jpeg" className="lp-logo" alt="AraraDev" />
-            <span className="lp-brand-name">AraraDev</span>
+            <img src="/logoararadev.jpeg" className="lp-logo" alt="TrilhaDev" />
+            <span className="lp-brand-name">TrilhaDev</span>
           </a>
           <nav className="lp-nav">
             <button className="lp-btn-ghost" onClick={() => open('login')}>Entrar</button>
@@ -213,7 +213,7 @@ export default function Landing() {
             <div className="lp-phone-screen">
               <div className="lp-mini-top">
                 <span className="lp-mini-brand">
-                  <img src="/logoararadev.jpeg" alt="" className="lp-mini-logo" /> AraraDev
+                  <img src="/logoararadev.jpeg" alt="" className="lp-mini-logo" /> TrilhaDev
                 </span>
                 <span className="lp-mini-xp">{ICONS.bolt2} 480</span>
               </div>
@@ -391,7 +391,7 @@ print(soma)`}</code></pre>
         <div className="lp-container lp-footer-inner">
           <span className="lp-brand">
             <img src="/logoararadev.jpeg" className="lp-logo-sm" alt="" />
-            <span>AraraDev</span>
+            <span>TrilhaDev</span>
           </span>
           <span className="lp-footer-copy">Trilha de fundamentos técnicos</span>
         </div>
@@ -407,8 +407,8 @@ print(soma)`}</code></pre>
           <div className="auth-card">
             <button className="auth-close" onClick={() => setAuthOpen(false)}>✕</button>
             <div className="auth-brand">
-              <img src="/logoararadev.jpeg" className="auth-logo" alt="AraraDev" />
-              <span className="auth-brand-name">AraraDev</span>
+              <img src="/logoararadev.jpeg" className="auth-logo" alt="TrilhaDev" />
+              <span className="auth-brand-name">TrilhaDev</span>
             </div>
 
             <div className="auth-tabs">

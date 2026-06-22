@@ -443,7 +443,7 @@ const LOGIN_HTML = `<!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<title>Admin — AraraDev</title><style>
+<title>Admin — TrilhaDev</title><style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Outfit',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#0d1a2e 0%,#091420 40%,#060e18 70%,#04090f 100%);color:#e8f4ff;padding:20px}
 .card{background:#1a2d42;border:1px solid #1e3a54;border-radius:18px;padding:40px 36px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
@@ -458,8 +458,8 @@ button{display:block;width:100%;padding:13px;margin-top:8px;background:#58cc02;c
 button:hover{background:#4ab301}
 .err{color:#ff6b6b;font-size:.82rem;margin-top:14px;text-align:center;background:rgba(255,75,75,.08);border:1px solid rgba(255,75,75,.2);border-radius:8px;padding:8px}
 </style></head><body><div class="card">
-<img class="logo" src="/logoararadev.jpeg" alt="AraraDev">
-<h1>AraraDev Admin</h1>
+<img class="logo" src="/logoararadev.jpeg" alt="TrilhaDev">
+<h1>TrilhaDev Admin</h1>
 <p class="sub">Painel administrativo</p>
 <form method="POST" action="/admin/login">
 <div class="field"><label>Usuário</label><input type="text" name="username" autocomplete="off" required></div>
@@ -475,7 +475,7 @@ const DASHBOARD_HTML = `<!DOCTYPE html>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<title>Admin — AraraDev</title>
+<title>Admin — TrilhaDev</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--surface:#15233a;--surface2:#1c2f4a;--border:#1e3a54;--green:#58cc02;--blue:#1cb0f6;--gold:#ffc800;--purple:#a974ff;--text:#e8f4ff;--muted:#6b8fa8;--red:#ff5b5b}
@@ -558,7 +558,7 @@ tbody tr:hover td{background:rgba(88,204,2,.03)}
 </head>
 <body>
 <header class="adm-hdr">
-  <div class="adm-brand"><img src="/logoararadev.jpeg" alt="AraraDev">AraraDev Admin</div>
+  <div class="adm-brand"><img src="/logoararadev.jpeg" alt="TrilhaDev">TrilhaDev Admin</div>
   <div class="adm-actions">
     <button class="adm-btn" onclick="load()">↻ Atualizar</button>
     <a class="adm-btn" href="/admin/api/export">⬇ CSV</a>
@@ -852,4 +852,4 @@ app.get('*', (req, res, next) => {
   res.sendFile(path.join(WEB_DIR, 'index.html'));
 });
 
-app.listen(PORT, () => console.log(`AraraDev running → http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`TrilhaDev running → http://localhost:${PORT}`));

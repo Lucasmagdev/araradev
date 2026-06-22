@@ -1,4 +1,9 @@
-# AraraDev — contexto pra IA
+# TrilhaDev — contexto pra IA
+
+> Rebrand 2026-06-22: nome exibido **AraraDev → TrilhaDev** (mascote arara mantido).
+> appId/package **com.araradev.app → com.trilhadev.app**. Infra mantém nomes antigos
+> de propósito: banco `araradev`, paths `/var/www/araradev`, keystore
+> `araradev-release.jks`, arquivos `logoararadev.jpeg`, repo `github.com/Lucasmagdev/araradev`.
 
 App React (client) + API + Capacitor Android. Roda no Android Studio pra teste
 e vai pra **Play Store**. Toda mudança deve considerar o impacto na publicação,
@@ -6,7 +11,7 @@ não só "funciona no navegador".
 
 ## Regras que afetam publicação
 
-1. **appId `com.araradev.app` é definitivo.** Mudar = app novo na Play Store
+1. **appId `com.trilhadev.app` é definitivo.** Mudar = app novo na Play Store
    (perde reviews, instalações, histórico). Nunca alterar sem confirmar com o usuário.
 
 2. **HTTP em texto plano é débito técnico conhecido** (`capacitor.config.json`

@@ -1,4 +1,4 @@
-# Publicar AraraDev na Play Store
+# Publicar TrilhaDev na Play Store
 
 ## 1. Build do app web + sync pro Android
 

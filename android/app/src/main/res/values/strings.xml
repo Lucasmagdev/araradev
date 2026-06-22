@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">AraraDev</string>
-    <string name="title_activity_main">AraraDev</string>
-    <string name="package_name">com.araradev.app</string>
-    <string name="custom_url_scheme">com.araradev.app</string>
+    <string name="app_name">TrilhaDev</string>
+    <string name="title_activity_main">TrilhaDev</string>
+    <string name="package_name">com.trilhadev.app</string>
+    <string name="custom_url_scheme">com.trilhadev.app</string>
 </resources>

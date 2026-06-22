@@ -1745,7 +1745,7 @@ const apiKey = process.env.API_KEY;</code></pre>
       <pre><code>const hash = await bcrypt.hash(senha, 10);
 // no login:
 await bcrypt.compare(senhaDigitada, hash); // true/false</code></pre>
-      <p>Assim, mesmo se vazar o banco, ninguém lê as senhas. (O AraraDev faz exatamente isso.)</p>
+      <p>Assim, mesmo se vazar o banco, ninguém lê as senhas. (O TrilhaDev faz exatamente isso.)</p>
     `,
     quiz: [
       { q: 'Como senha deve ser guardada?', options: ['texto puro', 'hash (ex: bcrypt)', 'em maiúsculas', 'na URL'], answer: 1 },
@@ -2243,7 +2243,7 @@ console.log("3");
     content: `
       <p>No React, a tela é montada com <strong>componentes</strong>: funções que retornam <strong>JSX</strong> (parece HTML dentro do JavaScript).</p>
       <pre><code>function Saudacao() {
-  return &lt;h1&gt;Olá, AraraDev!&lt;/h1&gt;;
+  return &lt;h1&gt;Olá, TrilhaDev!&lt;/h1&gt;;
 }</code></pre>
       <p>Um componente é reutilizável e pode ser usado dentro de outro, como se fosse uma tag:</p>
       <pre><code>function App() {
@@ -2361,7 +2361,7 @@ function Contador() {
     type: 'checklist',
     xp: 10,
     content: `
-      <p>Abra um projeto React seu (ou o próprio AraraDev). Escolha 1 componente e, sem IA, identifique no código:</p>
+      <p>Abra um projeto React seu (ou o próprio TrilhaDev). Escolha 1 componente e, sem IA, identifique no código:</p>
       <ol>
         <li>Quais <strong>props</strong> ele recebe?</li>
         <li>Ele tem <strong>estado</strong> (<code>useState</code>)? O que esse estado representa?</li>

@@ -1,4 +1,4 @@
-# Ficha da loja — AraraDev (Google Play)
+# Ficha da loja — TrilhaDev (Google Play)
 
 ## Política de privacidade
 
@@ -22,9 +22,9 @@ Aprenda programação na prática com trilha gamificada e exercícios de código
 ## Descrição longa (máx. 4000 caracteres)
 
 ```
-🦜 AraraDev — aprenda a programar de verdade
+🦜 TrilhaDev — aprenda a programar de verdade
 
-O AraraDev é uma trilha gamificada pra aprender lógica de programação do zero,
+O TrilhaDev é uma trilha gamificada pra aprender lógica de programação do zero,
 com lições curtas, exercícios de código direto no app e acompanhamento de progresso.
 
 📚 O QUE VOCÊ VAI APRENDER

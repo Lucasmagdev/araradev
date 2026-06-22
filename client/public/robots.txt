@@ -1,4 +1,4 @@
-# AraraDev — trilha de fundamentos técnicos
+# TrilhaDev — trilha de fundamentos técnicos
 User-agent: *
 Allow: /
 

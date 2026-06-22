@@ -1,7 +1,7 @@
 {
   "name": "araradev-api",
   "version": "1.0.0",
-  "description": "AraraDev backend API",
+  "description": "TrilhaDev backend API",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

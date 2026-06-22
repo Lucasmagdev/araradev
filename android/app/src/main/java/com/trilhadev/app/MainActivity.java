@@ -1,4 +1,4 @@
-package com.araradev.app;
+package com.trilhadev.app;
 
 import android.os.Bundle;
 import android.webkit.CookieManager;

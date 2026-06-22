@@ -16,7 +16,7 @@ export const BADGES: Badge[] = [
   { id: 'ten-lessons',    icon: '📚', name: '10 lições',         check: (p) => Object.keys(p.completed).length >= 10 },
   { id: 'thirty-lessons', icon: '🎯', name: '30 lições',         check: (p) => Object.keys(p.completed).length >= 30 },
   { id: 'fifty-lessons',  icon: '🏆', name: '50 lições',         check: (p) => Object.keys(p.completed).length >= 50 },
-  { id: 'all-lessons',    icon: '🦜', name: 'AraraDev Master',   check: (p) => Object.keys(p.completed).length >= LESSONS.length },
+  { id: 'all-lessons',    icon: '🦜', name: 'TrilhaDev Master',   check: (p) => Object.keys(p.completed).length >= LESSONS.length },
   { id: 'streak-3',       icon: '🔥', name: 'Streak 3 dias',     check: (p) => p.streak.count >= 3 },
   { id: 'streak-7',       icon: '⚡', name: 'Streak 7 dias',     check: (p) => p.streak.count >= 7 },
   { id: 'correct-25',      icon: '✅', name: '25 acertos',          check: (p) => p.stats.correctAnswers >= 25 },

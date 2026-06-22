@@ -1,6 +1,6 @@
 {
-  "appId": "com.araradev.app",
-  "appName": "AraraDev",
+  "appId": "com.trilhadev.app",
+  "appName": "TrilhaDev",
   "webDir": "client/dist",
   "server": {
     "androidScheme": "https"
