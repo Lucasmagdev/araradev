@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LESSONS } from '../data/lessons';
 import type { Lesson, OnboardingPreferences } from '../types';
-import { useProgress } from '../context/ProgressContext';
+import { ProgressProvider, useProgress } from '../context/ProgressContext';
 import { getMe, getOnboardingPreferences } from '../lib/api';
 
 const GOAL_MSG: Record<string, string> = {
@@ -23,7 +23,7 @@ import { ProfileModal, AchievementsModal, SettingsModal, PhaseCompleteModal, Dai
 import Toasts, { type Toast } from '../components/Toasts';
 import { launchConfetti } from '../lib/effects';
 
-export default function Trilha() {
+function TrilhaInner() {
   const navigate = useNavigate();
   const { progress, markComplete } = useProgress();
 
@@ -129,5 +129,15 @@ export default function Trilha() {
 
       <Toasts toasts={toasts} />
     </>
+  );
+}
+
+// O ProgressProvider vive aqui (não no main) pra entrar no chunk lazy da Trilha,
+// mantendo as 119 lições fora do carregamento inicial da landing.
+export default function Trilha() {
+  return (
+    <ProgressProvider>
+      <TrilhaInner />
+    </ProgressProvider>
   );
 }
