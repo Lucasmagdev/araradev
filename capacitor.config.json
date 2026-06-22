@@ -3,7 +3,6 @@
   "appName": "AraraDev",
   "webDir": "client/dist",
   "server": {
-    "cleartext": true,
-    "androidScheme": "http"
+    "androidScheme": "https"
   }
 }

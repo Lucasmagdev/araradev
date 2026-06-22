@@ -2,7 +2,7 @@ import { Capacitor } from '@capacitor/core';
 import type { OnboardingPreferences, Progress, RankingEntry, User } from '../types';
 
 export const API_BASE = Capacitor.isNativePlatform()
-  ? 'http://80.241.218.217:3008'
+  ? 'https://trilhadev.app.br'
   : (import.meta.env.VITE_API_BASE || '');
 
 const TOKEN_KEY = 'auth_token';
