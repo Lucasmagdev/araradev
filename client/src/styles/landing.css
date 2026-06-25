@@ -972,6 +972,36 @@ html { scroll-behavior: smooth; }
 .auth-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--green-dark); }
 .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+.auth-title {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+.auth-notice {
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+}
+.auth-link {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 6px;
+  background: none;
+  border: none;
+  color: #9aa7b5;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+}
+.auth-link:hover { color: var(--green); text-decoration: underline; }
+
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .lp-hero {

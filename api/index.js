@@ -7,12 +7,18 @@ const bcrypt  = require('bcryptjs');
 const path    = require('path');
 const mysql   = require('mysql2/promise');
 const rateLimit = require('express-rate-limit');
+const { Resend } = require('resend');
 
 // Token de API: guardado no banco como hash sha256 (nunca em texto puro).
 // Validade de 90 dias; renova no login.
 const TOKEN_TTL_MS = 90 * 24 * 60 * 60 * 1000;
 const MAX_XP_PER_EVENT = 100; // teto anti-fraude por lição/desafio
 const sha256hex = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
+
+// Recuperação de senha: código de 6 dígitos por email, validade curta.
+const RESET_CODE_TTL_MS = 15 * 60 * 1000;
+const MAIL_FROM = process.env.MAIL_FROM || 'TrilhaDev <onboarding@resend.dev>';
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const ALLOWED_ORIGINS = [
   'capacitor://localhost',
@@ -118,6 +124,15 @@ async function ensureSchema() {
       'UPDATE users SET token = SHA2(token, 256), token_expires_at = ? WHERE token IS NOT NULL AND CHAR_LENGTH(token) = 36',
       [Date.now() + TOKEN_TTL_MS]
     );
+  }
+
+  // Recuperação de senha: colunas pro código de reset (hash + validade).
+  const [rcol] = await pool.query(
+    "SELECT COUNT(*) AS c FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'users' AND column_name = 'reset_code_hash'"
+  );
+  if (!rcol[0].c) {
+    await pool.query('ALTER TABLE users ADD COLUMN reset_code_hash VARCHAR(64) NULL');
+    await pool.query('ALTER TABLE users ADD COLUMN reset_expires_at BIGINT NULL');
   }
 
   await backfillProgressTables();
@@ -318,6 +333,69 @@ app.post('/auth/logout', async (req, res) => {
     }
   } catch { /* ignore */ }
   req.session.destroy(() => res.json({ ok: true }));
+});
+
+// Recuperação de senha — passo 1: pede o código.
+// Sempre responde ok (não revela se o email existe — evita enumeração de contas).
+app.post('/auth/forgot', authLimiter, async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Informe o email' });
+  try {
+    const emailKey = email.toLowerCase().trim();
+    const [rows] = await pool.query('SELECT id, name FROM users WHERE email = ?', [emailKey]);
+    if (rows.length) {
+      const code = String(crypto.randomInt(0, 1000000)).padStart(6, '0');
+      await pool.query(
+        'UPDATE users SET reset_code_hash = ?, reset_expires_at = ? WHERE id = ?',
+        [sha256hex(code), Date.now() + RESET_CODE_TTL_MS, rows[0].id]
+      );
+      if (resend) {
+        await resend.emails.send({
+          from: MAIL_FROM,
+          to: emailKey,
+          subject: 'Seu código de recuperação — TrilhaDev',
+          html: `<div style="font-family:sans-serif;max-width:480px;margin:auto">
+            <h2 style="color:#58cc02">TrilhaDev</h2>
+            <p>Oi${rows[0].name ? ', ' + rows[0].name : ''}! Use o código abaixo pra criar uma nova senha:</p>
+            <p style="font-size:32px;font-weight:bold;letter-spacing:6px;background:#f3f4f6;padding:16px;text-align:center;border-radius:8px">${code}</p>
+            <p style="color:#666">O código vale por 15 minutos. Se não foi você que pediu, ignore este email.</p>
+          </div>`,
+        });
+      } else {
+        console.log(`[reset] (sem RESEND_API_KEY) código de ${emailKey}: ${code}`);
+      }
+    }
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// Recuperação de senha — passo 2: troca a senha com o código.
+app.post('/auth/reset', authLimiter, async (req, res) => {
+  const { email, code, password } = req.body;
+  if (!email || !code || !password) return res.status(400).json({ error: 'Preencha todos os campos' });
+  if (password.length < 6) return res.status(400).json({ error: 'Senha mínimo 6 caracteres' });
+  try {
+    const emailKey = email.toLowerCase().trim();
+    const [rows] = await pool.query(
+      'SELECT id FROM users WHERE email = ? AND reset_code_hash = ? AND reset_expires_at > ?',
+      [emailKey, sha256hex(String(code).trim()), Date.now()]
+    );
+    if (!rows.length) return res.status(400).json({ error: 'Código inválido ou expirado' });
+
+    const hash = await bcrypt.hash(password, 10);
+    // Troca a senha, queima o código e invalida o token atual (força login com a senha nova).
+    await pool.query(
+      'UPDATE users SET password_hash = ?, reset_code_hash = NULL, reset_expires_at = NULL, token = NULL, token_expires_at = NULL WHERE id = ?',
+      [hash, rows[0].id]
+    );
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Erro interno' });
+  }
 });
 
 app.get('/api/me', requireAuth, async (req, res) => {

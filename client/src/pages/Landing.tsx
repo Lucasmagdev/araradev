@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMe, getOnboardingPreferences, login, register, setToken, getToken } from '../lib/api';
+import { getMe, getOnboardingPreferences, login, register, setToken, getToken, forgotPassword, resetPassword } from '../lib/api';
 
-type Mode = 'login' | 'register';
+type Mode = 'login' | 'register' | 'forgot' | 'reset';
 
 // Fases agrupadas por nível — cada tier tem cor própria (verde→azul→roxo).
 const PHASE_GROUPS: { tier: string; label: string; phases: [string, string][] }[] = [
@@ -95,12 +95,20 @@ export default function Landing() {
   const [authOpen, setAuthOpen] = useState(false);
   const [mode, setMode] = useState<Mode>('login');
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const codeRef = useRef<HTMLInputElement>(null);
+
+  function switchMode(m: Mode) {
+    setMode(m);
+    setError('');
+    setNotice('');
+  }
 
   // Already logged in? Go to trilha.
   useEffect(() => {
@@ -161,6 +169,46 @@ export default function Landing() {
       navigate(prefs?.completedAt ? '/trilha' : '/onboarding');
     } catch (err) {
       setError((err as Error).message || 'Erro de conexão. Tente novamente.');
+      setBusy(false);
+    }
+  }
+
+  // Recuperação de senha — passo 1: envia o código pro email.
+  async function submitForgot(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+    setNotice('');
+    const email = emailRef.current!.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('Email inválido.'); return; }
+    setBusy(true);
+    try {
+      await forgotPassword(email);
+      setMode('reset');
+      setNotice('Se esse email tiver conta, enviamos um código. Confira sua caixa de entrada (e o spam).');
+    } catch (err) {
+      setError((err as Error).message || 'Erro de conexão. Tente novamente.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // Recuperação de senha — passo 2: troca a senha com o código.
+  async function submitReset(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+    const email = emailRef.current!.value.trim();
+    const code = codeRef.current!.value.trim();
+    const password = passRef.current!.value;
+    if (!code) { setError('Digite o código que chegou no email.'); return; }
+    if (password.length < 6) { setError('Senha precisa de no mínimo 6 caracteres.'); return; }
+    setBusy(true);
+    try {
+      await resetPassword(email, code, password);
+      setMode('login');
+      setNotice('Senha alterada! Entre com a nova senha.');
+    } catch (err) {
+      setError((err as Error).message || 'Erro de conexão. Tente novamente.');
+    } finally {
       setBusy(false);
     }
   }
@@ -411,36 +459,92 @@ print(soma)`}</code></pre>
               <span className="auth-brand-name">TrilhaDev</span>
             </div>
 
-            <div className="auth-tabs">
-              <button className={'auth-tab' + (mode === 'login' ? ' active' : '')} onClick={() => { setMode('login'); setError(''); }}>Entrar</button>
-              <button className={'auth-tab' + (mode === 'register' ? ' active' : '')} onClick={() => { setMode('register'); setError(''); }}>Criar conta</button>
-            </div>
+            {(mode === 'login' || mode === 'register') && (
+              <div className="auth-tabs">
+                <button className={'auth-tab' + (mode === 'login' ? ' active' : '')} onClick={() => switchMode('login')}>Entrar</button>
+                <button className={'auth-tab' + (mode === 'register' ? ' active' : '')} onClick={() => switchMode('register')}>Criar conta</button>
+              </div>
+            )}
+            {(mode === 'forgot' || mode === 'reset') && (
+              <h3 className="auth-title">{mode === 'forgot' ? 'Recuperar senha' : 'Nova senha'}</h3>
+            )}
 
-            <form onSubmit={submit}>
-              {mode === 'register' && (
+            {notice && <p className="auth-notice">{notice}</p>}
+
+            {/* Login / Registro */}
+            {(mode === 'login' || mode === 'register') && (
+              <form onSubmit={submit}>
+                {mode === 'register' && (
+                  <div className="auth-field">
+                    <label>Nome</label>
+                    <input ref={nameRef} type="text" placeholder="Seu nome" autoComplete="name" />
+                  </div>
+                )}
                 <div className="auth-field">
-                  <label>Nome</label>
-                  <input ref={nameRef} type="text" placeholder="Seu nome" autoComplete="name" />
+                  <label>Email</label>
+                  <input ref={emailRef} type="email" placeholder="seu@email.com" autoComplete="email" inputMode="email" />
                 </div>
-              )}
-              <div className="auth-field">
-                <label>Email</label>
-                <input ref={emailRef} type="email" placeholder="seu@email.com" autoComplete="email" inputMode="email" />
-              </div>
-              <div className="auth-field">
-                <label>Senha</label>
-                <div className="auth-pass">
-                  <input ref={passRef} type={showPass ? 'text' : 'password'} placeholder="Mínimo 6 caracteres" autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
-                  <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(s => !s)} aria-label={showPass ? 'Ocultar senha' : 'Mostrar senha'}>
-                    {showPass ? '🙈' : '👁'}
-                  </button>
+                <div className="auth-field">
+                  <label>Senha</label>
+                  <div className="auth-pass">
+                    <input ref={passRef} type={showPass ? 'text' : 'password'} placeholder="Mínimo 6 caracteres" autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
+                    <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(s => !s)} aria-label={showPass ? 'Ocultar senha' : 'Mostrar senha'}>
+                      {showPass ? '🙈' : '👁'}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              {error && <p className="auth-error" style={{ display: 'block' }}>{error}</p>}
-              <button type="submit" className="auth-btn" disabled={busy}>
-                {mode === 'login' ? 'ENTRAR' : 'CRIAR CONTA'}
-              </button>
-            </form>
+                {error && <p className="auth-error" style={{ display: 'block' }}>{error}</p>}
+                <button type="submit" className="auth-btn" disabled={busy}>
+                  {mode === 'login' ? 'ENTRAR' : 'CRIAR CONTA'}
+                </button>
+                {mode === 'login' && (
+                  <button type="button" className="auth-link" onClick={() => switchMode('forgot')}>Esqueci minha senha</button>
+                )}
+              </form>
+            )}
+
+            {/* Esqueci a senha — pede o email */}
+            {mode === 'forgot' && (
+              <form onSubmit={submitForgot}>
+                <div className="auth-field">
+                  <label>Email</label>
+                  <input ref={emailRef} type="email" placeholder="seu@email.com" autoComplete="email" inputMode="email" />
+                </div>
+                {error && <p className="auth-error" style={{ display: 'block' }}>{error}</p>}
+                <button type="submit" className="auth-btn" disabled={busy}>
+                  {busy ? 'ENVIANDO...' : 'ENVIAR CÓDIGO'}
+                </button>
+                <button type="button" className="auth-link" onClick={() => switchMode('login')}>Voltar ao login</button>
+              </form>
+            )}
+
+            {/* Reset — código + senha nova */}
+            {mode === 'reset' && (
+              <form onSubmit={submitReset}>
+                <div className="auth-field">
+                  <label>Email</label>
+                  <input ref={emailRef} type="email" placeholder="seu@email.com" autoComplete="email" inputMode="email" />
+                </div>
+                <div className="auth-field">
+                  <label>Código (6 dígitos)</label>
+                  <input ref={codeRef} type="text" placeholder="000000" inputMode="numeric" maxLength={6} autoComplete="one-time-code" />
+                </div>
+                <div className="auth-field">
+                  <label>Nova senha</label>
+                  <div className="auth-pass">
+                    <input ref={passRef} type={showPass ? 'text' : 'password'} placeholder="Mínimo 6 caracteres" autoComplete="new-password" />
+                    <button type="button" className="auth-pass-toggle" onClick={() => setShowPass(s => !s)} aria-label={showPass ? 'Ocultar senha' : 'Mostrar senha'}>
+                      {showPass ? '🙈' : '👁'}
+                    </button>
+                  </div>
+                </div>
+                {error && <p className="auth-error" style={{ display: 'block' }}>{error}</p>}
+                <button type="submit" className="auth-btn" disabled={busy}>
+                  {busy ? 'SALVANDO...' : 'TROCAR SENHA'}
+                </button>
+                <button type="button" className="auth-link" onClick={() => switchMode('forgot')}>Reenviar código</button>
+              </form>
+            )}
           </div>
         </div>
       )}

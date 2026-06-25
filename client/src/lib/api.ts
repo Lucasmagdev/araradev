@@ -59,6 +59,22 @@ export function logout() {
   return req<{ ok: boolean }>('/auth/logout', { method: 'POST' }).catch(() => {});
 }
 
+export function forgotPassword(email: string) {
+  return req<{ ok: boolean }>('/auth/forgot', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+}
+
+export function resetPassword(email: string, code: string, password: string) {
+  return req<{ ok: boolean }>('/auth/reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, code, password }),
+  });
+}
+
 export function getMe() {
   return req<User>('/api/me');
 }
