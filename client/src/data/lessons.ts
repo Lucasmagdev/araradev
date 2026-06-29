@@ -77,39 +77,45 @@ while (n &lt; 3) {
     id: 'm1-4',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Acumulador: soma de lista',
-    type: 'fill',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>Um <strong>acumulador</strong> guarda um resultado parcial e é atualizado a cada volta do loop. Complete a linha que soma o item atual no acumulador.</p>
-    `,
-    fillCode: `function soma(lista) {
+      <p>Um <strong>acumulador</strong> guarda um resultado parcial e é atualizado a cada volta do loop. A cada item, somamos o valor no total:</p>
+      <pre><code>function soma(lista) {
   let total = 0;
-  for (let i = 0; i < lista.length; i++) {
-    total = total ◻;
+  for (let i = 0; i &lt; lista.length; i++) {
+    total = total + lista[i];
   }
   return total;
-}`,
-    fillBlanks: [{ accept: ['+ lista[i]', '+lista[i]'] }],
-    fillHint: 'Some o item da posição i: lista[i].',
+}</code></pre>
+    `,
+    quiz: [
+      { q: 'Qual linha soma o item atual no acumulador?', options: ['total = total + lista[i]', 'total = lista[i]', 'total = total + i', 'lista[i] = total'], answer: 0 },
+      { q: 'Por que <code>total</code> começa em <code>0</code>?', options: ['é o valor neutro da soma — não altera o resultado', 'porque a lista tem 0 itens', 'pra dar erro de propósito', 'tanto faz o valor inicial'], answer: 0 },
+      { q: 'Pra <code>soma([2, 3, 5])</code>, o retorno é:', options: ['10', '3', '235', '0'], answer: 0 },
+    ],
   },
   {
     id: 'm1-5',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Contar pares',
-    type: 'fill',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>Mesmo padrão de acumulador, mas <strong>contando</strong> em vez de somar. Um número é par quando o resto da divisão por 2 é zero. Complete o teste de "é par".</p>
-    `,
-    fillCode: `function contarPares(lista) {
+      <p>Mesmo padrão de acumulador, mas <strong>contando</strong> em vez de somar. Um número é par quando o resto da divisão por 2 é zero (<code>% 2 === 0</code>):</p>
+      <pre><code>function contarPares(lista) {
   let total = 0;
-  for (let i = 0; i < lista.length; i++) {
-    if (lista[i] % 2 ◻ 0) total = total + 1;
+  for (let i = 0; i &lt; lista.length; i++) {
+    if (lista[i] % 2 === 0) total = total + 1;
   }
   return total;
-}`,
-    fillBlanks: [{ accept: ['===', '=='] }],
-    fillHint: 'Compare o resto com 0 usando igualdade estrita.',
+}</code></pre>
+    `,
+    quiz: [
+      { q: 'Qual teste verifica se <code>lista[i]</code> é par?', options: ['lista[i] % 2 === 0', 'lista[i] / 2 === 0', 'lista[i] % 2 === 1', 'lista[i] * 2 === 0'], answer: 0 },
+      { q: 'O que <code>% 2</code> devolve?', options: ['o resto da divisão por 2', 'a metade do número', 'o dobro do número', 'sempre 0'], answer: 0 },
+      { q: 'Pra <code>contarPares([1, 2, 3, 4])</code>, o retorno é:', options: ['2', '4', '1', '3'], answer: 0 },
+    ],
   },
   {
     id: 'm1-6',
@@ -137,20 +143,23 @@ dobro(10); // 20</code></pre>
     id: 'm1-7',
     unit: 'Fase 1 — Lógica de programação',
     title: 'Inverter string',
-    type: 'fill',
+    type: 'theory',
     xp: 20,
     content: `
-      <p>Pra inverter, o loop percorre o texto <strong>de trás pra frente</strong>, acumulando cada caractere. Complete o passo do loop pra ele <strong>diminuir</strong> o índice.</p>
-    `,
-    fillCode: `function inverter(texto) {
+      <p>Pra inverter, o loop percorre o texto <strong>de trás pra frente</strong>, acumulando cada caractere. O índice começa no último e <strong>diminui</strong> (<code>i--</code>) a cada volta:</p>
+      <pre><code>function inverter(texto) {
   let resultado = '';
-  for (let i = texto.length - 1; i >= 0; i◻) {
+  for (let i = texto.length - 1; i &gt;= 0; i--) {
     resultado += texto[i];
   }
   return resultado;
-}`,
-    fillBlanks: [{ accept: ['--'] }],
-    fillHint: 'Operador que subtrai 1 do índice a cada volta.',
+}</code></pre>
+    `,
+    quiz: [
+      { q: 'O que <code>i--</code> faz a cada volta do loop?', options: ['subtrai 1 do índice', 'soma 1 ao índice', 'zera o índice', 'dobra o índice'], answer: 0 },
+      { q: 'Por que o loop começa em <code>texto.length - 1</code>?', options: ['é a posição do último caractere', 'é a posição do primeiro caractere', 'pra pular o último caractere', 'pra evitar erro de sintaxe'], answer: 0 },
+      { q: 'Pra <code>inverter("abc")</code>, o retorno é:', options: ['"cba"', '"abc"', '"bca"', '"cab"'], answer: 0 },
+    ],
   },
   {
     id: 'm1-8',
