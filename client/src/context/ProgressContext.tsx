@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Progress } from '../types';
-import { LESSONS } from '../data/lessons';
+import { ALL_LESSONS, lessonById } from '../data/tracks';
 import { bumpStreak, checkBadges, consumeCredit as consumeProgressCredit, emptyProgress, normalizeProgress, rechargeCredits, type Badge } from '../lib/progress';
 import { getProgress, recordDailyChallenge, recordLessonCompletion, saveProgressRemote } from '../lib/api';
 
@@ -69,9 +69,10 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     const newBadges = checkBadges(next);
 
     let phaseComplete: string | null = null;
-    const lesson = LESSONS.find(l => l.id === lessonId);
+    const lesson = lessonById(lessonId);
     if (lesson) {
-      const unitLessons = LESSONS.filter(l => l.unit === lesson.unit);
+      // fase completa = todas as lições da MESMA trilha e MESMA unidade concluídas
+      const unitLessons = ALL_LESSONS.filter(l => l.track === lesson.track && l.unit === lesson.unit);
       if (unitLessons.every(l => next.completed[l.id])) phaseComplete = lesson.unit;
     }
 

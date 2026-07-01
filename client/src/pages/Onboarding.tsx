@@ -49,6 +49,15 @@ const defaults: OnboardingPreferences = {
   interests: [],
 };
 
+// Sugere a trilha inicial a partir das respostas. O usuário pode trocar
+// a qualquer momento pelo seletor de trilhas na tela principal.
+function suggestTrack(p: OnboardingPreferences): string {
+  if (p.interests.includes('web') || p.interests.includes('apps')) return 'frontend';
+  if (p.interests.includes('data')) return 'sql';
+  if (p.goal === 'work-study') return 'sql';
+  return 'fund';
+}
+
 function StepHeader({ step, onBack }: { step: number; onBack: () => void }) {
   return (
     <div className="ob-top">
@@ -117,6 +126,7 @@ export default function Onboarding() {
   function finish() {
     setLoadPct(0);
     setSaving(true);
+    localStorage.setItem('pc_active_track', suggestTrack(prefs));
     // Quem já está logado salva agora; o avanço é controlado pela animação 0→100%.
     if (hasAuth) void saveOnboardingPreferences({ ...prefs, completedAt: Date.now() });
   }

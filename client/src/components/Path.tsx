@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { LESSONS } from '../data/lessons';
 import { useProgress } from '../context/ProgressContext';
 import { isUnlocked } from '../lib/progress';
 import { IconBook, IconCode, IconCheck, IconLock, IconList } from './icons';
-import type { LessonType } from '../types';
+import type { LessonType, Track } from '../types';
 
 const WAVE_OFFSETS_BASE = [0, 70, 100, 70, 0, -70, -100, -70];
 
@@ -49,8 +48,9 @@ function nodeIcon(type: LessonType) {
   return <IconBook />;
 }
 
-export default function Path({ onOpenLesson }: { onOpenLesson: (index: number) => void }) {
+export default function Path({ track, onOpenLesson }: { track: Track; onOpenLesson: (index: number) => void }) {
   const { progress } = useProgress();
+  const LESSONS = track.lessons;
   const [width, setWidth] = useState(window.innerWidth);
   const currentRef = useRef<HTMLButtonElement>(null);
 
@@ -64,10 +64,10 @@ export default function Path({ onOpenLesson }: { onOpenLesson: (index: number) =
   useEffect(() => {
     const id = setTimeout(() => currentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
     return () => clearTimeout(id);
-  }, []);
+  }, [track.id]);
 
   const offsets = waveOffsets(width);
-  const nextIndex = LESSONS.findIndex((l, i) => isUnlocked(progress, i) && !progress.completed[l.id]);
+  const nextIndex = LESSONS.findIndex((l, i) => isUnlocked(progress, LESSONS, i) && !progress.completed[l.id]);
 
   // unit stats
   const unitStats: Record<string, { total: number; done: number }> = {};
@@ -117,7 +117,7 @@ export default function Path({ onOpenLesson }: { onOpenLesson: (index: number) =
               ))}
 
               {g.lessons.map(({ lesson, index }, gi) => {
-                const unlocked = isUnlocked(progress, index);
+                const unlocked = isUnlocked(progress, LESSONS, index);
                 const done = !!progress.completed[lesson.id];
                 const isCurrent = index === nextIndex;
                 const offset = offsets[gi % offsets.length];

@@ -1,5 +1,6 @@
-import type { Progress } from '../types';
+import type { Lesson, Progress } from '../types';
 import { LESSONS } from '../data/lessons';
+import { ALL_LESSONS } from '../data/tracks';
 
 export const MAX_CREDITS = 4;
 export const CREDIT_RECHARGE_MS = 48 * 60 * 60 * 1000;
@@ -16,7 +17,7 @@ export const BADGES: Badge[] = [
   { id: 'ten-lessons',    icon: '📚', name: '10 lições',         check: (p) => Object.keys(p.completed).length >= 10 },
   { id: 'thirty-lessons', icon: '🎯', name: '30 lições',         check: (p) => Object.keys(p.completed).length >= 30 },
   { id: 'fifty-lessons',  icon: '🏆', name: '50 lições',         check: (p) => Object.keys(p.completed).length >= 50 },
-  { id: 'all-lessons',    icon: '🦜', name: 'TrilhaDev Master',   check: (p) => Object.keys(p.completed).length >= LESSONS.length },
+  { id: 'all-lessons',    icon: '🦜', name: 'TrilhaDev Master',   check: (p) => Object.keys(p.completed).length >= ALL_LESSONS.length },
   { id: 'streak-3',       icon: '🔥', name: 'Streak 3 dias',     check: (p) => p.streak.count >= 3 },
   { id: 'streak-7',       icon: '⚡', name: 'Streak 7 dias',     check: (p) => p.streak.count >= 7 },
   { id: 'correct-25',      icon: '✅', name: '25 acertos',          check: (p) => p.stats.correctAnswers >= 25 },
@@ -26,9 +27,9 @@ export const BADGES: Badge[] = [
   { id: 'xp-200',         icon: '💎', name: '200 XP',            check: (p) => p.xp >= 200 },
   { id: 'xp-500',         icon: '🚀', name: '500 XP',            check: (p) => p.xp >= 500 },
   { id: 'xp-1000',        icon: '🏅', name: '1000 XP',           check: (p) => p.xp >= 1000 },
-  { id: 'coder',          icon: '💻', name: 'Programador',       check: (p) => LESSONS.filter(l => l.type === 'code' && p.completed[l.id]).length >= 5 },
-  { id: 'async-dev',      icon: '⏳', name: 'Async Dev',         check: (p) => LESSONS.filter(l => l.id.startsWith('async-') && p.completed[l.id]).length >= 6 },
-  { id: 'react-dev',      icon: '⚛️', name: 'React Dev',          check: (p) => LESSONS.filter(l => l.id.startsWith('react-') && p.completed[l.id]).length >= 6 },
+  { id: 'coder',          icon: '💻', name: 'Programador',       check: (p) => ALL_LESSONS.filter(l => l.type === 'code' && p.completed[l.id]).length >= 5 },
+  { id: 'async-dev',      icon: '⏳', name: 'Async Dev',         check: (p) => ALL_LESSONS.filter(l => l.id.startsWith('async-') && p.completed[l.id]).length >= 6 },
+  { id: 'react-dev',      icon: '⚛️', name: 'React Dev',          check: (p) => ALL_LESSONS.filter(l => l.id.startsWith('react-') && p.completed[l.id]).length >= 6 },
   { id: 'phase-1',         icon: '🏁', name: 'Fase 1 completa',     check: (p) => isUnitComplete(p, 'Fase 1') },
   { id: 'phase-4',         icon: '🧠', name: 'Algoritmos',          check: (p) => isUnitComplete(p, 'Fase 4') },
 ];
@@ -123,9 +124,10 @@ export function formatCreditTimer(nextRechargeAt: number | null, now = Date.now(
   return `${hours}h ${minutes.toString().padStart(2, '0')}min`;
 }
 
-export function isUnlocked(progress: Progress, index: number): boolean {
+// Desbloqueio é por trilha: a lição N abre quando a N-1 da MESMA trilha foi concluída.
+export function isUnlocked(progress: Progress, lessons: Lesson[], index: number): boolean {
   if (index === 0) return true;
-  return !!progress.completed[LESSONS[index - 1].id];
+  return !!progress.completed[lessons[index - 1].id];
 }
 
 export function isUnitComplete(progress: Progress, unitPrefix: string): boolean {

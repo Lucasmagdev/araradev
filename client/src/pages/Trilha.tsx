@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LESSONS } from '../data/lessons';
+import { TRACKS, getTrack, DEFAULT_TRACK, trackDone } from '../data/tracks';
 import type { Lesson, OnboardingPreferences } from '../types';
+
+const ACTIVE_TRACK_KEY = 'pc_active_track';
 import { ProgressProvider, useProgress } from '../context/ProgressContext';
 import { getMe, getOnboardingPreferences } from '../lib/api';
 
@@ -34,7 +36,18 @@ function TrilhaInner() {
   const [pendingPhase, setPendingPhase] = useState<string | null>(null);
   const [prefs, setPrefs] = useState<OnboardingPreferences | null>(null);
   const [bannerOff, setBannerOff] = useState(() => localStorage.getItem(BANNER_KEY) === '1');
+  const [activeTrackId, setActiveTrackId] = useState(() => localStorage.getItem(ACTIVE_TRACK_KEY) || DEFAULT_TRACK);
   const toastId = useRef(0);
+
+  const track = getTrack(activeTrackId);
+  const trackLessons = track.lessons;
+
+  function switchTrack(id: string) {
+    setActiveTrackId(id);
+    localStorage.setItem(ACTIVE_TRACK_KEY, id);
+    setOpenIndex(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   useEffect(() => {
     getMe()
@@ -64,13 +77,13 @@ function TrilhaInner() {
   }, [markComplete, addToast]);
 
   const openLesson = useCallback((index: number) => {
-    const lesson = LESSONS[index];
+    const lesson = trackLessons[index];
     if (!progress.completed[lesson.id] && progress.credits.current <= 0) {
       addToast('Sem vidas agora. Elas recarregam automaticamente a cada <strong>48h</strong>.');
       return;
     }
     setOpenIndex(index);
-  }, [addToast, progress.completed, progress.credits]);
+  }, [addToast, progress.completed, progress.credits, trackLessons]);
 
   const closeLesson = useCallback(() => {
     setOpenIndex(null);
@@ -83,7 +96,7 @@ function TrilhaInner() {
     return <div id="app-shell" style={{ alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>Carregando…</div>;
   }
 
-  const lesson = openIndex !== null ? LESSONS[openIndex] : null;
+  const lesson = openIndex !== null ? trackLessons[openIndex] : null;
   const isTheoryQuiz = lesson?.type === 'theory' && (lesson.quiz?.length ?? 0) > 0;
   const isFill = lesson?.type === 'fill';
 
@@ -103,7 +116,24 @@ function TrilhaInner() {
             <button className="trail-banner-close" onClick={dismissBanner} aria-label="Fechar">✕</button>
           </div>
         )}
-        <Path onOpenLesson={openLesson} />
+        <div className="track-switch">
+          {TRACKS.map(t => {
+            const done = trackDone(progress, t.id);
+            const total = t.lessons.length;
+            return (
+              <button
+                key={t.id}
+                className={'track-chip' + (t.id === activeTrackId ? ' active' : '')}
+                style={t.id === activeTrackId ? { borderColor: t.color, color: t.color } : undefined}
+                onClick={() => switchTrack(t.id)}
+              >
+                <span className="track-chip-name">{t.short}</span>
+                <span className="track-chip-count">{done}/{total}</span>
+              </button>
+            );
+          })}
+        </div>
+        <Path track={track} onOpenLesson={openLesson} />
         <BottomNav active={nav} onNav={onNav} />
       </div>
 

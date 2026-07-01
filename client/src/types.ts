@@ -25,6 +25,7 @@ export interface Lesson {
   type: LessonType;
   xp: number;
   content: string;
+  track?: string; // id da trilha; ausente = 'fund' (Fundamentos, trilha original)
   // theory
   quiz?: QuizQuestion[];
   // code
@@ -35,6 +36,16 @@ export interface Lesson {
   fillCode?: string;
   fillBlanks?: FillBlank[];
   fillHint?: string;
+}
+
+export interface Track {
+  id: string;        // 'fund' | 'frontend' | 'sql' | 'logica'
+  name: string;      // nome completo exibido
+  short: string;     // rótulo curto pro seletor
+  icon: string;      // emoji/símbolo
+  color: string;     // cor de destaque
+  desc: string;      // 1 linha do que ensina
+  lessons: Lesson[];
 }
 
 export interface Streak {
