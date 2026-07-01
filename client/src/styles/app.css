@@ -1090,6 +1090,19 @@ body {
   z-index: 1;
 }
 
+/* Abas de escopo do ranking (Geral + trilhas) */
+.rank-scope {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+}
+.rank-scope::-webkit-scrollbar { display: none; }
+.rank-scope button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-size: 0.82rem;
+}
+
 /* Seletor de trilhas */
 .track-switch {
   display: flex;

@@ -474,8 +474,17 @@ app.get('/api/ranking', requireAuth, async (req, res) => {
       ? now - 30 * 24 * 60 * 60 * 1000
       : 0;
 
-  const where = period === 'global' ? '' : 'WHERE e.created_at >= ?';
-  const params = period === 'global' ? [] : [start];
+  const conds = [];
+  const params = [];
+  if (period !== 'global') { conds.push('e.created_at >= ?'); params.push(start); }
+  // Ranking por trilha: filtra os xp_events de lição pelo prefixo do ref_id (lesson id).
+  // Prefixos por trilha nova; Fundamentos = lições sem esses prefixos. Literais fixos, sem input do usuário.
+  const track = req.query.track;
+  if (track === 'frontend')    conds.push("e.source = 'lesson' AND e.ref_id LIKE 'fe-%'");
+  else if (track === 'sql')    conds.push("e.source = 'lesson' AND e.ref_id LIKE 'sql-%'");
+  else if (track === 'logica') conds.push("e.source = 'lesson' AND e.ref_id LIKE 'logic-%'");
+  else if (track === 'fund')   conds.push("e.source = 'lesson' AND e.ref_id NOT LIKE 'fe-%' AND e.ref_id NOT LIKE 'sql-%' AND e.ref_id NOT LIKE 'logic-%'");
+  const where = conds.length ? 'WHERE ' + conds.join(' AND ') : '';
   const [rows] = await pool.query(`
     SELECT
       u.id,

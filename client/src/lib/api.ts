@@ -107,8 +107,9 @@ export function recordDailyChallenge(date: string, correct: number, total: numbe
   }).catch(() => {});
 }
 
-export function getRanking(period: 'global' | 'weekly' | 'monthly') {
-  return req<RankingEntry[]>(`/api/ranking?period=${period}`);
+export function getRanking(period: 'global' | 'weekly' | 'monthly', track?: string) {
+  const q = track ? `?period=${period}&track=${track}` : `?period=${period}`;
+  return req<RankingEntry[]>(`/api/ranking${q}`);
 }
 
 export function getOnboardingPreferences() {

@@ -4,6 +4,7 @@ import { useProgress } from '../context/ProgressContext';
 import { BADGES, getLevel, LEVELS } from '../lib/progress';
 import { getMe, getRanking, logout, clearToken } from '../lib/api';
 import { getDailyQuestions, todayKey } from '../lib/daily';
+import { TRACKS } from '../data/tracks';
 import type { RankingEntry, User } from '../types';
 
 function Overlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
@@ -141,21 +142,32 @@ export function DailyChallengeModal({ onClose, onToast }: { onClose: () => void;
 
 export function RankingModal({ onClose }: { onClose: () => void }) {
   const [period, setPeriod] = useState<'global' | 'weekly' | 'monthly'>('weekly');
+  const [scope, setScope] = useState<string>('geral'); // 'geral' = todas as trilhas (primário)
   const [rows, setRows] = useState<RankingEntry[] | null>(null);
 
   useEffect(() => {
-    getRanking(period).then(setRows).catch(() => setRows([]));
-  }, [period]);
+    getRanking(period, scope === 'geral' ? undefined : scope).then(setRows).catch(() => setRows([]));
+  }, [period, scope]);
 
   function selectPeriod(next: 'global' | 'weekly' | 'monthly') {
     setRows(null);
     setPeriod(next);
+  }
+  function selectScope(next: string) {
+    setRows(null);
+    setScope(next);
   }
 
   return (
     <Overlay onClose={onClose}>
       <button className="close" onClick={onClose}>×</button>
       <h2>Ranking</h2>
+      <div className="rank-tabs rank-scope">
+        <button className={scope === 'geral' ? 'active' : ''} onClick={() => selectScope('geral')}>Geral</button>
+        {TRACKS.map(t => (
+          <button key={t.id} className={scope === t.id ? 'active' : ''} onClick={() => selectScope(t.id)}>{t.short}</button>
+        ))}
+      </div>
       <div className="rank-tabs">
         <button className={period === 'weekly' ? 'active' : ''} onClick={() => selectPeriod('weekly')}>Semanal</button>
         <button className={period === 'monthly' ? 'active' : ''} onClick={() => selectPeriod('monthly')}>Mensal</button>
