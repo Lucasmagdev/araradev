@@ -1,0 +1,7 @@
+Todo programa que existe toma decisão, e é o if que faz isso.
+
+"Se a senha tá certa, entra. Senão, dá erro." Esse raciocínio de se isso, então aquilo é o coração da lógica de programação. Domina o if e metade do caminho tá andado.
+
+Conceito 2 da série. Tem mais chegando todo dia.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr

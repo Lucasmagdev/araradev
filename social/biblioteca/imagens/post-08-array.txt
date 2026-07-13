@@ -1,0 +1,7 @@
+Em vez de criar uma variável pra cada coisa, você junta tudo numa lista.
+
+Array guarda vários valores em ordem e deixa você percorrer todos de uma vez (lembra do loop?). É a base de quase todo app que mostra uma lista de algo.
+
+Conceito 7 da série.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr

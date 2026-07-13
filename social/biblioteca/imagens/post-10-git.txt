@@ -1,0 +1,7 @@
+Git é o "salvar" do programador, mas muito mais poderoso.
+
+add, commit e push: com esses três você já guarda seu código com histórico e manda pro GitHub. É o primeiro passo pra trabalhar como dev de verdade.
+
+Conceito da série sobre ferramentas.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr

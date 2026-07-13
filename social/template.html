@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1080px; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(circle at 30% 20%, #0e1c2a 0%, #04090f 70%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* glow accents */
+  .glow1 { position:absolute; top:-150px; right:-150px; width:500px; height:500px;
+           background:#58cc02; opacity:.18; filter:blur(120px); border-radius:50%; }
+  .glow2 { position:absolute; bottom:-180px; left:-120px; width:480px; height:480px;
+           background:#1cb0f6; opacity:.15; filter:blur(120px); border-radius:50%; }
+
+  .top { display:flex; align-items:center; gap:20px; z-index:2; }
+  .logo { width:84px; height:84px; border-radius:20px; object-fit:cover;
+          border:3px solid #58cc02; }
+  .brand { font-size:38px; font-weight:800; letter-spacing:-1px; }
+  .brand span { color:#58cc02; }
+
+  .tag { z-index:2; margin-top:56px; display:inline-block; align-self:flex-start;
+         background:rgba(28,176,246,.15); color:#1cb0f6; font-weight:700;
+         font-size:28px; padding:12px 26px; border-radius:999px;
+         border:1px solid rgba(28,176,246,.4); text-transform:uppercase;
+         letter-spacing:1px; }
+
+  .title { z-index:2; margin-top:40px; font-size:78px; font-weight:800;
+           line-height:1.05; letter-spacing:-2px; }
+  .title em { color:#58cc02; font-style:normal; }
+
+  .body { z-index:2; margin-top:40px; font-size:42px; line-height:1.4;
+          color:#c5d4e3; font-weight:500; }
+  .body code { background:#07111d; color:#7dd3fc; padding:4px 14px;
+               border-radius:10px; font-family:"Cascadia Code",Consolas,monospace;
+               font-size:38px; }
+
+  .footer { z-index:2; margin-top:auto; display:flex; justify-content:space-between;
+            align-items:center; font-size:30px; color:#5a7088; font-weight:600; }
+  .footer .cta { color:#ffc800; }
+</style>
+</head>
+<body>
+  <div class="glow1"></div>
+  <div class="glow2"></div>
+
+  <div class="top">
+    <img class="logo" src="LOGO_SRC" alt="">
+    <div class="brand">Trilha<span>Dev</span></div>
+  </div>
+
+  <div class="tag">__TAG__</div>
+  <div class="title">__TITLE__</div>
+  <div class="body">__BODY__</div>
+
+  <div class="footer">
+    <div>@trilhadev.ai</div>
+    <div class="cta">Baixe na Play Store ↓</div>
+  </div>
+</body>
+</html>

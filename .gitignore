@@ -26,3 +26,10 @@ android/_emu_*.png
 # os / editor
 .DS_Store
 *.log
+
+# posts gerados (regerar a qualquer hora)
+social/out/
+
+# tooling local
+.playwright-mcp/
+desktop.ini

@@ -1,0 +1,7 @@
+Programar não é escrever a mesma coisa mil vezes.
+
+Loop faz o trabalho repetitivo no seu lugar: você escreve uma vez e o computador repete quantas vezes precisar. Esse é um dos conceitos que separa quem copia código de quem entende o que faz.
+
+Conceito 3 da série, todo dia tem mais.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr

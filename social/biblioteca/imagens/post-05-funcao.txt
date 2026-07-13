@@ -1,0 +1,7 @@
+Função é você dar um nome pra um pedaço de código e usar quantas vezes quiser.
+
+Em vez de reescrever a mesma lógica em 10 lugares, você escreve uma função e chama ela. Menos código, menos erro, mais organização.
+
+Conceito 4 da série.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr

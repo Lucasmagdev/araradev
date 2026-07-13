@@ -1,0 +1,7 @@
+Todo if depende de uma comparação, e quem faz isso são os operadores.
+
+Igual, maior, menor, diferente: eles devolvem verdadeiro ou falso e é isso que o seu código usa pra decidir o que fazer.
+
+Conceito 6 da série.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr

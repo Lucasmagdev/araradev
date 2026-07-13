@@ -1,0 +1,7 @@
+Antes de manipular dados, você precisa saber com o que tá lidando.
+
+Texto, número, verdadeiro ou falso: cada tipo se comporta de um jeito. Misturar tipo errado é uma das maiores fontes de bug de iniciante.
+
+Conceito 5 da série.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr

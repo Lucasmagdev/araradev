@@ -1,0 +1,7 @@
+Variável é o primeiro tijolo de praticamente todo código que existe.
+
+Pensa numa caixinha com nome: você guarda um valor dentro e usa quando precisar. É isso. Parece bobo agora, mas é a base de tudo que vem depois.
+
+Salva esse post pra não esquecer e fica de olho na série, é um conceito por dia.
+
+#programacao #aprenderprogramar #javascript #trilhadev #codigo #estudardev #logicadeprogramacao

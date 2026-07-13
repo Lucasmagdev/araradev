@@ -1,0 +1,7 @@
+Se você tá começando, já viu undefined aparecer do nada.
+
+Não é bug do computador: é o jeito dele dizer "isso que você pediu não existe". Geralmente é um nome digitado errado ou um valor que você esqueceu de definir.
+
+Salva esse pra quando bater o desespero.
+
+#programacao #aprenderprogramar #logicadeprogramacao #trilhadev #estudardev #codigo #devbr
