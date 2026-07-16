@@ -5,16 +5,19 @@ import { formatCreditTimer } from '../lib/progress';
 import { playSound, launchConfetti } from '../lib/effects';
 import { IconClose } from './icons';
 import Mascote, { type MascoteEstado } from './Mascote';
+import { lessonKindLabel } from '../lib/lessonContext';
 
 interface Props {
   lesson: Lesson;
+  nextPractice?: Lesson | null;
   onComplete: (lesson: Lesson) => void;
   onClose: () => void;
 }
 
-export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
+export default function LessonScreen({ lesson, nextPractice, onComplete, onClose }: Props) {
   const { progress, consumeCredit, recordCorrectAnswer } = useProgress();
   const quiz = lesson.quiz || [];
+  const [reading, setReading] = useState(() => !!lesson.content);
   const [qi, setQi] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -63,7 +66,7 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
     setAnswered(false);
   }
 
-  const progressPct = finished ? 100 : Math.round((qi / total) * 100);
+  const progressPct = finished ? 100 : reading ? 0 : Math.round((qi / total) * 100);
 
   let mascoteEstado: MascoteEstado = 'idle';
   let mascoteFala: string | undefined;
@@ -99,6 +102,22 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
             )}
             <button className="ls-complete-btn" onClick={onClose}>CONTINUAR</button>
           </div>
+        ) : reading ? (
+          <div className="ls-question-wrap">
+            <div className="ls-mascote-slot">
+              <Mascote estado="idle" size={84} />
+            </div>
+            <div className="ls-type-label">Fundamento para a trilha</div>
+            <h2 className="ls-theory-title" dangerouslySetInnerHTML={{ __html: lesson.title }} />
+            <div className="ls-theory-content" dangerouslySetInnerHTML={{ __html: lesson.content }} />
+            {nextPractice && (
+              <div className="ls-next-card">
+                <span className="ls-next-kicker">Você vai usar isso em</span>
+                <strong>{nextPractice.title}</strong>
+                <small>{lessonKindLabel(nextPractice)}</small>
+              </div>
+            )}
+          </div>
         ) : (
           <div className="ls-question-wrap">
             <div className="ls-mascote-slot">
@@ -125,7 +144,15 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
         )}
       </div>
 
-      {!finished && !answered && (
+      {!finished && reading && (
+        <div className="ls-footer">
+          <button className="ls-verify-btn ready" onClick={() => setReading(false)}>
+            IR PARA O QUIZ
+          </button>
+        </div>
+      )}
+
+      {!finished && !reading && !answered && (
         <div className="ls-footer">
           <button
             className={'ls-verify-btn' + (selected !== null && (alreadyDone || progress.credits.current > 0) ? ' ready' : '')}
@@ -137,7 +164,7 @@ export default function LessonScreen({ lesson, onComplete, onClose }: Props) {
         </div>
       )}
 
-      {!finished && answered && (
+      {!finished && !reading && answered && (
         <div className={'ls-feedback visible ' + (selected === q.answer ? 'correct' : 'wrong')}>
           <div className="ls-feedback-top">
             <div className="ls-feedback-icon">{selected === q.answer ? '🎉' : '💡'}</div>

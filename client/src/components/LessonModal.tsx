@@ -5,11 +5,12 @@ import { runCodeTests, type TestResult } from '../lib/effects';
 
 interface Props {
   lesson: Lesson;
+  relatedTheory?: Lesson | null;
   onComplete: (lesson: Lesson) => void;
   onClose: () => void;
 }
 
-export default function LessonModal({ lesson, onComplete, onClose }: Props) {
+export default function LessonModal({ lesson, relatedTheory, onComplete, onClose }: Props) {
   const { progress, consumeCredit, saveCode } = useProgress();
   const done = !!progress.completed[lesson.id];
 
@@ -19,15 +20,15 @@ export default function LessonModal({ lesson, onComplete, onClose }: Props) {
         <button className="close" aria-label="Fechar" onClick={onClose}>×</button>
         <h2 dangerouslySetInnerHTML={{ __html: lesson.title }} />
         {lesson.type === 'code'
-          ? <CodeBody lesson={lesson} done={done} credits={progress.credits.current} consumeCredit={consumeCredit} onComplete={onComplete} saveCode={saveCode} initial={progress.code[lesson.id]} />
-          : <ChecklistBody lesson={lesson} done={done} onComplete={onComplete} />}
+          ? <CodeBody lesson={lesson} relatedTheory={relatedTheory} done={done} credits={progress.credits.current} consumeCredit={consumeCredit} onComplete={onComplete} saveCode={saveCode} initial={progress.code[lesson.id]} />
+          : <ChecklistBody lesson={lesson} relatedTheory={relatedTheory} done={done} onComplete={onComplete} />}
       </div>
     </div>
   );
 }
 
-function CodeBody({ lesson, done, credits, consumeCredit, onComplete, saveCode, initial }: {
-  lesson: Lesson; done: boolean; onComplete: (l: Lesson) => void;
+function CodeBody({ lesson, relatedTheory, done, credits, consumeCredit, onComplete, saveCode, initial }: {
+  lesson: Lesson; relatedTheory?: Lesson | null; done: boolean; onComplete: (l: Lesson) => void;
   credits: number; consumeCredit: () => boolean;
   saveCode: (id: string, code: string) => void; initial?: string;
 }) {
@@ -63,7 +64,7 @@ function CodeBody({ lesson, done, credits, consumeCredit, onComplete, saveCode, 
 
   return (
     <>
-      <div className="lesson-content" dangerouslySetInnerHTML={{ __html: lesson.content }} />
+      <PracticeBrief lesson={lesson} relatedTheory={relatedTheory} />
       {!done && <div className={'modal-credits' + (credits === 0 ? ' empty' : '')}>♥ {credits} vidas restantes</div>}
       <textarea id="code-input" rows={8} value={code} onChange={(e) => setCode(e.target.value)} spellCheck={false} />
       <div className="actions">
@@ -82,16 +83,26 @@ function CodeBody({ lesson, done, credits, consumeCredit, onComplete, saveCode, 
   );
 }
 
-function ChecklistBody({ lesson, done, onComplete }: { lesson: Lesson; done: boolean; onComplete: (l: Lesson) => void }) {
+function ChecklistBody({ lesson, relatedTheory, done, onComplete }: { lesson: Lesson; relatedTheory?: Lesson | null; done: boolean; onComplete: (l: Lesson) => void }) {
   const [isDone, setIsDone] = useState(done);
   return (
     <>
-      <div className="lesson-content" dangerouslySetInnerHTML={{ __html: lesson.content }} />
+      <PracticeBrief lesson={lesson} relatedTheory={relatedTheory} />
       <div className="actions">
         <button disabled={isDone} onClick={() => { if (!isDone) { onComplete(lesson); setIsDone(true); } }}>
           {isDone ? 'Concluído ✓' : 'Marquei como feito'}
         </button>
       </div>
     </>
+  );
+}
+
+function PracticeBrief({ lesson, relatedTheory }: { lesson: Lesson; relatedTheory?: Lesson | null }) {
+  return (
+    <div className="practice-brief">
+      <span>Base para esta atividade</span>
+      <div className="lesson-content" dangerouslySetInnerHTML={{ __html: lesson.content }} />
+      {relatedTheory && <small>Conceito relacionado: {relatedTheory.title}</small>}
+    </div>
   );
 }
