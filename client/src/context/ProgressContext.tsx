@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Progress } from '../types';
 import { ALL_LESSONS, lessonById } from '../data/tracks';
-import { bumpStreak, checkBadges, consumeCredit as consumeProgressCredit, emptyProgress, normalizeProgress, rechargeCredits, type Badge } from '../lib/progress';
-import { getProgress, recordDailyChallenge, recordLessonCompletion, saveProgressRemote } from '../lib/api';
+import { bumpStreak, checkBadges, consumeCredit as consumeProgressCredit, emptyProgress, mergeProgress, normalizeProgress, rechargeCredits, type Badge } from '../lib/progress';
+import { flushPending, getProgress, recordDailyChallenge, recordLessonCompletion, saveProgressRemote } from '../lib/api';
 
 const STORAGE_KEY = 'pc_progress_v1';
 
@@ -46,10 +46,16 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     try {
       const data = await getProgress();
       if (data) {
-        const merged = normalizeProgress(data);
+        // merge em vez de sobrescrever: lição completada offline não some
+        // quando o remoto (desatualizado) chega
+        const remote = normalizeProgress(data);
+        const merged = mergeProgress(progressRef.current, remote);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
         setProgress(merged);
+        // local tinha coisa que o remoto não tinha → sobe o merge
+        if (JSON.stringify(merged) !== JSON.stringify(remote)) saveProgressRemote(merged);
       }
+      void flushPending();
     } catch { /* offline: keep local */ }
   }, []);
 
@@ -157,6 +163,18 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     const id = window.setTimeout(() => { void loadRemote(); }, 0);
     return () => window.clearTimeout(id);
   }, [loadRemote]);
+
+  // reenvia escritas pendentes quando a rede volta ou o app volta pro foreground
+  useEffect(() => {
+    const flush = () => { void flushPending(); };
+    const onVisible = () => { if (document.visibilityState === 'visible') flush(); };
+    window.addEventListener('online', flush);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      window.removeEventListener('online', flush);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, []);
 
   useEffect(() => {
     const id = window.setInterval(() => {

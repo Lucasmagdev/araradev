@@ -106,6 +106,20 @@ async function ensureSchema() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS client_errors (
+      id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+      user_id VARCHAR(64) NULL,
+      message VARCHAR(500) NOT NULL,
+      stack TEXT NULL,
+      url VARCHAR(300) NULL,
+      user_agent VARCHAR(300) NULL,
+      created_at BIGINT NOT NULL,
+      PRIMARY KEY (id),
+      KEY idx_cerr_time (created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  `);
+
   await pool.query('ALTER TABLE xp_events CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
   await pool.query('ALTER TABLE lesson_completions CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
   await pool.query('ALTER TABLE daily_challenges CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
@@ -575,6 +589,39 @@ app.post('/api/onboarding', requireAuth, async (req, res) => {
   }
 });
 
+// ── Error reporting do client ─────────────────────────────────────────────────
+// Recebe erros JS não tratados do app (web e Android). Sem auth obrigatória:
+// erro pode acontecer deslogado. Rate limit apertado — endpoint aberto.
+
+const errorLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,                       // 30 erros / 15min / IP já cobre burst real
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Rate limit' },
+});
+
+app.post('/api/client-errors', errorLimiter, async (req, res) => {
+  const { message, stack, url } = req.body || {};
+  if (!message || typeof message !== 'string') return res.status(400).json({ error: 'message obrigatório' });
+  try {
+    await pool.query(
+      'INSERT INTO client_errors (user_id, message, stack, url, user_agent, created_at) VALUES (?,?,?,?,?,?)',
+      [
+        req.session?.userId || null,
+        message.slice(0, 500),
+        typeof stack === 'string' ? stack.slice(0, 4000) : null,
+        typeof url === 'string' ? url.slice(0, 300) : null,
+        String(req.headers['user-agent'] || '').slice(0, 300),
+        Date.now(),
+      ]
+    );
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 // ── Admin HTML ────────────────────────────────────────────────────────────────
 
 const LOGIN_HTML = `<!DOCTYPE html>
@@ -978,6 +1025,17 @@ app.delete('/admin/api/users/:userId', requireAdmin, async (req, res) => {
     await pool.query('DELETE FROM progress WHERE user_id = ?', [req.params.userId]);
     await pool.query('DELETE FROM users WHERE id = ?', [req.params.userId]);
     res.json({ ok: true });
+  } catch (e) {
+    res.status(503).json({ error: 'Banco indisponível' });
+  }
+});
+
+app.get('/admin/api/client-errors', requireAdmin, async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT id, user_id, message, stack, url, user_agent, created_at FROM client_errors ORDER BY created_at DESC LIMIT 200'
+    );
+    res.json(rows);
   } catch (e) {
     res.status(503).json({ error: 'Banco indisponível' });
   }

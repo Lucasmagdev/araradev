@@ -599,6 +599,10 @@ body {
   color: var(--text);
 }
 
+/* Nó atual ganha respiro em cima: o start-badge (top negativo) deixava de
+   cobrir o rótulo da lição anterior */
+.lesson-wrap.current { margin-top: 32px; }
+
 /* Start badge */
 .start-badge {
   position: absolute;
@@ -1113,6 +1117,9 @@ body {
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  /* fade na borda direita: sinaliza que a fileira de chips rola horizontal */
+  -webkit-mask-image: linear-gradient(90deg, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, #000 90%, transparent);
 }
 .track-switch::-webkit-scrollbar { display: none; }
 .track-chip {
@@ -1602,6 +1609,47 @@ body {
   color: #e2e8f0;
 }
 
+.practice-brief,
+.ls-practice-brief,
+.ls-next-card {
+  border: 1px solid rgba(28,176,246,0.24);
+  border-radius: 12px;
+  background: rgba(28,176,246,0.08);
+}
+
+.practice-brief,
+.ls-practice-brief {
+  padding: 14px 14px 12px;
+  margin-bottom: 16px;
+}
+
+.practice-brief > span,
+.ls-practice-brief > span,
+.ls-next-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: #90caf9;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.practice-brief .lesson-content,
+.ls-practice-brief .ls-fill-desc {
+  margin-bottom: 8px;
+}
+
+.practice-brief small,
+.ls-practice-brief small,
+.ls-next-card small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
 /* Quiz */
 .quiz-q {
   margin-bottom: 16px;
@@ -1833,6 +1881,68 @@ body {
   margin-bottom: 28px;
   color: var(--text);
 }
+
+.ls-theory-title {
+  margin: 0 0 16px;
+  color: var(--text);
+  font-size: 1.55rem;
+  line-height: 1.16;
+  font-weight: 900;
+}
+
+.ls-theory-content {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.58;
+}
+
+.ls-theory-content p,
+.ls-theory-content ul,
+.ls-theory-content ol {
+  margin: 0 0 14px;
+}
+
+.ls-theory-content pre {
+  background: #0e1c2c;
+  border: 1.5px solid #1e3a54;
+  border-radius: 12px;
+  padding: 14px;
+  overflow-x: auto;
+  color: #cfe6ff;
+}
+
+.ls-theory-content code {
+  background: rgba(125,211,252,0.12);
+  color: #7dd3fc;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.86em;
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.ls-theory-content pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.ls-next-card {
+  margin-top: 18px;
+  padding: 14px;
+}
+
+.ls-next-card strong {
+  display: block;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.ls-next-card small {
+  text-transform: capitalize;
+}
+
 .ls-question code {
   background: rgba(125,211,252,0.12);
   color: #7dd3fc;

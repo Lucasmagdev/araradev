@@ -8,6 +8,7 @@ import Mascote, { type MascoteEstado } from './Mascote';
 
 interface Props {
   lesson: Lesson;
+  relatedTheory?: Lesson | null;
   onComplete: (lesson: Lesson) => void;
   onClose: () => void;
 }
@@ -17,9 +18,9 @@ function norm(s: string) {
   return s.replace(/\s+/g, '').replace(/;+$/, '');
 }
 
-export default function FillScreen({ lesson, onComplete, onClose }: Props) {
+export default function FillScreen({ lesson, relatedTheory, onComplete, onClose }: Props) {
   const { progress, consumeCredit } = useProgress();
-  const blanks = lesson.fillBlanks || [];
+  const blanks = useMemo(() => lesson.fillBlanks || [], [lesson.fillBlanks]);
   // Quebra o código nos marcadores ◻ — entre cada par de pedaços entra um input.
   const parts = useMemo(() => (lesson.fillCode || '').split('◻'), [lesson.fillCode]);
 
@@ -92,7 +93,11 @@ export default function FillScreen({ lesson, onComplete, onClose }: Props) {
               <Mascote estado={mascoteEstado} fala={answered ? mascoteFala : undefined} size={84} />
             </div>
             <div className="ls-type-label">Complete o código</div>
-            <div className="ls-fill-desc" dangerouslySetInnerHTML={{ __html: lesson.content }} />
+            <div className="ls-practice-brief">
+              <span>Base para esta atividade</span>
+              <div className="ls-fill-desc" dangerouslySetInnerHTML={{ __html: lesson.content }} />
+              {relatedTheory && <small>Conceito relacionado: {relatedTheory.title}</small>}
+            </div>
             <pre className="ls-fill-code"><code>
               {parts.map((part, i) => (
                 <span key={i}>

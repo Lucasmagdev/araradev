@@ -99,6 +99,50 @@ export function normalizeProgress(progress: Partial<Progress> | null | undefined
   return rechargeCredits(merged);
 }
 
+// Merge local × remoto sem perder progresso feito offline: união do que foi
+// concluído, máximo de XP/stats, streak mais recente. Créditos: o menor valor
+// vence (conservador — evita "farmar" vida trocando de dispositivo).
+export function mergeProgress(local: Progress, remote: Progress): Progress {
+  const completed = { ...remote.completed, ...local.completed };
+  const badges = Array.from(new Set([...remote.badges, ...local.badges]));
+
+  const lt = local.streak.lastDate ? new Date(local.streak.lastDate).getTime() : 0;
+  const rt = remote.streak.lastDate ? new Date(remote.streak.lastDate).getTime() : 0;
+  const streak = lt === rt
+    ? { count: Math.max(local.streak.count, remote.streak.count), lastDate: local.streak.lastDate }
+    : lt > rt ? { ...local.streak } : { ...remote.streak };
+
+  const seen = new Set(remote.xpEvents.map(e => `${e.source}@${e.at}`));
+  const xpEvents = [
+    ...remote.xpEvents,
+    ...local.xpEvents.filter(e => !seen.has(`${e.source}@${e.at}`)),
+  ].sort((a, b) => a.at - b.at);
+
+  const dl = local.dailyChallenge;
+  const dr = remote.dailyChallenge;
+  // datas em ISO (yyyy-mm-dd): comparação de string funciona
+  const dailyChallenge = (dl.date || '') === (dr.date || '')
+    ? { date: dl.date, completed: dl.completed || dr.completed, correct: Math.max(dl.correct, dr.correct), total: dl.total || dr.total }
+    : (dl.date || '') > (dr.date || '') ? { ...dl } : { ...dr };
+
+  return normalizeProgress({
+    completed,
+    code: { ...remote.code, ...local.code },
+    xp: Math.max(local.xp, remote.xp),
+    streak,
+    badges,
+    nome: local.nome || remote.nome,
+    avatar: local.avatar || remote.avatar,
+    credits: local.credits.current <= remote.credits.current ? { ...local.credits } : { ...remote.credits },
+    xpEvents,
+    stats: {
+      correctAnswers: Math.max(local.stats.correctAnswers, remote.stats.correctAnswers),
+      codeExercisesPassed: Math.max(local.stats.codeExercisesPassed, remote.stats.codeExercisesPassed),
+    },
+    dailyChallenge,
+  });
+}
+
 export function consumeCredit(progress: Progress, now = Date.now()): Progress | null {
   const recharged = rechargeCredits(progress, now);
   if (recharged.credits.current <= 0) return null;

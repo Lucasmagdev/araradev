@@ -2,7 +2,12 @@ import { StrictMode, Suspense, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Capacitor } from '@capacitor/core';
+import { initNative } from './lib/native';
+import { initErrorReporting } from './lib/errlog';
 import './index.css';
+
+initNative();
+initErrorReporting();
 
 // Cada rota vira um chunk separado: a landing não baixa o código da trilha
 // (+119 lições, ProgressProvider) e vice-versa. Carregam sob demanda.

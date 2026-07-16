@@ -124,11 +124,12 @@ export default function Path({ track, onOpenLesson }: { track: Track; onOpenLess
                 const state = done ? 'done' : unlocked ? 'unlocked' : 'locked';
 
                 return (
-                  <div key={lesson.id} className={'lesson-wrap ' + state} style={{ transform: `translateX(${offset}px)` }}>
+                  <div key={lesson.id} className={'lesson-wrap ' + state + (isCurrent ? ' current' : '')} style={{ transform: `translateX(${offset}px)` }}>
                     <button
                       ref={isCurrent ? currentRef : undefined}
                       className={'lesson-node ' + state + (isCurrent ? ' current' : '')}
                       disabled={!unlocked}
+                      aria-label={`${lesson.title}${done ? ' — concluída' : unlocked ? '' : ' — bloqueada'}`}
                       onClick={() => unlocked && onOpenLesson(index)}
                     >
                       {done ? <IconCheck /> : unlocked ? nodeIcon(lesson.type) : <IconLock />}

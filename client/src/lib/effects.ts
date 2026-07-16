@@ -1,5 +1,7 @@
 // Web Audio API sound effects (no external files) + confetti.
 
+import { hapticError, hapticSuccess } from './native';
+
 let _audioCtx: AudioContext | null = null;
 function getCtx(): AudioContext {
   if (!_audioCtx) {
@@ -10,6 +12,9 @@ function getCtx(): AudioContext {
 }
 
 export function playSound(type: 'correct' | 'wrong' | 'complete') {
+  // som e vibração andam juntos: todo acerto/erro dá feedback tátil no app nativo
+  if (type === 'wrong') hapticError();
+  else hapticSuccess();
   try {
     const ctx = getCtx();
     if (ctx.state === 'suspended') ctx.resume();

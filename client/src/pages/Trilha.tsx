@@ -24,6 +24,8 @@ import LessonModal from '../components/LessonModal';
 import { ProfileModal, AchievementsModal, SettingsModal, PhaseCompleteModal, DailyChallengeModal, RankingModal } from '../components/Modals';
 import Toasts, { type Toast } from '../components/Toasts';
 import { launchConfetti } from '../lib/effects';
+import { findNextPractice, findPreviousTheory } from '../lib/lessonContext';
+import { pushBackHandler } from '../lib/native';
 
 function TrilhaInner() {
   const navigate = useNavigate();
@@ -92,11 +94,20 @@ function TrilhaInner() {
     }
   }, [pendingPhase]);
 
+  // botão voltar do Android: fecha lição/modal aberto em vez de sair do app
+  useEffect(() => pushBackHandler(() => {
+    if (openIndex !== null) { closeLesson(); return true; }
+    if (nav !== 'trilha') { setNav('trilha'); return true; }
+    return false;
+  }), [openIndex, nav, closeLesson]);
+
   if (!authChecked) {
     return <div id="app-shell" style={{ alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>Carregando…</div>;
   }
 
   const lesson = openIndex !== null ? trackLessons[openIndex] : null;
+  const nextPractice = openIndex !== null ? findNextPractice(trackLessons, openIndex) : null;
+  const relatedTheory = openIndex !== null ? findPreviousTheory(trackLessons, openIndex) : null;
   const isTheoryQuiz = lesson?.type === 'theory' && (lesson.quiz?.length ?? 0) > 0;
   const isFill = lesson?.type === 'fill';
 
@@ -138,13 +149,13 @@ function TrilhaInner() {
       </div>
 
       {lesson && isTheoryQuiz && (
-        <LessonScreen lesson={lesson} onComplete={handleComplete} onClose={closeLesson} />
+        <LessonScreen lesson={lesson} nextPractice={nextPractice} onComplete={handleComplete} onClose={closeLesson} />
       )}
       {lesson && isFill && (
-        <FillScreen lesson={lesson} onComplete={handleComplete} onClose={closeLesson} />
+        <FillScreen lesson={lesson} relatedTheory={relatedTheory} onComplete={handleComplete} onClose={closeLesson} />
       )}
       {lesson && !isTheoryQuiz && !isFill && (
-        <LessonModal lesson={lesson} onComplete={handleComplete} onClose={closeLesson} />
+        <LessonModal lesson={lesson} relatedTheory={relatedTheory} onComplete={handleComplete} onClose={closeLesson} />
       )}
 
       {nav === 'diario' && <DailyChallengeModal onClose={() => setNav('trilha')} onToast={addToast} />}

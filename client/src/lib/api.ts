@@ -33,6 +33,80 @@ async function req<T>(path: string, opts: RequestInit = {}): Promise<T> {
   return data as T;
 }
 
+// ---- Fila offline ----
+// Escritas que falham (sem rede, API fora) entram numa fila no localStorage e
+// são reenviadas em flushPending() — chamado no evento 'online', quando o app
+// volta pro foreground e após o load inicial. Erros 4xx não entram na fila
+// (reenviar não resolve); só falha de rede/5xx.
+const QUEUE_KEY = 'pc_sync_queue_v1';
+const QUEUE_MAX = 200;
+
+interface PendingOp {
+  path: string;
+  body: unknown;
+  at: number;
+}
+
+function readQueue(): PendingOp[] {
+  try {
+    const raw = localStorage.getItem(QUEUE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch { /* fila corrompida: descarta */ }
+  return [];
+}
+
+function writeQueue(ops: PendingOp[]) {
+  localStorage.setItem(QUEUE_KEY, JSON.stringify(ops.slice(-QUEUE_MAX)));
+}
+
+function enqueue(path: string, body: unknown) {
+  // snapshot de progresso: só o mais recente importa — remove os anteriores
+  const base = path === '/api/progress'
+    ? readQueue().filter(op => op.path !== '/api/progress')
+    : readQueue();
+  writeQueue([...base, { path, body, at: Date.now() }]);
+}
+
+async function postOrQueue(path: string, body: unknown): Promise<void> {
+  try {
+    await req(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  } catch (e) {
+    // 4xx vem como Error com mensagem do servidor; falha de rede vem como
+    // TypeError do fetch. Só enfileira o que tem chance de funcionar depois.
+    if (e instanceof TypeError) enqueue(path, body);
+  }
+}
+
+let flushing = false;
+export async function flushPending(): Promise<void> {
+  if (flushing) return;
+  flushing = true;
+  try {
+    let ops = readQueue();
+    while (ops.length > 0) {
+      const op = ops[0];
+      try {
+        await req(op.path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(op.body),
+        });
+      } catch (e) {
+        if (e instanceof TypeError) break; // ainda sem rede: para e tenta depois
+        // erro do servidor (4xx): descarta a op, não trava a fila
+      }
+      ops = ops.slice(1);
+      writeQueue(ops);
+    }
+  } finally {
+    flushing = false;
+  }
+}
+
 export interface AuthResponse {
   ok: boolean;
   token: string;
@@ -84,27 +158,15 @@ export function getProgress() {
 }
 
 export function saveProgressRemote(progress: Progress) {
-  return req<{ ok: boolean }>('/api/progress', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(progress),
-  }).catch(() => {});
+  return postOrQueue('/api/progress', progress);
 }
 
 export function recordLessonCompletion(lessonId: string, xp: number) {
-  return req<{ ok: boolean }>('/api/lesson-completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ lessonId, xp }),
-  }).catch(() => {});
+  return postOrQueue('/api/lesson-completions', { lessonId, xp });
 }
 
 export function recordDailyChallenge(date: string, correct: number, total: number, xp: number) {
-  return req<{ ok: boolean }>('/api/daily-challenges', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ date, correct, total, xp }),
-  }).catch(() => {});
+  return postOrQueue('/api/daily-challenges', { date, correct, total, xp });
 }
 
 export function getRanking(period: 'global' | 'weekly' | 'monthly', track?: string) {
