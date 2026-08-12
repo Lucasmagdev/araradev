@@ -405,6 +405,24 @@ print(soma)`}</code></pre>
         </div>
       </section>
 
+      <section className="lp-ecosystem">
+        <div className="lp-container">
+          <h2 className="lp-section-title">Ecossistema</h2>
+          <div className="lp-eco-grid">
+            <a className="lp-eco-card" href="https://codexy.com.br/" target="_blank" rel="noopener">
+              <div className="lp-eco-icon">🚀</div>
+              <h3>Codexy</h3>
+              <p>Fábrica de software que constrói o TrilhaDev. Produtos digitais sob medida, do zero à produção.</p>
+            </a>
+            <a className="lp-eco-card" href="https://doctorchatbot.com.br/" target="_blank" rel="noopener">
+              <div className="lp-eco-icon">🩺</div>
+              <h3>DoctorChatBot</h3>
+              <p>Assistente de IA pra clínicas e consultórios, parceiro do time por trás do TrilhaDev.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section className="lp-faq">
         <div className="lp-container lp-faq-inner">
           <h2 className="lp-section-title">Perguntas frequentes</h2>
@@ -442,6 +460,7 @@ print(soma)`}</code></pre>
             <span>TrilhaDev</span>
           </span>
           <span className="lp-footer-copy">Trilha de fundamentos técnicos</span>
+          <span className="lp-footer-copy">Um produto <a href="https://codexy.com.br/" target="_blank" rel="noopener">Codexy</a> · parceiro <a href="https://doctorchatbot.com.br/" target="_blank" rel="noopener">DoctorChatBot</a></span>
         </div>
       </footer>
 

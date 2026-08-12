@@ -776,6 +776,46 @@ html { scroll-behavior: smooth; }
   .lp-footer { padding-bottom: 90px; }
 }
 
+/* ── Ecosystem ─────────────────────────────────────────────── */
+.lp-ecosystem {
+  padding: 80px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+  z-index: 1;
+}
+
+.lp-eco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.lp-eco-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+  transition: transform 0.18s ease, border-color 0.2s, box-shadow 0.2s;
+}
+
+.lp-eco-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--green) 55%, transparent);
+  box-shadow: 0 9px 0 rgba(0,0,0,0.2), 0 12px 26px color-mix(in srgb, var(--green) 16%, transparent);
+}
+
+.lp-eco-icon { font-size: 1.8rem; line-height: 1; }
+
+.lp-eco-card h3 { font-size: 1.05rem; font-weight: 800; color: var(--green); }
+
+.lp-eco-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; }
+
 /* ── CTA bottom ────────────────────────────────────────────── */
 .lp-cta-bottom {
   padding: 80px 0;
@@ -827,6 +867,9 @@ html { scroll-behavior: smooth; }
   font-size: 0.8rem;
   color: var(--text-muted);
 }
+
+.lp-footer-copy a { color: var(--green); text-decoration: none; }
+.lp-footer-copy a:hover { text-decoration: underline; }
 
 /* ── Auth modal ────────────────────────────────────────────── */
 .auth-overlay {
