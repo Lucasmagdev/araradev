@@ -295,6 +295,39 @@ body {
   color: var(--text);
 }
 
+/* ── Ecosystem ─────────────────────────────────────────────── */
+.lp-ecosystem {
+  padding: 80px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.lp-eco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.lp-eco-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.lp-eco-card:hover { border-color: rgba(88,204,2,0.4); transform: translateY(-2px); }
+
+.lp-eco-icon { font-size: 2rem; line-height: 1; }
+
+.lp-eco-card h3 { font-size: 1.05rem; font-weight: 800; color: var(--green); }
+
+.lp-eco-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; }
+
 /* ── CTA bottom ────────────────────────────────────────────── */
 .lp-cta-bottom {
   padding: 80px 0;

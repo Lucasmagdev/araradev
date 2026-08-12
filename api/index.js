@@ -1041,16 +1041,195 @@ app.get('/admin/api/client-errors', requireAdmin, async (req, res) => {
   }
 });
 
+// ── Landing page (server-side rendered) ─────────────────────────────────────
+
+function renderLanding() {
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>TrilhaDev — Aprenda a programar de verdade</title>
+  <meta name="description" content="Trilha gamificada e gratuita pra aprender fundamentos de programação: lógica, SQL, algoritmos, debug, testes e arquitetura. Um produto Codexy." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="landing.css?v=2" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="lp-header">
+    <div class="lp-header-inner">
+      <a href="/" class="lp-brand">
+        <img src="logoararadev.jpeg" class="lp-logo" alt="TrilhaDev" />
+        <span class="lp-brand-name">TrilhaDev</span>
+      </a>
+      <nav class="lp-nav">
+        <button class="lp-btn-ghost" id="btn-login">Entrar</button>
+        <button class="lp-btn-primary" id="btn-register">Cadastre-se</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="lp-hero">
+    <div class="lp-hero-inner">
+      <div class="lp-badge">59 lições · 8 fases · 100% gratuito</div>
+      <h1 class="lp-headline">
+        Aprenda a programar<br/>
+        <span class="lp-headline-green">de verdade.</span>
+      </h1>
+      <p class="lp-sub">
+        Trilha gamificada do zero aos fundamentos técnicos.
+        SQL, algoritmos, debug, testes e arquitetura — sem depender de IA.
+      </p>
+      <div class="lp-hero-cta">
+        <button class="lp-btn-primary lp-btn-lg" id="btn-start">Começar agora</button>
+        <a href="#fases" class="lp-btn-ghost lp-btn-lg">Ver trilha ↓</a>
+      </div>
+    </div>
+    <div class="lp-hero-visual">
+      <img src="logoararadev.jpeg" class="lp-hero-mascot" alt="TrilhaDev mascote" />
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="lp-features">
+    <div class="lp-container">
+      <div class="lp-feature-grid">
+        <div class="lp-feature-card">
+          <div class="lp-feature-icon">🗺️</div>
+          <h3>Trilha gamificada</h3>
+          <p>Cada lição desbloqueada abre a próxima. XP, streak diário e conquistas pra manter o ritmo.</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="lp-feature-icon">🧠</div>
+          <h3>Fundamentos reais</h3>
+          <p>Lógica, estruturas de dados, SQL, algoritmos, debug, testes e arquitetura. O que o mercado cobra.</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="lp-feature-icon">💾</div>
+          <h3>Progresso salvo</h3>
+          <p>Conta própria, progresso vinculado. Continue de qualquer dispositivo, qualquer hora.</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="lp-feature-icon">⚡</div>
+          <h3>Ritmo seu</h3>
+          <p>2–3 lições por dia. Em 3–4 semanas você cobre toda a trilha de fundamentos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASES -->
+  <section class="lp-phases" id="fases">
+    <div class="lp-container">
+      <h2 class="lp-section-title">As 8 fases da trilha</h2>
+      <div class="lp-phases-grid">
+        <div class="lp-phase"><span class="lp-phase-num">01</span><span class="lp-phase-name">Lógica de programação</span></div>
+        <div class="lp-phase"><span class="lp-phase-num">02</span><span class="lp-phase-name">Estruturas de dados</span></div>
+        <div class="lp-phase"><span class="lp-phase-num">03</span><span class="lp-phase-name">Recursão</span></div>
+        <div class="lp-phase"><span class="lp-phase-num">04</span><span class="lp-phase-name">Algoritmos clássicos</span></div>
+        <div class="lp-phase"><span class="lp-phase-num">05</span><span class="lp-phase-name">SQL</span></div>
+        <div class="lp-phase"><span class="lp-phase-num">06</span><span class="lp-phase-name">Debug &amp; IA</span></div>
+        <div class="lp-phase"><span class="lp-phase-num">07</span><span class="lp-phase-name">Testes</span></div>
+        <div class="lp-phase"><span class="lp-phase-num">08</span><span class="lp-phase-name">Arquitetura &amp; segurança</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ECOSYSTEM -->
+  <section class="lp-ecosystem" id="ecossistema">
+    <div class="lp-container">
+      <h2 class="lp-section-title">Ecossistema</h2>
+      <div class="lp-eco-grid">
+        <a class="lp-eco-card" href="https://codexy.com.br/" target="_blank" rel="noopener">
+          <div class="lp-eco-icon">🚀</div>
+          <h3>Codexy</h3>
+          <p>Fábrica de software que constrói o TrilhaDev. Produtos digitais sob medida, do zero à produção.</p>
+        </a>
+        <a class="lp-eco-card" href="https://doctorchatbot.com.br/" target="_blank" rel="noopener">
+          <div class="lp-eco-icon">🩺</div>
+          <h3>DoctorChatBot</h3>
+          <p>Assistente de IA pra clínicas e consultórios, parceiro do time por trás do TrilhaDev.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section class="lp-cta-bottom">
+    <div class="lp-container lp-cta-inner">
+      <h2>Pronto pra começar?</h2>
+      <p>Crie sua conta grátis e inicie a trilha agora.</p>
+      <button class="lp-btn-primary lp-btn-lg" id="btn-start2">Criar conta grátis</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="lp-footer">
+    <div class="lp-container lp-footer-inner">
+      <span class="lp-brand">
+        <img src="logoararadev.jpeg" class="lp-logo-sm" alt="" />
+        <span>TrilhaDev</span>
+      </span>
+      <span class="lp-footer-copy">Trilha de fundamentos técnicos</span>
+      <span class="lp-footer-copy">Um produto <a href="https://codexy.com.br/" target="_blank" rel="noopener">Codexy</a> · parceiro <a href="https://doctorchatbot.com.br/" target="_blank" rel="noopener">DoctorChatBot</a></span>
+    </div>
+  </footer>
+
+  <!-- AUTH MODAL -->
+  <div id="auth-overlay" class="auth-overlay hidden">
+    <div class="auth-card">
+      <button class="auth-close" id="auth-close">✕</button>
+      <div class="auth-brand">
+        <img src="logoararadev.jpeg" class="auth-logo" alt="TrilhaDev" />
+        <span class="auth-brand-name">TrilhaDev</span>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Entrar</button>
+        <button class="auth-tab" data-tab="register">Criar conta</button>
+      </div>
+
+      <form id="auth-form" autocomplete="off">
+        <div id="auth-name-wrap" class="auth-field" style="display:none">
+          <label>Nome</label>
+          <input id="auth-name" type="text" placeholder="Seu nome" />
+        </div>
+        <div class="auth-field">
+          <label>Email</label>
+          <input id="auth-email" type="email" placeholder="seu@email.com" />
+        </div>
+        <div class="auth-field">
+          <label>Senha</label>
+          <input id="auth-password" type="password" placeholder="Mínimo 6 caracteres" />
+        </div>
+        <p id="auth-error" class="auth-error" style="display:none"></p>
+        <button type="submit" id="auth-submit" class="auth-btn">ENTRAR</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="landing.js?v=1"></script>
+</body>
+</html>`;
+}
+
+app.get('/', (req, res) => res.send(renderLanding()));
+
 // ── Static files ──────────────────────────────────────────────────────────────
 
 const WEB_DIR = path.join(__dirname, '..', 'app');
-app.use(express.static(WEB_DIR));
+app.use(express.static(WEB_DIR, { index: false }));
 
-// SPA fallback — React Router (BrowserRouter): qualquer GET que não seja
-// API/admin devolve o index.html pro roteamento client-side.
+// Fallback SSR: qualquer GET que não seja API/admin/asset devolve a landing
+// gerada no servidor (mesmo tratamento de "/").
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api') || req.path.startsWith('/auth') || req.path.startsWith('/admin')) return next();
-  res.sendFile(path.join(WEB_DIR, 'index.html'));
+  res.send(renderLanding());
 });
 
 app.listen(PORT, () => console.log(`TrilhaDev running → http://localhost:${PORT}`));
