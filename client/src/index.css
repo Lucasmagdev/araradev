@@ -4,6 +4,7 @@
    Landing styles are scoped under .lp-page so they don't leak. */
 @import "./styles/app.css";
 @import "./styles/landing.css";
+@import "./styles/blog.css";
 
 html, body, #root {
   margin: 0;

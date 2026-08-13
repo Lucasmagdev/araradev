@@ -1,0 +1,91 @@
+/* Escopado sob .lp-page (mesmas variáveis --green/--bg/--card/--border/--text
+   já definidas em landing.css). */
+
+.blog-list-page,
+.blog-post-page {
+  padding: 120px 0 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.blog-list-title { text-align: left; }
+.blog-list-sub { text-align: left; margin-bottom: 40px; }
+
+.blog-empty {
+  color: var(--text-muted);
+  padding: 40px 0;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.blog-card {
+  display: block;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.blog-card:hover {
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+
+.blog-card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.blog-card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.blog-post-article {
+  max-width: 720px;
+}
+
+.blog-post-article h1 {
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.blog-post-body h2,
+.blog-post-body h3,
+.blog-post-body h4 {
+  margin: 28px 0 12px;
+}
+
+.blog-post-body p {
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.blog-post-body ul {
+  margin: 0 0 16px 20px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.blog-post-cta {
+  margin-top: 48px;
+  padding: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.blog-post-cta p {
+  margin-bottom: 16px;
+  color: var(--text-muted);
+}
