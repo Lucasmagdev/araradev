@@ -1,0 +1,96 @@
+{
+  "title": "Função pura vs efeito colateral",
+  "excerpt": "Entenda a diferença entre função pura e efeito colateral para melhorar seu código e impressionar em entrevistas técnicas.",
+  "category": "Lógica de programação",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "A definição de uma função é um dos conceitos mais básicos da programação, mas muitos iniciantes ainda não entendem a diferença entre uma função pura e uma que causa efeito colateral. Isso pode ser especialmente problemático durante entrevistas técnicas, onde os entrevistadores podem perguntar sobre o comportamento de funções comuns. Uma função pura é aquela que sempre produz o mesmo resultado para um conjunto específico de entradas, sem alterar ou modificar o estado do sistema em que está sendo executada. Ela não depende de variáveis globais ou externas e não causa efeitos colaterais indesejados. Por outro lado, uma função impura pode causar mudanças no estado do sistema, como atualizar uma base de dados ou alterar um valor global. Isso pode levar a comportamentos imprevisíveis e difíceis de debugar se não forem entendidos corretamente. Durante entrevistas técnicas, os entrevistadores podem perguntar sobre funções que realizam operações de leitura ou escrita em arquivos, bases de dados ou variáveis globais, o que pode ser um claro indicativo de uma função impura."
+    },
+    {
+      "type": "heading",
+      "text": "Função pura"
+    },
+    {
+      "type": "paragraph",
+      "text": "Uma função pura é aquela que sempre produz a mesma saída para um determinado conjunto de entradas, sem causar efeitos colaterais. Isso significa que a função não depende do estado global ou da memória e não muda o estado interno do programa. Para entender melhor esse conceito, imagine uma função matemática simples como a soma de dois números. Nesse caso, independentemente das entradas fornecidas, a saída sempre será a mesma, seguindo as regras da matemática. Já em um programa que manipula dados em uma lista, por exemplo, é comum encontrar funções impuras, pois elas dependem do estado interno do programa e podem causar mudanças nesse estado. Por outro lado, uma função pura não afetaria a lista original, retornando apenas o resultado da operação realizada. Outros exemplos de funções puras incluem a manipulação de strings e arrays, onde as entradas são sempre tratadas de forma consistente, sem causar alterações no programa."
+    },
+    {
+      "type": "list",
+      "items": [
+        "A saída é sempre igual para uma mesma entrada.",
+        "Não depende do estado global ou da memória.",
+        "Não muda o estado interno do programa."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Efeito colateral"
+    },
+    {
+      "type": "paragraph",
+      "text": "Um efeito colateral é uma alteração no estado do programa que não está relacionada à saída da função. Isso pode incluir mudanças na memória, na base de dados ou em outros componentes do sistema. Por exemplo, quando uma função escreve um arquivo no disco rígido, ela está causando um efeito colateral porque a alteração no estado do programa não é apenas a saída da função, mas também a escrita efetiva dos dados no arquivo. Outro exemplo é quando uma função envia uma mensagem por email, nesse caso, o efeito colateral é a alteração na quantidade de mensagens armazenadas no servidor de correio. Além disso, funções que atualizam bases de dados também causam efeitos colaterais, pois estão alterando o estado da base de dados, seja inserindo novos registros ou atualizando informações existentes. É importante notar que esses efeitos colaterais podem ser desejados ou indesejados, dependendo do contexto em que a função está sendo utilizada. Em alguns casos, os desenvolvedores podem querer evitar esses efeitos colaterais para manter a consistência e integridade dos dados."
+    },
+    {
+      "type": "list",
+      "items": [
+        "A saída não é sempre igual para uma mesma entrada.",
+        "Depende do estado global ou da memória.",
+        "Muda o estado interno do programa."
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Por que a pergunta sobre função pura vs efeito colateral é um clássico em entrevistas técnicas? A resposta está no fato de que essa é uma habilidade fundamental para qualquer desenvolvedor. Uma função pura é aquela cujo resultado depende apenas dos argumentos passados, sem causar alterações externas ao código. Já o efeito colateral ocorre quando a função modifica variáveis globais ou causa efeitos não intencionais no programa. Essa distinção pode parecer simples, mas é crucial para garantir que os programas sejam previsíveis e fáceis de manter. Além disso, o uso excessivo de efeitos colaterais pode levar a problemas difíceis de identificar e resolver. Em entrevistas técnicas, o objetivo da pergunta não é apenas testar a memória do candidato, mas sim avaliar sua capacidade de pensar criticamente sobre o código e entender as implicações das decisões de design que ele toma."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ao questionar sobre a natureza das funções em uma entrevista técnica, os entrevistadores buscam avaliar não apenas o conhecimento do candidato sobre conceitos de programação, mas também sua capacidade de pensar criticamente sobre o design e a manutenção de sistemas. Funções puras são consideradas mais fáceis de testar e depurar porque seu comportamento é previsível e isolado, o que facilita a identificação e resolução de problemas. Além disso, funções puras podem ser reutilizadas em diferentes partes do código sem causar interferências indesejadas. Por outro lado, funções com efeitos colaterais podem levar a problemas de concorrência e estabilidade, pois afetam variáveis externas que não são controladas pela função em questão. Isso pode ser comparado à diferença entre uma bomba d'água que simplesmente bombeia água (função pura) e outra que também regula o nível da piscina (função com efeito colateral). Em sistemas de alta disponibilidade, como bancos de dados ou servidores web, a presença de funções com efeitos colaterais pode levar a falhas catastróficas. Portanto, é fundamental que os desenvolvedores entendam a importância da separação entre a responsabilidade da função e o impacto sobre o sistema em geral."
+    },
+    {
+      "type": "heading",
+      "text": "Exemplos"
+    },
+    {
+      "type": "paragraph",
+      "text": "A diferenciação entre funções puras e impuras é uma abordagem fundamental na programação funcional. Uma função pura é aquela que não altera o estado do programa, não tem efeitos colaterais e produz sempre o mesmo resultado para as mesmas entradas, independentemente de quando for chamada. Por outro lado, uma função impura pode ter um ou mais dos seguintes comportamentos: dependência de entrada não determinística, acesso a variáveis globais ou estado do programa, modificações no estado do programa e efeitos colaterais. Para entender melhor essas diferenças práticas, considere os exemplos clássicos de funções puras e impuras. Uma função que calcula o fatorial de um número é pura porque produz sempre o mesmo resultado para as mesmas entradas e não altera o estado do programa. Já uma função que lê dados de um arquivo, por exemplo, pode ser considerada impura porque depende de entrada não determinística (o conteúdo do arquivo) e pode ter efeitos colaterais se causar a sobrecarga do sistema de arquivos."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Função pura: `def soma(a, b): return a + b`",
+        "Função impura: `def escreve_arquivo(nome, conteudo): with open(nome, 'w') as f: f.write(conteudo)`"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Conclusão"
+    },
+    {
+      "type": "paragraph",
+      "text": "Em resumo, é fundamental entender a diferença entre funções puras e impuras para escrever código mais limpo, testável e manutenível. Isso se deve ao fato de que as funções puras são aquelas que não têm efeitos colaterais, ou seja, elas não mudam o estado externo do programa, enquanto as funções impuras, por outro lado, podem afetar o estado externo do programa. Por exemplo, uma função pura pode calcular a soma de dois números, enquanto uma função impura pode alterar um valor em uma variável global. A capacidade de distinguir entre esses tipos de funções é crucial para garantir que o código seja fácil de entender e manter, além de ser testado de forma eficaz. Além disso, a habilidade de explicar conceitos básicos da programação, como a diferença entre funções puras e impuras, é altamente valorizada em entrevistas técnicas, onde a capacidade de resolver problemas e escrever código limpo e manutenível é fundamental para qualquer desenvolvedor. Portanto, é essencial que os programadores tenham uma boa compreensão desses conceitos para se destacar em suas carreiras e impressionar em entrevistas técnicas."
+    }
+  ],
+  "faq": [
+    {
+      "question": "O que é uma função pura?",
+      "answer": "Uma função pura é aquela que sempre produz a mesma saída para um determinado conjunto de entradas, sem causar efeitos colaterais."
+    },
+    {
+      "question": "O que é um efeito colateral?",
+      "answer": "Um efeito colateral é uma alteração no estado do programa que não está relacionada à saída da função."
+    },
+    {
+      "question": "Por que é importante entender a diferença entre funções puras e impuras?",
+      "answer": "É fundamental entender a diferença para escrever código mais limpo, testável e manutenível, e também para impressionar em entrevistas técnicas."
+    }
+  ],
+  "slug": "funcao-pura-vs-efeito-colateral",
+  "publishedAt": "2026-08-14",
+  "seo": {
+    "title": "Função pura vs efeito colateral | Blog TrilhaDev",
+    "description": "Entenda a diferença entre função pura e efeito colateral para melhorar seu código e impressionar em entrevistas técnicas."
+  },
+  "coverImage": "/images/blog/funcao-pura-vs-efeito-colateral-cover.jpg",
+  "coverImageAlt": "Vibrant close-up of multicolor programming code lines displayed on a screen."
+}
