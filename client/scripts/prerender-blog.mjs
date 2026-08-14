@@ -2,17 +2,14 @@
 // Gera HTML estático por post de blog, igual em espírito a
 // prerender-landing.mjs: injeta um snapshot do conteúdo em <div id="root">
 // pra crawlers/first-paint (React troca por hidratação client-side depois).
+// Mesmo schema rico (blocks + FAQ + categoria + capa) usado por
+// site1/doctorchatbot (ver generate-blog-trilhadev.mjs no lado da VPS).
 //
-// Diferença: aqui não é 1 arquivo (dist/index.html), são N arquivos —
-// dist/blog/index.html (listagem) e dist/blog/<slug>/index.html (1 por
-// post) — porque cada post precisa de <title>/description próprios pra SEO
-// de verdade. Funciona sem mudar nginx: com "try_files $uri $uri/
+// Gera dist/blog/index.html (listagem) e dist/blog/<slug>/index.html (1 por
+// post) — cada post com <title>/description/JSON-LD próprios pra SEO de
+// verdade. Funciona sem mudar nginx: com "try_files $uri $uri/
 // /index.html" (padrão SPA), uma request pra /blog/<slug>/ já resolve pro
 // arquivo físico dist/blog/<slug>/index.html se ele existir.
-//
-// Conversor markdown->HTML é uma cópia minimalista do de
-// src/lib/markdown.ts (mesmo motivo de duplicar dados do prerender-landing:
-// esse script roda com node puro, sem TS/bundler).
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -23,36 +20,26 @@ const DIST_DIR = join(__dirname, '..', 'dist');
 const DIST_INDEX = join(DIST_DIR, 'index.html');
 const CONTENT_DIR = join(__dirname, '..', '..', 'content', 'blog');
 const SITE_URL = 'https://trilhadev.app.br';
+const WORDS_PER_MINUTE = 200;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const inline = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
-function renderMarkdown(md) {
-  const lines = md.replace(/\r\n/g, '\n').split('\n');
-  const html = [];
-  let listBuffer = [];
-  const flushList = () => {
-    if (listBuffer.length === 0) return;
-    html.push(`<ul>${listBuffer.map((item) => `<li>${inline(item)}</li>`).join('')}</ul>`);
-    listBuffer = [];
-  };
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (!line) { flushList(); continue; }
-    const heading = line.match(/^(#{1,3})\s+(.*)$/);
-    if (heading) {
-      flushList();
-      const level = heading[1].length;
-      html.push(`<h${level + 1}>${inline(heading[2])}</h${level + 1}>`);
-      continue;
-    }
-    const listItem = line.match(/^[-*]\s+(.*)$/);
-    if (listItem) { listBuffer.push(listItem[1]); continue; }
-    flushList();
-    html.push(`<p>${inline(line)}</p>`);
-  }
-  flushList();
-  return html.join('\n');
+function slugifyHeading(text) {
+  return String(text)
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+function estimateReadingMinutes(post) {
+  const words = post.content
+    .map((b) => b.text ?? (b.items ?? []).join(' '))
+    .join(' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
 function loadPosts() {
@@ -95,6 +82,20 @@ function withRoot(html, markup) {
   return html.replace(rootRe, `<div id="root">${markup}</div>\n  $1`);
 }
 
+function renderBlock(block, i) {
+  if (block.type === 'heading') {
+    return `<h2 id="${slugifyHeading(block.text)}">${esc(block.text)}</h2>`;
+  }
+  if (block.type === 'list') {
+    return `<ul>${(block.items ?? []).map((item) => `<li>${esc(item)}</li>`).join('')}</ul>`;
+  }
+  return `<p>${esc(block.text)}</p>`;
+}
+
+function jsonLd(obj) {
+  return `<script type="application/ld+json">${JSON.stringify(obj)}</script>`;
+}
+
 const posts = loadPosts();
 
 let template;
@@ -110,7 +111,7 @@ const listMarkup = `<div class="lp-page"><main class="blog-list-page"><div class
   <h1 class="lp-section-title blog-list-title">Blog TrilhaDev</h1>
   ${posts.length === 0
     ? '<p class="blog-empty">Ainda não tem post publicado. Volta em breve.</p>'
-    : `<div class="blog-grid">${posts.map((p) => `<a class="blog-card" href="/blog/${p.slug}/"><h2>${esc(p.title)}</h2><p>${esc(p.excerpt)}</p></a>`).join('')}</div>`}
+    : `<div class="blog-grid">${posts.map((p) => `<a class="blog-card" href="/blog/${p.slug}/">${p.coverImage ? `<div class="blog-card-cover"><img src="${p.coverImage}" alt="" /></div>` : ''}<span class="blog-card-category">${esc(p.category ?? '')}</span><h2>${esc(p.title)}</h2><p>${esc(p.excerpt)}</p></a>`).join('')}</div>`}
 </div></main></div>`;
 
 const listHtml = withMeta(withRoot(template, listMarkup), {
@@ -123,15 +124,58 @@ writeFileSync(join(DIST_DIR, 'blog', 'index.html'), listHtml);
 
 // Um HTML por post
 for (const post of posts) {
-  const markup = `<div class="lp-page"><main class="blog-post-page"><article class="lp-container blog-post-article">
-    <h1>${esc(post.title)}</h1>
-    <div class="blog-post-body">${renderMarkdown(post.contentMd)}</div>
-  </article></main></div>`;
+  const headings = post.content.filter((b) => b.type === 'heading' && b.text);
+  const readingMinutes = estimateReadingMinutes(post);
+  const pageUrl = `${SITE_URL}/blog/${post.slug}/`;
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.seo?.description ?? post.excerpt,
+    datePublished: post.publishedAt,
+    url: pageUrl,
+    ...(post.coverImage ? { image: `${SITE_URL}${post.coverImage}` } : {}),
+    publisher: { '@type': 'Organization', name: 'TrilhaDev' },
+  };
+  const faqSchema = (post.faq ?? []).length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: post.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: { '@type': 'Answer', text: item.answer },
+        })),
+      }
+    : null;
+
+  const markup = `<div class="lp-page"><main class="blog-post-page"><div class="lp-container blog-post-grid">
+    <article class="blog-post-article">
+      <span class="blog-card-category">${esc(post.category ?? '')}</span>
+      <h1>${esc(post.title)}</h1>
+      <div class="blog-post-meta">
+        <span>${new Date(post.publishedAt + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+        <span>${readingMinutes} min de leitura</span>
+        ${post.source ? `<span>Inspirado em <a href="${esc(post.source.url)}" target="_blank" rel="noopener noreferrer">${esc(post.source.label)}</a></span>` : ''}
+      </div>
+      ${post.coverImage ? `<div class="blog-post-cover"><img src="${post.coverImage}" alt="${esc(post.coverImageAlt ?? post.title)}" /></div>` : ''}
+      <div class="blog-post-body">${post.content.map(renderBlock).join('\n')}</div>
+      <div class="blog-post-cta">
+        <p>Curtiu? A trilha gamificada de fundamentos do TrilhaDev é grátis.</p>
+        <a href="/" class="lp-btn-primary lp-btn-lg">Criar conta grátis</a>
+      </div>
+      ${(post.faq ?? []).length > 0 ? `<div class="blog-post-faq"><h2>Perguntas frequentes</h2>${post.faq.map((item) => `<details><summary>${esc(item.question)}</summary><p>${esc(item.answer)}</p></details>`).join('')}</div>` : ''}
+    </article>
+    <aside class="blog-post-sidebar">
+      ${headings.length > 1 ? `<nav class="blog-post-toc"><div class="blog-post-toc-title">Neste artigo</div><ol>${headings.map((h) => `<li><a href="#${slugifyHeading(h.text)}">${esc(h.text)}</a></li>`).join('')}</ol></nav>` : ''}
+    </aside>
+  </div></main>${jsonLd(articleSchema)}${faqSchema ? jsonLd(faqSchema) : ''}</div>`;
 
   const postHtml = withMeta(withRoot(template, markup), {
-    title: `${post.title} — Blog TrilhaDev`,
-    description: post.excerpt,
-    canonical: `${SITE_URL}/blog/${post.slug}/`,
+    title: post.seo?.title ?? `${post.title} — Blog TrilhaDev`,
+    description: post.seo?.description ?? post.excerpt,
+    canonical: pageUrl,
   });
 
   const postDir = join(DIST_DIR, 'blog', post.slug);
