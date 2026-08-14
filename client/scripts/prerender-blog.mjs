@@ -42,6 +42,20 @@ function estimateReadingMinutes(post) {
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
+// Schema mudou ao longo do tempo (versão antiga era markdown solto, sem
+// "content"/"faq"). Um arquivo com schema velho não pode derrubar o build
+// inteiro — pula com aviso em vez de deixar .map/.filter estourar no meio
+// do loop (que travaria ANTES do rsync rodar, via "set -e" no shell script
+// que chama isso).
+function isValidPost(post) {
+  return (
+    typeof post.title === 'string' &&
+    typeof post.slug === 'string' &&
+    Array.isArray(post.content) &&
+    Array.isArray(post.faq)
+  );
+}
+
 function loadPosts() {
   let files = [];
   try {
@@ -50,7 +64,13 @@ function loadPosts() {
     return [];
   }
   return files
-    .map((f) => JSON.parse(readFileSync(join(CONTENT_DIR, f), 'utf8')))
+    .map((f) => ({ f, post: JSON.parse(readFileSync(join(CONTENT_DIR, f), 'utf8')) }))
+    .filter(({ f, post }) => {
+      if (isValidPost(post)) return true;
+      console.error(`[prerender-blog] pulando ${f}: schema inválido (não bate com o formato atual)`);
+      return false;
+    })
+    .map(({ post }) => post)
     .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''));
 }
 

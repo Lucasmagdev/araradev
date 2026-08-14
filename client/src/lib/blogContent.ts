@@ -33,8 +33,16 @@ const modules = import.meta.glob<{ default: BlogPostContent }>(
   { eager: true }
 );
 
+// Schema mudou ao longo do tempo — um arquivo com formato antigo não pode
+// quebrar a listagem inteira, então filtra antes de renderizar.
+function isValidPost(post: unknown): post is BlogPostContent {
+  const p = post as Partial<BlogPostContent>;
+  return typeof p.title === 'string' && typeof p.slug === 'string' && Array.isArray(p.content) && Array.isArray(p.faq);
+}
+
 export const BLOG_POSTS: BlogPostContent[] = Object.values(modules)
   .map((m) => m.default)
+  .filter(isValidPost)
   .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''));
 
 export function getBlogPost(slug: string): BlogPostContent | undefined {
