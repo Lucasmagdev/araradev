@@ -204,7 +204,7 @@ export default function Onboarding() {
 
       {step === 1 && (
         <section className="ob-card intro">
-          <img src="/logoararadev.jpeg" className="ob-mascot" alt="TrilhaDev" />
+          <img src="/logoararadev.png" className="ob-mascot" alt="TrilhaDev" />
           <h1>Vamos montar sua trilha?</h1>
           <p>Antes de começar, responda rapidinho para o TrilhaDev ajustar ritmo, foco e ponto de partida.</p>
           <button className="ob-primary" onClick={() => setStep(2)}>Continuar</button>
@@ -280,7 +280,7 @@ export default function Onboarding() {
 
       {step === 7 && (
         <section className="ob-card account">
-          <img src="/logoararadev.jpeg" className="ob-mascot" alt="TrilhaDev" />
+          <img src="/logoararadev.png" className="ob-mascot" alt="TrilhaDev" />
           <h1>Sua trilha esta pronta</h1>
           <p>Crie sua conta gratis para salvar o plano, XP, vidas e progresso.</p>
           <form className="ob-account-form" onSubmit={createAccount}>
@@ -334,7 +334,7 @@ export default function Onboarding() {
           <div className="auth-card">
             <button className="auth-close" onClick={() => setLoginOpen(false)}>✕</button>
             <div className="auth-brand">
-              <img src="/logoararadev.jpeg" className="auth-logo" alt="TrilhaDev" />
+              <img src="/logoararadev.png" className="auth-logo" alt="TrilhaDev" />
               <span className="auth-brand-name">TrilhaDev</span>
             </div>
             <h2 style={{ textAlign: 'center', margin: '0 0 16px' }}>Entrar</h2>

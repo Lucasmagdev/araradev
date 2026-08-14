@@ -20,7 +20,7 @@ export default function Header() {
     <header className="topbar">
       <div className="topbar-main">
         <div className="topbar-brand">
-          <img src="/logoararadev.jpeg" className="brand-mascote" alt="TrilhaDev" />
+          <img src="/logoararadev.png" className="brand-mascote" alt="TrilhaDev" />
           <span className="brand-name">TrilhaDev</span>
         </div>
 

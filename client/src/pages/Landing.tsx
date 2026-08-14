@@ -225,7 +225,7 @@ export default function Landing() {
       <header className="lp-header">
         <div className="lp-header-inner">
           <a href="/" className="lp-brand">
-            <img src="/logoararadev.jpeg" className="lp-logo" alt="TrilhaDev" />
+            <img src="/logoararadev.png" className="lp-logo" alt="TrilhaDev" />
             <span className="lp-brand-name">TrilhaDev</span>
           </a>
           <nav className="lp-nav">
@@ -261,7 +261,7 @@ export default function Landing() {
             <div className="lp-phone-screen">
               <div className="lp-mini-top">
                 <span className="lp-mini-brand">
-                  <img src="/logoararadev.jpeg" alt="" className="lp-mini-logo" /> TrilhaDev
+                  <img src="/logoararadev.png" alt="" className="lp-mini-logo" /> TrilhaDev
                 </span>
                 <span className="lp-mini-xp">{ICONS.bolt2} 480</span>
               </div>
@@ -456,7 +456,7 @@ print(soma)`}</code></pre>
       <footer className="lp-footer">
         <div className="lp-container lp-footer-inner">
           <span className="lp-brand">
-            <img src="/logoararadev.jpeg" className="lp-logo-sm" alt="" />
+            <img src="/logoararadev.png" className="lp-logo-sm" alt="" />
             <span>TrilhaDev</span>
           </span>
           <span className="lp-footer-copy">Trilha de fundamentos técnicos</span>
@@ -474,7 +474,7 @@ print(soma)`}</code></pre>
           <div className="auth-card">
             <button className="auth-close" onClick={() => setAuthOpen(false)}>✕</button>
             <div className="auth-brand">
-              <img src="/logoararadev.jpeg" className="auth-logo" alt="TrilhaDev" />
+              <img src="/logoararadev.png" className="auth-logo" alt="TrilhaDev" />
               <span className="auth-brand-name">TrilhaDev</span>
             </div>
 
