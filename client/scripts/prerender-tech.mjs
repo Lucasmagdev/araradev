@@ -165,6 +165,7 @@ for (const page of pages) {
         <p>Curtiu? A trilha gamificada de fundamentos do TrilhaDev é grátis.</p>
         <a href="/" class="lp-btn-primary lp-btn-lg">Criar conta grátis</a>
       </div>
+      ${page.partner ? `<div class="blog-post-cta"><p>${esc(page.partner.description)}</p><a href="${esc(page.partner.url)}" target="_blank" rel="noopener" class="lp-btn-primary lp-btn-lg">Conhecer ${esc(page.partner.name)}</a></div>` : ''}
       ${(page.faq ?? []).length > 0 ? `<div class="blog-post-faq"><h2>Perguntas frequentes</h2>${page.faq.map((item) => `<details><summary>${esc(item.question)}</summary><p>${esc(item.answer)}</p></details>`).join('')}</div>` : ''}
     </article>
     <aside class="blog-post-sidebar">

@@ -13,6 +13,12 @@ export interface TechFaqItem {
   answer: string;
 }
 
+export interface CrossLinkPartner {
+  name: string;
+  url: string;
+  description: string;
+}
+
 export interface TechPageContent {
   title: string;
   slug: string;
@@ -24,6 +30,7 @@ export interface TechPageContent {
   seo: { title: string; description: string };
   coverImage?: string;
   coverImageAlt?: string;
+  partner?: CrossLinkPartner;
 }
 
 const modules = import.meta.glob<{ default: TechPageContent }>(

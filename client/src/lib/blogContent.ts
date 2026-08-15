@@ -14,6 +14,12 @@ export interface BlogFaqItem {
   answer: string;
 }
 
+export interface CrossLinkPartner {
+  name: string;
+  url: string;
+  description: string;
+}
+
 export interface BlogPostContent {
   title: string;
   slug: string;
@@ -26,6 +32,7 @@ export interface BlogPostContent {
   coverImage?: string;
   coverImageAlt?: string;
   source?: { label: string; url: string };
+  partner?: CrossLinkPartner;
 }
 
 const modules = import.meta.glob<{ default: BlogPostContent }>(

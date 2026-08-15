@@ -106,6 +106,15 @@ export default function BlogPost() {
               <a href="/" className="lp-btn-primary lp-btn-lg">Criar conta grátis</a>
             </div>
 
+            {post.partner && (
+              <div className="blog-post-cta">
+                <p>{post.partner.description}</p>
+                <a href={post.partner.url} target="_blank" rel="noopener" className="lp-btn-primary lp-btn-lg">
+                  Conhecer {post.partner.name}
+                </a>
+              </div>
+            )}
+
             {post.faq.length > 0 && (
               <div className="blog-post-faq">
                 <h2>Perguntas frequentes</h2>
