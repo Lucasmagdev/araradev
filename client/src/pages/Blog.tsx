@@ -7,7 +7,7 @@ export default function Blog() {
       <header className="lp-header">
         <div className="lp-header-inner">
           <a href="/" className="lp-brand">
-            <img src="/logoararadev.jpeg" className="lp-logo" alt="TrilhaDev" />
+            <img src="/logoararadev.png" className="lp-logo" alt="TrilhaDev" />
             <span className="lp-brand-name">TrilhaDev</span>
           </a>
           <nav className="lp-nav">
@@ -47,7 +47,7 @@ export default function Blog() {
       <footer className="lp-footer">
         <div className="lp-container lp-footer-inner">
           <span className="lp-brand">
-            <img src="/logoararadev.jpeg" className="lp-logo-sm" alt="" />
+            <img src="/logoararadev.png" className="lp-logo-sm" alt="" />
             <span>TrilhaDev</span>
           </span>
           <span className="lp-footer-copy">Trilha de fundamentos técnicos</span>

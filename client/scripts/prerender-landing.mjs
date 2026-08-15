@@ -101,7 +101,7 @@ const markup = `<div class="lp-page">
   <header class="lp-header">
     <div class="lp-header-inner">
       <a href="/" class="lp-brand">
-        <img src="/logoararadev.jpeg" class="lp-logo" alt="TrilhaDev" />
+        <img src="/logoararadev.png" class="lp-logo" alt="TrilhaDev" />
         <span class="lp-brand-name">TrilhaDev</span>
       </a>
       <nav class="lp-nav">
@@ -135,7 +135,7 @@ const markup = `<div class="lp-page">
       <div class="lp-phone">
         <div class="lp-phone-screen">
           <div class="lp-mini-top">
-            <span class="lp-mini-brand"><img src="/logoararadev.jpeg" alt="" class="lp-mini-logo" /> TrilhaDev</span>
+            <span class="lp-mini-brand"><img src="/logoararadev.png" alt="" class="lp-mini-logo" /> TrilhaDev</span>
             <span class="lp-mini-xp">480</span>
           </div>
           <div class="lp-mini-fase">FASE 1 · Lógica de programação</div>
@@ -284,7 +284,7 @@ print(soma)</code></pre>
   <footer class="lp-footer">
     <div class="lp-container lp-footer-inner">
       <span class="lp-brand">
-        <img src="/logoararadev.jpeg" class="lp-logo-sm" alt="" />
+        <img src="/logoararadev.png" class="lp-logo-sm" alt="" />
         <span>TrilhaDev</span>
       </span>
       <span class="lp-footer-copy">Trilha de fundamentos técnicos</span>

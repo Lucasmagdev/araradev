@@ -29,7 +29,7 @@ export function ProfileModal({ onClose }: { onClose: () => void }) {
     <Overlay onClose={onClose}>
       <button className="close" onClick={onClose}>×</button>
       <div style={{ textAlign: 'center', marginBottom: 4 }}>
-        <img src="/logoararadev.jpeg" className="avatar-display" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--green)' }} alt="TrilhaDev" />
+        <img src="/logoararadev.png" className="avatar-display" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--green)' }} alt="TrilhaDev" />
         <h3 className="profile-name">{user?.name || '...'}</h3>
         <p className="profile-email">{user?.email || ''}</p>
       </div>
