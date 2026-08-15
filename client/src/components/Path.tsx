@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { isUnlocked } from '../lib/progress';
 import { IconBook, IconCode, IconCheck, IconLock, IconList } from './icons';
@@ -98,7 +98,7 @@ export default function Path({ track, onOpenLesson }: { track: Track; onOpenLess
 
         return (
           <div key={g.unit}>
-            <div className="fase-banner" style={{ background: color }}>
+            <div className="fase-banner" style={{ '--fase-color': color } as CSSProperties}>
               <div className="fase-banner-text">
                 <span className="fase-banner-label">Fase {fi + 1}</span>
                 <span className="fase-banner-title">{shortTitle}</span>
