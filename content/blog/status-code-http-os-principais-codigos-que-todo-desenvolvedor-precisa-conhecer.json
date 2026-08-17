@@ -1,0 +1,108 @@
+{
+  "title": "Status Code HTTP: os principais códigos que todo desenvolvedor precisa conhecer",
+  "excerpt": "Entenda os status codes HTTP para melhorar a experiência de usuário em sua aplicação",
+  "category": "Lógica de programação",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Quando estamos trabalhando com requisições HTTP, é comum vermos códigos de status retornados pelo servidor. No entanto, muitos desenvolvedores não sabem o que significam esses códigos e como usá-los corretamente em suas aplicações. Isso pode levar a erros e problemas ao longo do tempo, pois os códigos de status são fundamentais para entender se uma requisição foi bem-sucedida ou não. Além disso, eles podem fornecer informações valiosas sobre o que aconteceu com a requisição, como por exemplo, se houve um erro no servidor ou se a requisição foi cancelada pelo cliente. Para desenvolvedores web, é crucial entender esses códigos e saber como lidar com eles, pois eles são uma ferramenta importante para debuggar problemas e melhorar a experiência do usuário. Por exemplo, ao receber um código de status 404, o desenvolvedor sabe que a requisição foi bem-sucedida até certo ponto, mas não encontrou o recurso solicitado. Em vez de simplesmente mostrar uma página de erro genérica, ele pode redirecionar o usuário para uma página de erro personalizada com informações úteis sobre o que aconteceu."
+    },
+    {
+      "type": "heading",
+      "text": "Códigos de status 1xx: Informações"
+    },
+    {
+      "type": "paragraph",
+      "text": "Os códigos de status 1xx são usados para indicar que a solicitação foi recebida e está sendo processada. O código mais comum nessa categoria é o 100 Continue, que indica que a solicitação deve continuar. Este código é frequentemente utilizado em conjunção com os métodos PATCH ou PUT, quando o servidor deseja fornecer informações adicionais para a continuação da operação. Por exemplo, se você estiver atualizando um recurso e o servidor precisar de mais informações para processar a atualização, ele pode retornar o código 100 Continue, indicando que a solicitação deve continuar com as informações adicionais necessárias. Isso permite ao cliente enviar os dados necessários para completar a operação sem precisar reenviar toda a solicitação original."
+    },
+    {
+      "type": "list",
+      "items": [
+        "100 Continue: A solicitação deve continuar.",
+        "101 Switching Protocols: O servidor vai mudar o protocolo para outro."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Códigos de status 2xx: Sucesso"
+    },
+    {
+      "type": "paragraph",
+      "text": "Os códigos de status 2xx são usados para indicar que a solicitação foi processada com sucesso. O código mais comum nessa categoria é o 200 OK, que indica que a solicitação foi bem-sucedida e o recurso solicitado foi entregue sem problemas. No entanto, existem outros códigos de status na mesma categoria, como os 201 Created, que indicam que uma nova entidade foi criada em resposta à solicitação do cliente, e os 202 Accepted, que significam que a solicitação foi aceita para processamento, mas não está concluída. É importante entender esses códigos de status porque eles ajudam a determinar o curso da ação do programa ou aplicação, evitando que ele continue tentando realizar uma ação que já foi bem-sucedida ou que pode causar problemas se realizada novamente. Por exemplo, se um cliente solicitar que um arquivo seja criado e o servidor responda com o código 201 Created, é provável que o cliente não precise continuar solicitando a criação do arquivo. Além disso, entender os códigos de status pode ajudar a identificar problemas no sistema ou na rede e a tomar medidas corretivas para garantir que as solicitações sejam processadas com sucesso."
+    },
+    {
+      "type": "list",
+      "items": [
+        "200 OK: A solicitação foi bem-sucedida.",
+        "201 Created: O recurso foi criado com sucesso."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Códigos de status 3xx: Redirecionamento"
+    },
+    {
+      "type": "paragraph",
+      "text": "Os códigos de status 3xx são usados para indicar que a solicitação deve ser redirecionada. Esse tipo de resposta é comum quando o recurso solicitado não está disponível no endereço especificado ou quando há uma mudança permanente na URL do recurso. O código mais comum nessa categoria é o 301 Moved Permanently, que indica que o recurso foi movido permanentemente para outra URL. Esse código é utilizado para informar os navegadores que a URL original está desatualizada e que devem atualizar sua base de dados para refletir a nova localização do recurso. Por exemplo, se um site está migrando para uma nova plataforma, pode retornar o código 301 com a nova URL do conteúdo no corpo da resposta. Isso permite que os navegadores atualizem automaticamente as URLs nos ícones dos favoritos e em outras partes do sistema, garantindo que os usuários continuem a acessar o recurso corretamente. Além disso, o código 301 também ajuda a evitar que os motores de busca acumulem links para versões anteriores da URL, melhorando a experiência geral do usuário e a autoridade da página no Google."
+    },
+    {
+      "type": "list",
+      "items": [
+        "300 Multiple Choices: Existem várias opções para a solicitação.",
+        "301 Moved Permanently: O recurso foi movido permanentemente."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Códigos de status 4xx: Erro do cliente"
+    },
+    {
+      "type": "paragraph",
+      "text": "Os códigos de status 4xx são usados para indicar que a solicitação contém erros. Esse grupo é composto por várias categorias específicas de erros, cada uma com um código único e significado distinto. O código mais comum nessa categoria é o 404 Not Found, que indica que o recurso solicitado não foi encontrado no servidor. Isso pode ocorrer quando a URL fornecida é inválida ou quando o arquivo solicitado não existe na pasta especificada. Por exemplo, se você tentar acessar uma página que foi removida ou movida para outro local, o navegador recebê-lo-á um código 404 Not Found. Outro erro comum nessa categoria é o 403 Forbidden, que indica que o usuário não tem permissão para acessar o recurso solicitado. Isso pode ocorrer quando a autenticação falha ou quando há restrições de acesso ao recurso. É importante notar que os códigos de status 4xx são retornados pelo servidor e podem ser usados para fornecer informações mais detalhadas sobre o erro ocorrido, ajudando desenvolvedores a identificar e corrigir problemas em seus aplicativos."
+    },
+    {
+      "type": "list",
+      "items": [
+        "400 Bad Request: A solicitação é inválida.",
+        "401 Unauthorized: A autenticação falhou."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Códigos de status 5xx: Erro do servidor"
+    },
+    {
+      "type": "paragraph",
+      "text": "Os códigos de status 5xx são usados para indicar que a solicitação causou erros no servidor. Esse grupo é composto por seis subcategorias de códigos de status, cada uma com seu próprio significado específico e uso em diferentes cenários. O código mais comum nessa categoria é o 500 Internal Server Error, que indica que ocorreu um erro interno no servidor. Em outras palavras, a solicitação foi aceita pelo servidor, mas houve algum problema ao processá-la e executar a ação solicitada. Por exemplo, se você tenta acessar uma página que está com problemas de design ou conteúdo, o servidor pode retornar um 500 para indicar que não conseguiu exibir a página como esperado.\n\nAlém disso, existem outros códigos nessa categoria que podem ser úteis em diferentes situações. Por exemplo, o código 502 Bad Gateway é usado quando o servidor atendido por proxy ou gateway retornou uma resposta de erro ao processar a solicitação. Isso pode ocorrer se o destino da requisição não está disponível ou se houve um problema no processo de proxy. Outro exemplo é o código 503 Service Unavailable, que indica que o servidor está temporariamente indisponível para atender à solicitação, seja por manutenção, sobrecarga ou algum outro motivo.\n\nEsses códigos são importantes para os desenvolvedores porque permitem que eles entendam melhor como o servidor está respondendo às suas requisições e identifiquem problemas nos sistemas. Ao entender esses códigos de status, os desenvolvedores podem tomar medidas corretivas para resolver problemas e melhorar a experiência do usuário."
+    },
+    {
+      "type": "list",
+      "items": [
+        "500 Internal Server Error: Ocorreu um erro interno no servidor.",
+        "501 Not Implemented: A solicitação não pode ser processada."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Qual é o significado do código de status 404?",
+      "answer": "O código de status 404 indica que o recurso solicitado não foi encontrado."
+    },
+    {
+      "question": "Qual é a diferença entre os códigos de status 301 e 302?",
+      "answer": "O código de status 301 indica que o recurso foi movido permanentemente, enquanto o código de status 302 indica que a solicitação deve ser redirecionada temporariamente."
+    },
+    {
+      "question": "Qual é o significado do código de status 500?",
+      "answer": "O código de status 500 indica que ocorreu um erro interno no servidor."
+    }
+  ],
+  "slug": "status-code-http-os-principais-codigos-que-todo-desenvolvedor-precisa-conhecer",
+  "publishedAt": "2026-08-17",
+  "seo": {
+    "title": "Status Code HTTP: os principais códigos que todo desenvolvedor precisa conhecer | Blog TrilhaDev",
+    "description": "Entenda os status codes HTTP para melhorar a experiência de usuário em sua aplicação"
+  },
+  "coverImage": "",
+  "coverImageAlt": "Status Code HTTP: os principais códigos que todo desenvolvedor precisa conhecer"
+}
