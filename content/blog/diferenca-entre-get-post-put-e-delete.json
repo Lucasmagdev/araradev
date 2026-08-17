@@ -1,0 +1,102 @@
+{
+  "title": "Diferença entre GET, POST, PUT e DELETE",
+  "excerpt": "Entenda a diferença entre os métodos HTTP para interagir com APIs de forma eficaz",
+  "category": "Lógica de programação",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Quando trabalhamos com APIs, é comum ouvir falar em GET, POST, PUT e DELETE. Mas o que cada um desses métodos significa? E quando usar cada um? Neste contexto, é fundamental entender as diferenças entre esses métodos para tomar decisões informadas sobre como estruturar a lógica de nossa aplicação. Comecemos por GET: esse método é usado para recuperar dados do servidor e enviar uma resposta ao cliente. Por exemplo, quando você acessa a página inicial de um site, o navegador envia uma solicitação GET para o servidor do site, que retorna os conteúdos da página. Já o POST, por sua vez, é utilizado para criar novos recursos no servidor ou realizar alterações significativas em dados existentes. Pense no exemplo de preencher e enviar um formulário online: ao clicar no botão \"Enviar\", o navegador envia uma solicitação POST com os dados do formulário para o servidor, que processa a informação e atualiza as bases de dados conforme necessário. O método PUT é semelhante ao POST, mas é usado quando precisamos atualizar completamente um recurso existente no servidor. Por exemplo, se você quiser substituir um usuário com novo dado, o método PUT seria a escolha certa. Finalmente, temos o DELETE: esse método é utilizado para deletar recursos do servidor. Uma situação prática envolve remover um cliente da base de dados: ao clicar no botão \"Excluir\", o navegador enviará uma solicitação DELETE para o servidor, que irá apagar a informação solicitada."
+    },
+    {
+      "type": "heading",
+      "text": "GET: Recuperar dados"
+    },
+    {
+      "type": "paragraph",
+      "text": "O método GET é utilizado para recuperar dados de uma API. Quando você faz uma requisição GET, a resposta é enviada ao cliente sem alterações, diferente do que ocorre com os métodos POST, PUT e DELETE, que modificam o estado da aplicação. O GET é o método mais comum utilizado em APIs e pode ser usado para buscar informações sobre um recurso específico ou para listar todos os recursos de um tipo. Por exemplo, se você está desenvolvendo uma API de gerenciamento de clientes e quer obter informações sobre um cliente específico, você faria uma requisição GET passando o ID do cliente como parâmetro na URL. Isso permite que a aplicação retorne as informações solicitadas sem causar alterações no estado da aplicação. Além disso, o GET pode ser usado para implementar recursos de busca e filtragem, permitindo que os usuários sejam guiados pelas opções disponíveis em uma interface."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Busca dados de uma API",
+        "Não altera a informação existente na API",
+        "Pode ser usado para buscar informações sobre um recurso específico"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "POST: Criar novos recursos"
+    },
+    {
+      "type": "paragraph",
+      "text": "O método POST é usado para criar novos recursos em uma API, ou seja, para adicionar um novo registro a uma coleção de dados. Quando você faz uma requisição POST, a informação necessária para a criação do recurso é enviada para a API e o servidor processa essa informação para criar um novo recurso com base nessa informação. Por exemplo, imagine que você está desenvolvendo uma aplicação de gerenciamento de contatos e deseja adicionar um novo contato à lista de contatos existente. Você faria uma requisição POST para a API enviando os dados do novo contato, como nome, telefone e endereço, e a API criaria um novo recurso representado pelo contato com base nos dados fornecidos. O método POST é frequentemente usado em conjunto com outros métodos, como GET e PUT, para criar ou atualizar recursos de forma eficaz. É importante notar que o método POST é idempotente, ou seja, realizar uma requisição POST várias vezes não causará efeitos adicionais, pois a API apenas cria um novo recurso quando a requisição é feita pela primeira vez."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Cria novos recursos em uma API",
+        "Envia dados para a API para criação de um novo recurso"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "PUT: Atualizar recursos"
+    },
+    {
+      "type": "paragraph",
+      "text": "O método PUT é utilizado para atualizar recursos existentes em uma API. Quando você faz uma requisição PUT, a informação desejada é enviada para a API e o recurso é atualizado com base nessa informação. Isso significa que, ao utilizar o método PUT, os dados do recurso são substituídos pelos dados enviados na requisição. Por exemplo, imagine uma aplicação de gerenciamento de usuários, onde você deseja alterar as informações de um usuário existente. Você pode realizar essa atualização utilizando o método PUT, enviando a nova informação do usuário para a API e, consequentemente, substituindo os dados antigos com os novos. O método PUT é frequentemente confundido com o método PATCH, que também se utiliza para atualizar recursos, mas com uma abordagem diferente, pois apenas as informações que mudaram são enviadas para a API, em vez de toda a informação do recurso."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Atualiza recursos existentes em uma API",
+        "Envia dados para a API para atualização de um recurso"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "DELETE: Excluir recursos"
+    },
+    {
+      "type": "paragraph",
+      "text": "O método DELETE é um dos métodos HTTP mais importantes para a manutenção e exclusão de recursos em uma API. Quando você faz uma requisição DELETE, o recurso correspondente é excluído da API, ou seja, ele não estará mais disponível no sistema. Essa operação é fundamental para evitar que os dados se acumulem e causem problemas de desempenho na aplicação. Por exemplo, imagine um aplicativo de gerenciamento de contatos, onde o usuário pode criar, ler, atualizar e excluir contatos. Se o usuário deseja remover um contato da lista, ele fará uma requisição DELETE para a API, especificando o ID do contato que deseja excluir. A API então processará a solicitação e excluiirá o recurso correspondente da base de dados. É importante notar que, ao fazer uma requisição DELETE, não é possível recuperar os dados excluídos, pois eles são permanentemente removidos do sistema. Além disso, é comum verificar se a exclusão foi bem-sucedida, retornando um código de status HTTP 204 No Content, indicando que o recurso foi excluído da API."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Exclui recursos existentes em uma API",
+        "Não envia dados para a API"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Como escolher o método certo"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ao escolher entre os métodos HTTP GET, POST, PUT e DELETE para sua aplicação, é fundamental considerar a finalidade de cada um. O método GET deve ser utilizado quando se necessita recuperar dados de uma API, como por exemplo, obter informações sobre um produto específico ou exibir uma lista de produtos disponíveis em estoque. Já o método POST é indicado para criar novos recursos em uma API, como registrar um novo cliente, cadastrar um novo produto ou realizar uma transação financeira. Por exemplo, ao se inscrever em um site de e-commerce, você está enviando informações através do formulário de cadastro, que são processadas pelo servidor e armazenadas na base de dados da empresa.\n\nSe a necessidade for atualizar recursos existentes em uma API, é recomendável utilizar o método PUT. Por exemplo, ao realizar uma alteração no perfil de um usuário, como mudar o endereço ou a senha, você está enviando as informações atualizadas através do servidor, que as processa e atualiza no banco de dados. Já o método DELETE deve ser usado para excluir recursos existentes em uma API. Por exemplo, ao remover um produto de estoque ou cancelar uma transação financeira, você está solicitando ao servidor que exclua a informação correspondente da base de dados.\n\nEssas regras podem parecer simples, mas são fundamentais para garantir que sua aplicação seja escalável e eficiente. Ao utilizar o método correto para cada operação, você estará garantindo uma comunicação mais segura e eficaz com a API, evitando problemas de desempenho ou até mesmo erros de lógica no sistema."
+    }
+  ],
+  "faq": [
+    {
+      "question": "O que é o método GET?",
+      "answer": "O método GET é usado para recuperar dados de uma API."
+    },
+    {
+      "question": "O que é o método POST?",
+      "answer": "O método POST é usado para criar novos recursos em uma API."
+    },
+    {
+      "question": "O que é o método DELETE?",
+      "answer": "O método DELETE é usado para excluir recursos existentes em uma API."
+    }
+  ],
+  "slug": "diferenca-entre-get-post-put-e-delete",
+  "publishedAt": "2026-08-17",
+  "seo": {
+    "title": "Diferença entre GET, POST, PUT e DELETE | Blog TrilhaDev",
+    "description": "Entenda a diferença entre os métodos HTTP para interagir com APIs de forma eficaz"
+  },
+  "coverImage": "",
+  "coverImageAlt": "Diferença entre GET, POST, PUT e DELETE"
+}
