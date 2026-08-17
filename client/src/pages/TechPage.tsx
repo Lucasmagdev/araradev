@@ -92,7 +92,7 @@ export default function TechPage() {
             {page.partner && (
               <div className="blog-post-cta">
                 <p>{page.partner.description}</p>
-                <a href={page.partner.url} target="_blank" rel="noopener" className="lp-btn-primary lp-btn-lg">
+                <a href={page.partner.url} target="_blank" rel="noopener nofollow sponsored" className="lp-btn-primary lp-btn-lg">
                   Conhecer {page.partner.name}
                 </a>
               </div>

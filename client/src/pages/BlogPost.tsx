@@ -109,7 +109,7 @@ export default function BlogPost() {
             {post.partner && (
               <div className="blog-post-cta">
                 <p>{post.partner.description}</p>
-                <a href={post.partner.url} target="_blank" rel="noopener" className="lp-btn-primary lp-btn-lg">
+                <a href={post.partner.url} target="_blank" rel="noopener nofollow sponsored" className="lp-btn-primary lp-btn-lg">
                   Conhecer {post.partner.name}
                 </a>
               </div>
