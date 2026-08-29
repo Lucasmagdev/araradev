@@ -1,0 +1,81 @@
+{
+  "title": "Debounce e Throttle: O que são e quando usar",
+  "excerpt": "Entenda a diferença entre debounce e throttle em JavaScript e aprenda quando usar cada um para otimizar seu código.",
+  "category": "Lógica de programação",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Ao trabalhar com eventos no JavaScript, é comum precisar lidar com a frequência em que eles são disparados. Isso ocorre especialmente quando estamos lidando com inputs de formulários, como campos de texto ou botões de submit, pois esses eventos podem ser disparados várias vezes por segundo enquanto o usuário digita ou interage com os elementos da página. Nesse contexto, dois conceitos importantes surgem: debounce e throttle. Embora sejam frequentemente usados de maneira similar, cada um tem uma função específica e deve ser utilizado de acordo com as necessidades do projeto. O debounce é usado para garantir que um evento seja disparado apenas após um período de tempo determinado após a última vez que ele foi disparado. Por exemplo, se você quiser enviar o formulário apenas quando o usuário parar de digitar por alguns segundos, pode usar o debounce com um intervalo de tempo específico. Já o throttle é usado para limitar a frequência em que um evento é disparado dentro de um período determinado. Isso é útil para evitar que os eventos sejam disparados muito rapidamente e sobrecarreguem o sistema. Por exemplo, se você quiser enviar uma atualização em tempo real apenas a cada 5 segundos, pode usar o throttle com um intervalo de tempo específico."
+    },
+    {
+      "type": "heading",
+      "text": "O que é o debounce?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Quando trabalhamos com eventos em programação, é comum precisar lidar com situações em que um evento ocorre repetidamente em um curto período de tempo. Nesses casos, podemos utilizar a técnica de debounce para evitar disparar esses eventos desnecessários durante um período determinado. Em outras palavras, ao invés de chamar uma função a cada vez que um evento ocorre, podemos esperar por um tempo específico após o último evento antes de executá-la. Isso ajuda a prevenir chamadas excessivas à função, reduzindo o impacto no desempenho do sistema e evitando possíveis problemas de escalabilidade.\n\nPor exemplo, imagine que você está desenvolvendo uma aplicação que monitora os movimentos de um sensor de movimento em um smartphone. Cada vez que o usuário se move, o sensor dispara um evento, e sua função é chamada para processar esses dados. Se a função for chamada a cada movimento, isso pode causar um grande impacto no desempenho do sistema, especialmente se o usuário estiver em movimento constante. Ao usar debounce, você pode configurar o tempo que deve passar após o último evento antes de executar a função novamente. Isso significa que, mesmo se o usuário estiver em movimento constante, sua função será chamada apenas uma vez por período determinado, reduzindo significativamente o impacto no desempenho do sistema.\n\nA técnica de debounce é especialmente útil quando lidamos com eventos que ocorrem frequentemente, como cliques de mouse ou teclado, sensores de movimento ou outros dispositivos que geram dados em tempo real. Além disso, ela também pode ser utilizada para lidar com problemas de latência e sincronização entre diferentes partes do sistema. Ao usar debounce corretamente, você pode melhorar a eficiência e escalabilidade da sua aplicação, além de garantir uma experiência mais suave e imersiva para os usuários."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Evita disparar eventos desnecessários",
+        "Reduz número de chamadas à função",
+        "Melhora desempenho do código"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "O que é o throttle?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Throttle é uma técnica de programação que visa limitar a frequência em que eventos são disparados. Em vez de esperar um período determinado após o último evento, você executa a função a cada um determinado intervalo de tempo. Isso ajuda a garantir que os eventos sejam processados de forma equilibrada e evitar sobrecarregar a aplicação com requisições excessivas. Imagine uma situação em que você está lidando com um formulário que envia dados para o servidor a cada caractere digitado no campo de texto. Se não houver limites, isso pode levar a milhares de requisições por segundo, sobrecarregando o servidor e causando problemas de desempenho.\n\nA implementação do throttle é simples: você define um tempo mínimo entre as execuções da função e usa esse valor para controlar a frequência das chamadas. Por exemplo, se você quiser executar uma função a cada 100ms, basta usar o valor `100` como parâmetro no método de disparo do evento. Dessa forma, mesmo que o usuário esteja digitando rapidamente, a função será executada apenas a cada 100ms, evitando assim o congestionamento do servidor e garantindo um desempenho mais estável. Além disso, o throttle também pode ser usado para evitar a perda de dados ao enviar requisições em lots ou por meio de WebSockets."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Limita frequência em que eventos são disparados",
+        "Garante processamento equilibrado dos eventos",
+        "Evita sobrecarregar o sistema"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Quando usar debounce e throttle?"
+    },
+    {
+      "type": "paragraph",
+      "text": "A escolha entre debounce e throttle depende do requisito específico do seu projeto. Se você precisa evitar disparos desnecessários de eventos, como em um formulário de login que deve ser submetido apenas quando o usuário pressiona a tecla Enter após digitar a senha correta, use debounce. O debounce é uma técnica que suprime temporariamente a execução do evento até que uma condição específica seja atendida. Por exemplo, se você tiver um formulário com campos de preenchimento obrigatório e deseja garantir que o usuário tenha preenchido todos os campos antes de submeter o formulário, use debounce para evitar disparos desnecessários.\n\nJá a throttle é uma técnica usada para limitar a frequência em que os eventos são disparados. Se você precisar controlar a quantidade de requisições feitas ao servidor, como em um aplicativo de navegação que deve atualizar a localização do usuário apenas a cada 10 segundos, use throttle. O throttle é útil em casos onde se deseja evitar sobrecarregar o servidor com requisições frequentes e desnecessárias. Por exemplo, se você tiver um aplicativo que utiliza APIs de geolocalização para atualizar a localização do usuário em tempo real, use throttle para limitar a frequência das requisições ao servidor e evitar sobrecarga."
+    },
+    {
+      "type": "heading",
+      "text": "Exemplos práticos"
+    },
+    {
+      "type": "paragraph",
+      "text": "Abaixo está um exemplo simples de como usar debounce para evitar chamadas excessivas à função `login` ao invés de usar throttle para limitar a frequência em que os eventos são disparados. O debounce é uma técnica que consiste em aguardar um tempo determinado antes de executar uma ação, ou seja, ele \"desliga\" o evento por um período de tempo. Em contrapartida, o throttle é uma técnica que limita a frequência com que os eventos são disparados, permitindo que apenas um evento seja processado em um intervalo determinado de tempo.\n\nImagine você estiver trabalhando em uma aplicação de login que envia requisições para o servidor toda vez que o usuário digita algo na tela. Se o usuário pressionar rapidamente as teclas, a aplicação pode enviar múltiplas requisições ao servidor, causando sobrecarga e potencialmente levantando erros de sincronização. Nesse caso, usar debounce seria uma opção melhor do que throttle, pois evitará que a aplicação envie requisições desnecessárias durante o tempo em que as teclas são pressionadas rapidamente.\n\nUm exemplo prático de como implementar debounce é usando um temporizador para aguardar um tempo determinado antes de executar a ação. Por exemplo, você pode usar o `setTimeout` do JavaScript para criar um temporizador que \"desliga\" o evento por alguns segundos após a última vez que ele foi disparado. Isso evitará que a aplicação envie requisições desnecessárias durante esse período de tempo."
+    }
+  ],
+  "faq": [
+    {
+      "question": "Qual é a diferença entre debounce e throttle?",
+      "answer": "Debounce é usado para evitar disparos desnecessários de eventos, enquanto throttle é utilizado para limitar a frequência em que os eventos são disparados."
+    },
+    {
+      "question": "Quando usar debounce?",
+      "answer": "Use debounce quando precisar evitar disparos desnecessários de eventos, como em casos de formulários ou entrada de dados."
+    },
+    {
+      "question": "Quando usar throttle?",
+      "answer": "Use throttle quando precisar limitar a frequência em que os eventos são disparados, como em casos de processamento de grandes quantidades de dados."
+    }
+  ],
+  "slug": "debounce-e-throttle-o-que-sao-e-quando-usar",
+  "publishedAt": "2026-08-29",
+  "seo": {
+    "title": "Debounce e Throttle: O que são e quando usar | Blog TrilhaDev",
+    "description": "Entenda a diferença entre debounce e throttle em JavaScript e aprenda quando usar cada um para otimizar seu código."
+  },
+  "coverImage": "",
+  "coverImageAlt": "Debounce e Throttle: O que são e quando usar"
+}
