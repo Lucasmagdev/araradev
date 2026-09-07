@@ -1,0 +1,85 @@
+{
+  "title": "Como escrever commits que fazem sentido pro time",
+  "excerpt": "Compreenda os princípios básicos para escrever commits claros e eficazes, tornando seu trabalho mais compreensível para o resto da equipe.",
+  "category": "Lógica de programação",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Os commits são uma das coisas mais importantes em qualquer projeto de software, pois eles não apenas registram as alterações feitas no código, mas também fornecem contexto e informações valiosas para os desenvolvedores que trabalham nele posteriormente. Quando um commit é bem escrito, ele serve como um registro preciso do que foi feito, permitindo que outros membros da equipe compreendam facilmente as alterações realizadas e como elas afetam o código. Isso torna mais fácil para os desenvolvedores entenderem a lógica por trás das mudanças, facilitando a manutenção e a melhoria contínua do projeto.\n\nUm exemplo de como um commit pode ser escrito é quando se adiciona uma nova funcionalidade. Em vez de apenas registrar que foi feita essa alteração, o commit pode incluir uma breve explicação sobre a finalidade dessa funcionalidade e como ela foi implementada. Por exemplo: \"Adicionado suporte para pagamento por cartão de crédito. A funcionalidade permite aos usuários inserir suas informações de cartão e realizar pagamentos com segurança. Implementei o uso do sistema de validação de cartões para garantir a autenticidade das transações.\" Com essas informações, os outros membros da equipe podem entender como usar essa funcionalidade corretamente e como ela se relaciona com outras partes do código.\n\nUm commit bem escrito também pode ser usado como referência futura, permitindo que os desenvolvedores aprendam com as experiências passadas e evitem erros semelhantes. Por exemplo, se um desenvolvedor tentou implementar uma solução que não funcionou como esperado, o commit pode incluir uma breve descrição do problema e da solução encontrada. Isso permite que os outros membros da equipe entendam o que foi feito e como evitar problemas semelhantes no futuro.\n\nAlém disso, um commit bem escrito também pode ajudar a manter a consistência na documentação do código. Se todos os desenvolvedores seguirem as mesmas práticas de escrita de commits, será mais fácil para os outros membros da equipe entenderem o que foi feito e como funciona o código. Isso também facilitará a transição de projetos ou equipes, pois os novos membros terão acesso a uma documentação clara e precisa dos commits."
+    },
+    {
+      "type": "heading",
+      "text": "Por que os commits são importantes"
+    },
+    {
+      "type": "paragraph",
+      "text": "Os commits são uma ferramenta fundamental na colaboração de equipes em projetos de desenvolvimento de software. Eles servem como um canal de comunicação eficaz entre os membros da equipe, facilitando a compreensão das alterações realizadas no código e garantindo que todos estejam alinhados com as metas do projeto. Ao escrever commits claros e concisos, é possível evitar problemas de comunicação e garantir que a equipe esteja atualizada sobre as mudanças feitas no código.\n\nUm commit bem escrito deve incluir informações sobre o que foi alterado, por quê e como isso impacta o sistema. Isso ajuda a identificar problemas e resolver conflitos mais rapidamente, além de fornecer uma trilha de rastreabilidade para as alterações feitas no código. Com essa informação, os desenvolvedores podem revisitar facilmente as mudanças realizadas e entender como elas afetam o comportamento do sistema.\n\nEm projetos grandes ou complexos, a colaboração entre equipes é fundamental para manter o código atualizado e funcionando corretamente ao longo do tempo. Os commits são essenciais nesse processo, pois permitem que os desenvolvedores compartilhem suas alterações e sejam capazes de entender como elas afetam o sistema. Além disso, os commits podem ser usados para documentar mudanças importantes no código, tornando mais fácil a manutenção e a evolução do sistema.\n\nUm exemplo prático é o uso de commits para registrar alterações em funcionalidades específicas do sistema. Por exemplo, se um desenvolvedor estiver trabalhando em uma nova funcionalidade, pode escrever um commit detalhado sobre as mudanças feitas e como elas afetam a funcionalidade. Isso permite que os outros membros da equipe entendam o que foi alterado e como isso impacta o sistema.\n\nAlém disso, os commits podem ser usados para registrar alterações em dependências ou bibliotecas utilizadas pelo projeto. Por exemplo, se um desenvolvedor estiver atualizando uma dependência para uma versão mais recente, pode escrever um commit detalhado sobre as mudanças feitas e como elas afetam o sistema.\n\nEm resumo, os commits são uma ferramenta fundamental na colaboração de equipes em projetos de desenvolvimento de software. Ao escrever commits claros e concisos, é possível evitar problemas de comunicação e garantir que a equipe esteja atualizada sobre as mudanças feitas no código. Além disso, os commits podem ser usados para documentar mudanças importantes no código, tornando mais fácil a manutenção e a evolução do sistema ao longo do tempo."
+    },
+    {
+      "type": "heading",
+      "text": "Regras básicas para escrever commits"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Use o imperativo: 'Adicione...' ou 'Mude...' em vez de 'Eu fiz...'",
+        "Seja específico: evite frases genéricas como 'Melhoria' ou 'Correção de bug'",
+        "Mantenha-os curtos: 50-72 caracteres é um bom limite"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Manter os commits organizados e estruturados é fundamental para garantir que a equipe possa entender facilmente o que foi feito em cada mudança no código. Isso pode ser alcançado usando categorias específicas para cada tipo de alteração, como \"feature\", \"bug fix\" ou \"refatoração\". A categoria \"feature\" deve ser usada quando há uma nova funcionalidade sendo implementada, enquanto a \"bug fix\" é mais adequada para corrigir problemas já existentes no código. Por outro lado, a \"refatoração\" é ideal para melhorias na estrutura ou organização do código, sem alterações significativas em sua funcionalidade. É importante lembrar que essas categorias devem ser aplicadas de forma consistente ao longo do tempo, para evitar confusão e facilitar a revisão das mudanças feitas em diferentes momentos. Por exemplo, se você está implementando uma nova funcionalidade de pagamento online, o commit deveria ter a categoria \"feature\" e uma descrição clara sobre as principais alterações implementadas. Se, por outro lado, você estiver corrigindo um problema de segurança no código, o commit deveria ter a categoria \"bug fix\". Além disso, é útil adicionar uma descrição breve sobre o que foi alterado no commit, tornando mais fácil para os demais membros da equipe entenderem rapidamente as principais mudanças implementadas. Isso pode incluir detalhes sobre as alterações feitas na lógica do código, a inclusão de novas funcionalidades ou a correção de bugs específicos. Com essas categorias e descrições claras, é possível que os membros da equipe possam entender facilmente o que foi feito em cada mudança no código, tornando mais fácil a revisão e a manutenção do projeto. Além disso, isso também facilita a identificação de problemas recorrentes ou áreas do código que precisam de melhorias."
+    },
+    {
+      "type": "heading",
+      "text": "Exemplos de bons commits"
+    },
+    {
+      "type": "paragraph",
+      "text": "Um bom exemplo de commit é quando você fornece contexto claro sobre as alterações feitas no código. Isso não significa apenas descrever o que foi modificado, mas também explicar como essas mudanças afetam a aplicação e os usuários. Em vez de apenas \"Adicione funcionalidade para calcular média de notas\", que pode soar um pouco vago, seria melhor especificar o que foi modificado e como isso beneficia a aplicação. Por exemplo: \"Refatorei a lógica de cálculo da nota média do aluno no sistema de gerenciamento de notas, incluindo correções de erros de arredondamento e melhoria na performance das operações\". Esse tipo de commit é importante porque ajuda os outros membros da equipe a entender rapidamente o que foi feito e como isso afeta a aplicação. Além disso, ao incluir detalhes sobre as melhorias implementadas, você está ajudando a equipe a aprender com suas alterações e a evitar possíveis problemas futuros.\n\nUm exemplo prático é quando se trabalha em uma aplicação de gerenciamento de notas para alunos. Se apenas for adicionada uma nova funcionalidade sem explicar como ela foi implementada ou quais melhorias foram feitas, pode ser difícil para os outros membros da equipe entenderem como a alteração afeta o sistema como um todo. No entanto, se for incluído contexto sobre as mudanças feitas, como correções de erros de arredondamento e melhoria na performance das operações, isso facilita a compreensão do que foi modificado e como isso beneficia a aplicação.\n\nAlém disso, ao incluir detalhes sobre as melhorias implementadas, você está ajudando a equipe a aprender com suas alterações e a evitar possíveis problemas futuros. Isso é especialmente importante em projetos de longo prazo ou que envolvem várias pessoas, pois ajuda a garantir que todos estejam na mesma página e que as alterações sejam feitas de forma consistente e eficaz.\n\nOutro aspecto importante é que os commits devem ser concisos e claros. Isso não significa apenas incluir um breve resumo das alterações, mas também explicar como elas afetam a aplicação e os usuários. Por exemplo, em vez de \"Refatorei lógica de cálculo\", seria melhor especificar \"Refatorei lógica de cálculo da nota média do aluno no sistema de gerenciamento de notas, incluindo correções de erros de arredondamento e melhoria na performance das operações\". Isso ajuda a evitar que os outros membros da equipe precisem abrir o código para entender o que foi modificado."
+    },
+    {
+      "type": "heading",
+      "text": "Dicas adicionais"
+    },
+    {
+      "type": "paragraph",
+      "text": "Manter um padrão consistente ao longo do tempo é fundamental para que os desenvolvedores possam entender facilmente o que foi alterado em cada commit e como ele se encaixa no contexto mais amplo da aplicação. Isso significa evitar usar linguagem coloquial ou jargões que podem ser específicos de uma equipe ou região, e sim manter um tom formal e objetivo. Por exemplo, ao descrever um bug, é importante incluir informações sobre a funcionalidade afetada e como o problema foi identificado, como \"corrigiu erro no cálculo do imposto na página de declaração de impostos\" em vez de apenas \"arrumou isso\". Além disso, é fundamental incluir informações relevantes sobre o que foi feito, como por exemplo: \"fixou bug no formulário\" em vez de apenas \"arrumou isso\". Isso ajuda a evitar confusão e permite que outros membros da equipe entrem na conversa e contribuam com suas ideias. Por exemplo, se você estiver trabalhando em um projeto de grande escala, pode ser útil incluir informações sobre a funcionalidade ou feature específica que está sendo alterada. Com essas práticas, você ajuda a criar um histórico de commits claro e fácil de entender, o que é fundamental para manter a comunicação eficaz entre os membros da equipe. Além disso, ao incluir informações sobre as alterações feitas, outros desenvolvedores podem aprender com seus erros e melhorias, evitando passar por problemas semelhantes no futuro. Isso também permite que outros membros da equipe contribuam com suas ideias e sugestões de melhoria, o que é fundamental para manter a inovação e a produtividade na equipe. Por exemplo, se você estiver trabalhando em um projeto de grande escala, pode ser útil incluir informações sobre as alterações feitas em cada commit, como \"melhorou desempenho da página inicial\" ou \"corrigiu erro no cálculo do imposto\". Com essas práticas, você ajuda a criar um histórico de commits claro e fácil de entender, o que é fundamental para manter a comunicação eficaz entre os membros da equipe."
+    },
+    {
+      "type": "heading",
+      "text": "Erros comuns"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Comitar tudo de uma vez: isso pode tornar difícil rastrear as alterações",
+        "Não fornecer contexto suficiente: isso pode levar a confusão e mal-entendidos",
+        "Usar linguagem coloquial ou jargões: isso pode ser problemático para desenvolvedores que não são familiarizados com esses termos"
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Por que os commits devem ter um padrão consistente?",
+      "answer": "Isso ajuda a manter a coesão e a consistência ao longo do tempo, tornando mais fácil para os desenvolvedores entenderem o que está acontecendo."
+    },
+    {
+      "question": "Como posso evitar comitar tudo de uma vez?",
+      "answer": "Tente fazer commits menores e mais frequentes, ou use ferramentas como Git Stash para armazenar alterações temporariamente."
+    },
+    {
+      "question": "O que é um bom exemplo de commit?",
+      "answer": "Um bom exemplo de commit é claro, conciso e fornece contexto suficiente para o que foi feito. Por exemplo: 'Adicione funcionalidade para calcular média de notas'."
+    }
+  ],
+  "slug": "como-escrever-commits-que-fazem-sentido-pro-time",
+  "publishedAt": "2026-08-29",
+  "seo": {
+    "title": "Como escrever commits que fazem sentido pro time | Blog TrilhaDev",
+    "description": "Compreenda os princípios básicos para escrever commits claros e eficazes, tornando seu trabalho mais compreensível para o resto da equipe."
+  },
+  "coverImage": "",
+  "coverImageAlt": "Como escrever commits que fazem sentido pro time"
+}

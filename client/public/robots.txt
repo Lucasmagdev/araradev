@@ -2,5 +2,4 @@
 User-agent: *
 Allow: /
 
-# TODO: trocar pela URL real do deploy
-Sitemap: https://araradev.netlify.app/sitemap.xml
+Sitemap: https://trilhadev.app.br/sitemap.xml
