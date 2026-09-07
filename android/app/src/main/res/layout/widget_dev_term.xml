@@ -1,40 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/widget_bg"
-    android:padding="12dp">
+    android:background="@drawable/widget_card_bg"
+    android:padding="20dp">
 
-    <TextView
-        android:id="@+id/widget_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TERMO DO DIA"
-        android:textColor="@color/widget_label"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        android:letterSpacing="0.08" />
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top|end"
+        android:src="@mipmap/ic_launcher_round" />
 
-    <TextView
-        android:id="@+id/widget_term"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/widget_term"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:maxLines="1"
-        android:ellipsize="end" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/widget_definition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/widget_definition"
-        android:textSize="13sp"
-        android:maxLines="3"
-        android:ellipsize="end" />
+        <TextView
+            android:id="@+id/widget_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/widget_label_badge"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp"
+            android:text="TERMO DO DIA"
+            android:textColor="@color/widget_label"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/widget_term"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/widget_term"
+            android:textSize="30sp"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="-0.01"
+            android:shadowColor="@color/widget_glow"
+            android:shadowRadius="6"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/widget_definition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/widget_definition"
+            android:textSize="15sp"
+            android:lineSpacingExtra="4dp"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/widget_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="toque para abrir"
+            android:textColor="@color/widget_hint"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="widget_bg">#0a1210</color>
+    <color name="widget_bg">#16241f</color>
     <color name="widget_label">#ffc800</color>
     <color name="widget_term">#39ff9d</color>
-    <color name="widget_definition">#6b9a8a</color>
+    <color name="widget_definition">#8fb3a6</color>
+    <color name="widget_border">#5c39ff9d</color>
+    <color name="widget_badge_bg">#1f39ff9d</color>
+    <color name="widget_hint">#738fb3a6</color>
+    <color name="widget_glow">#8039ff9d</color>
 </resources>
